@@ -1,0 +1,25 @@
+<mat-card>
+  <img mat-card-image [src]="imageURL" *ngIf="fileSelected">
+  <form (submit)="onSearch(formData)" #formData="ngForm">
+    <div>
+      <button mat-stroked-button type="button" color="primary" (click)="urlfilepicker.click()">Selct Search File</button>
+      <input matInput type ="file" name = "url" required #urlfilepicker (change)=fileEvent($event)>
+    </div>
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Optional Settings
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+          <p>Field</p><input matInput type="text" name="field" required [ngModel]="search.field" >
+          <p>Rows</p><input matInput type="text" name="rows" required [ngModel]="search.rows">
+          <p>MS</p><input matInput type="text" name="ms" required [ngModel]="search.ms">
+          <p>Accuracy</p><input matInput type="text" name="accuracy" required [ngModel]="search.accuracy">
+          <p>Candidates</p><input matInput type="text" name="candidates" required [ngModel]="search.candidates">
+      </mat-expansion-panel>
+      </mat-accordion>
+    <button mat-raised-button color="primary" type="submit">Search</button>
+  </form>
+</mat-card>
+

@@ -1,0 +1,9 @@
+<mat-accordion multi="true" *ngIf="searchResult.length > 0">
+  <mat-expansion-panel *ngFor="let hits of searchResult">
+    <mat-expansion-panel-header>
+      {{hits.title}}
+    </mat-expansion-panel-header>
+    <p>distance: {{hits.d}}</p>
+    <p>id: {{hits.id}}</p>
+  </mat-expansion-panel>
+</mat-accordion>
