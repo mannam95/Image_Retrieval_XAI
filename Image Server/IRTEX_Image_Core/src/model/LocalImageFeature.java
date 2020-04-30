@@ -5,6 +5,9 @@
  */
 package model;
 
+import INTEX_exceptions.IRTEX_Exception;
+import java.util.ArrayList;
+
 /**
  *
  * @author SUBHAJIT
@@ -15,7 +18,12 @@ public abstract class LocalImageFeature {
     
     public abstract boolean Extract(String fileName);
     
-    public abstract float calculateSimilarity(String imageFile);
+    public abstract Float[] calculateSimilarity(LocalImageFeature baseImage) throws IRTEX_Exception;
+    
+    
+    public abstract ArrayList<Float[][]> getFeatureVectors();
+    
+    public abstract boolean buildFeatureFromVector(ArrayList<Float[][]> vectors);
     
     
 }

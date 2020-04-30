@@ -5,16 +5,23 @@
  */
 package model.local;
 
+import INTEX_exceptions.IRTEX_Exception;
 import model.LocalImageFeature;
 import java.util.ArrayList;
 import java.util.List;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
+import org.opencv.core.DMatch;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfDMatch;
 import org.opencv.core.MatOfKeyPoint;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
+import org.opencv.features2d.DescriptorMatcher;
+import org.opencv.features2d.ORB;
+import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.xfeatures2d.SURF;
@@ -25,6 +32,13 @@ import utils.*;
  * @author SUBHAJIT
  */
 public class SegmentedFeatures extends LocalImageFeature{
+    
+    Mat Descriptor;
+    
+    public SegmentedFeatures()
+    {
+        this.name = "SEGMENTATION AND SURF";
+    }
     
     
 
@@ -38,7 +52,7 @@ public class SegmentedFeatures extends LocalImageFeature{
         }
         Mat src = srcOriginal.clone();
         
-        Imgproc.cvtColor(src, src, Imgproc.COLOR_BGR2HSV);
+        //Imgproc.cvtColor(src, src, Imgproc.COLOR_BGR2HSV);
         
         Mat src_org = new Mat();
         
@@ -127,67 +141,197 @@ public class SegmentedFeatures extends LocalImageFeature{
         markers.convertTo(mark, CvType.CV_8UC1);
         Core.bitwise_not(mark, mark);
         
-        ArrayList<byte[]> masks = new ArrayList<>();
-        for(int i=0; i<contours.size(); i++)
-        {
-            masks.add(new byte[(int) src_org.total()]);
-        }
+        byte[][] masks = new byte[contours.size()][(int)src_org.total()];
         
-//        Mat dst = Mat.zeros(markers.size(), CvType.CV_8UC3);
-//        byte[] dstData = new byte[(int) (dst.total() * dst.channels())];
-//        dst.get(0, 0, dstData);
-        // Fill labeled objects with random colors
+        
+        
         int[] markersData = new int[(int) (markers.total() * markers.channels())];
         markers.get(0, 0, markersData);
         for (int i = 0; i < markers.rows(); i++) {
             for (int j = 0; j < markers.cols(); j++) {
                 int index = markersData[i * markers.cols() + j];
-                if (index > 0 && index <= contours.size() && index == 1) 
+                if (index > 0 && index <= contours.size()) 
                 {
                     
-                    //dstData[(i * dst.cols() + j) * 3 + 0] = (byte) 255;
-                    //dstData[(i * dst.cols() + j) * 3 + 1] = (byte) 255;
-                    //dstData[(i * dst.cols() + j) * 3 + 2] = (byte) 255;
-                    
-                    masks.get(index)[(i * src_org.cols() + j)] = (byte) 255;
-                    
-                } else {
-                    //dstData[(i * dst.cols() + j) * 3 + 0] = 0;
-//                    dstData[(i * dst.cols() + j) * 3 + 1] = 0;
-//                    dstData[(i * dst.cols() + j) * 3 + 2] = 0;
+                    masks[index-1][(i * src_org.cols() + j)] = (byte) 255;
                 }
             }
         }
-//        dst.put(0, 0, dstData);
         
         
-        ArrayList<Float[][]> descriptors = new ArrayList<>();
+        ArrayList<Mat> descriptors = new ArrayList<>(); 
         
         double hessianThreshold = 400;
         int nOctaves = 4, nOctaveLayers = 3;
         boolean extended = false, upright = false;
         SURF detector = SURF.create(hessianThreshold, nOctaves, nOctaveLayers, extended, upright);
-        MatOfKeyPoint keypoints1 = new MatOfKeyPoint(), keypoints2 = new MatOfKeyPoint();
+        
         Mat mask = new Mat(src_org.size(), CvType.CV_8U);
         
-        for(int i=0; i< masks.size(); i++)
+        for(int i=0; i< masks.length; i++)
         {
+            MatOfKeyPoint keypoints1 = new MatOfKeyPoint();
             Mat descriptor = new Mat();
-            mask.put(0, 0, masks.get(i));
+            
+            mask.put(0, 0, masks[i]);
             
             detector.detectAndCompute(src_org, mask, keypoints1, descriptor);
-            Float[] desc = new Float[(int)descriptor.total()];
-            descriptors.add(new utils<Float>().convertOneDim2TwoDim(float.class, desc, descriptor.rows(), descriptor.cols()));
+            if(descriptor.total() > 0)
+                descriptors.add(descriptor);
             
         }
+ 
+
+
+
+
+
+
+//        Mat img = Imgcodecs.imread(fileName), greyscale = new Mat(), blur= new Mat(), gaussian_binary_otsu = new Mat(), reverse_mask = new Mat();
+//        // Otsu's thresholding after Gaussian filtering
+//        
+//        Imgproc.cvtColor(img, greyscale, Imgproc.COLOR_BGR2GRAY);
+//        
+//        Imgproc.GaussianBlur(greyscale, blur, new Size(5,5),0);
+//        double ret = Imgproc.threshold(blur, gaussian_binary_otsu, 0,255,Imgproc.THRESH_BINARY+Imgproc.THRESH_OTSU);
+//        
+//        Core.bitwise_not(gaussian_binary_otsu, reverse_mask);
+//        
+//        
+//        byte[][] masks = new byte[2][(int)img.total()];
+//        
+//        gaussian_binary_otsu.get(0,0, masks[0]);
+//        reverse_mask.get(0,0, masks[1]);
+//        HighGui.imshow("gaussian_binary_otsu", gaussian_binary_otsu);
+//        HighGui.imshow("reverse_mask", reverse_mask);
+//        HighGui.waitKey();
+//        
+//        ArrayList<Mat> descriptors = new ArrayList<>(); 
+//        
+//        double hessianThreshold = 400;
+//        int nOctaves = 4, nOctaveLayers = 3;
+//        boolean extended = false, upright = false;    
+//        SURF detector = SURF.create(hessianThreshold, nOctaves, nOctaveLayers, extended, upright);
+//        MatOfKeyPoint keypoints1 = new MatOfKeyPoint();
+//        Mat mask = new Mat(img.size(), CvType.CV_8U);
+//        
+//        for(int i=0; i< masks.length; i++)
+//        {
+//            Mat descriptor = new Mat();
+//            
+//            mask.put(0, 0, masks[i]);
+//            
+//            detector.detectAndCompute(img, mask, keypoints1, descriptor);
+//            if(descriptor.total() > 0)
+//                descriptors.add(descriptor);
+//            
+//        }
+        
+
+
+//        ArrayList<Mat> descriptors = new ArrayList<>(); 
+//        
+//        
+//        ORB detector = ORB.create(20);
+//        
+//        Mat mask = new Mat(img.size(), CvType.CV_8U);
+//        
+//        for(int i=0; i< masks.length; i++)
+//        {
+//            Mat descriptor = new Mat();
+//            MatOfKeyPoint keypoints1 = new MatOfKeyPoint();
+//            mask.put(0, 0, masks[i]);
+//            
+//            detector.detectAndCompute(img, new Mat(), keypoints1, descriptor);
+//            if(descriptor.total() > 0)
+//                descriptors.add(descriptor);
+//            
+//        }
+
+        
         
         this.feature = descriptors;
         return true;
     }
 
     @Override
-    public float calculateSimilarity(String imageFile) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Float[] calculateSimilarity(LocalImageFeature baseImage) throws IRTEX_Exception {
+        
+        if(!(baseImage instanceof SegmentedFeatures))
+            throw new IRTEX_Exception(IRTEX_Exception.notInstanceOfSameTypeCode);
+        
+        ArrayList<Mat> descriptors1 = (ArrayList<Mat>)this.feature;
+        ArrayList<Mat> descriptors2 = (ArrayList<Mat>)((SegmentedFeatures)baseImage).feature;
+        
+        ArrayList<Float> scoreAccumulator = new ArrayList<>();
+        
+        
+        for(int i=0;i<descriptors1.size(); i++)
+        {
+            for(int j=0; j<descriptors2.size(); j++)
+            {
+                DescriptorMatcher matcher = DescriptorMatcher.create(DescriptorMatcher.BRUTEFORCE);
+                MatOfDMatch matches = new MatOfDMatch();
+                matcher.match(descriptors1.get(i), descriptors2.get(j), matches);
+                if(matches.rows() == 0)
+                {
+                    scoreAccumulator.add(0f);
+                    continue;
+                }
+                float sum = 0;
+                for(int k=0; k<matches.rows(); k++)
+                {
+                    DMatch[] dm = matches.toArray();
+                    //System.out.println(dm[0].distance);
+                    sum += 1- 0.5 * dm[0].distance;
+                }
+                scoreAccumulator.add(sum/matches.rows());
+            }
+        }
+        
+        
+        return scoreAccumulator.size()>0?scoreAccumulator.toArray(new Float[scoreAccumulator.size()]):null;
+    }
+
+    @Override
+    public ArrayList<Float[][]> getFeatureVectors() {
+        
+        ArrayList<Mat> descriptors  = (ArrayList<Mat>)this.feature;
+        
+        ArrayList<Float[][]> featureVectors = new ArrayList<>();
+        
+        for(int i=0; i< descriptors.size(); i++)
+        {
+            Mat descriptor = descriptors.get(i);
+            Float[] desc = new Float[(int)descriptor.total()];
+            featureVectors.add(new utils<Float>().convertOneDim2TwoDim(float.class, desc, descriptor.rows(), descriptor.cols()));
+            
+        }
+        
+        return featureVectors;
+    }
+
+    @Override
+    public boolean buildFeatureFromVector(ArrayList<Float[][]> vectors) {
+        try
+        {
+            ArrayList<Mat> descriptors = new ArrayList<>(); 
+            for(int i=0; i<vectors.size(); i++)
+            {
+                Float[][] rawVector = vectors.get(i);
+                Float[] feature = new utils<Float>().convertTwoDim2OneDim(float.class, rawVector, rawVector.length, rawVector[0].length);
+                float[] pFeature = new float[feature.length];
+                for(int j=0;j<pFeature.length;j++)pFeature[j]=feature[j];
+                Mat descriptor = new Mat(new Size(rawVector.length, rawVector[0].length), CvType.CV_32FC1);
+                descriptor.put(0,0,pFeature);
+                descriptors.add(descriptor);
+            }
+            return true;
+        }
+        catch(Exception e)
+        {
+            return false;
+        }
     }
     
 }

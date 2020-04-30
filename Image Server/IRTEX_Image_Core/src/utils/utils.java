@@ -31,4 +31,22 @@ public class utils<T> {
         
         return a;
     }
+    
+    
+    public T[] convertTwoDim2OneDim(Class c, T[][] arr, int rows, int cols)
+    {
+        if(arr == null) return null;
+        @SuppressWarnings("unchecked")
+        final T[] a = (T[]) Array.newInstance(c, rows, cols);
+        
+        for(int i=0; i<rows; i++)
+        {
+            for(int j=0; j<cols; j++)
+            {
+                a[i*cols+j] = arr[i][j];
+            }
+        }
+        
+        return a;
+    }
 }
