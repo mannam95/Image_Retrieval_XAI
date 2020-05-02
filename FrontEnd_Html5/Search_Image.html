@@ -3,9 +3,10 @@
     require(['Libraries/JQuery/jquery.min'],
         function($) {
             require(['Libraries/JQuery/jquery-ui.min',
+                    'Libraries/SweetAlert/sweetalert2.all.min',
                     'JS/Search_Image'
                 ],
-                function(jQueryUI, Search_ImageJS) {});
+                function(jQueryUI, swal, Search_ImageJS) {});
         });
 </script>
 
@@ -15,6 +16,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="Styles/Search_Image.css">
+    <link rel="stylesheet" type="text/css" href="Libraries/SweetAlert/sweetalert2.css">
     <!-- <title>Page Title</title> -->
 </head>
 
