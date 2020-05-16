@@ -126,3 +126,56 @@ input[type="file"] {
         flex-direction: column
     }
 }
+
+
+/* Start of Table Classes */
+
+.irtexdbClass {
+    display: none;
+    width: 98% !important;
+    border: 1px solid lightgray;
+}
+
+.TheadClass {
+    /* background-color:rgba( 255, 234, 160, 1 ); */
+    background-color: rgba(169, 169, 169, 1);
+    text-align: center;
+    border: 1px solid black;
+}
+
+.odd {
+    /* background-color: cornsilk !important; */
+    background-color: rgba(255, 255, 255, 1) !important;
+}
+
+.even {
+    /* background-color: lightGoldenrodYellow !important; */
+    background-color: rgba(241, 241, 241, 1) !important;
+}
+
+
+/* table td,
+table th {
+    text-align: justify !important;
+    vertical-align: top !important;
+} */
+
+.tableImgClass {
+    width: 90px;
+    height: 90px;
+}
+
+.CustomClass {
+    /* text-align:left; */
+    border: 1px solid black;
+    width: 10%;
+    text-align: center;
+}
+
+.normalClass {
+    /* text-align:left; */
+    border: 1px solid black;
+}
+
+
+/* End Of Start of Table Classes */
