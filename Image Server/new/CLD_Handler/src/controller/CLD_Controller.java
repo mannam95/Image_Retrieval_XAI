@@ -21,10 +21,21 @@ public class CLD_Controller {
         BaseImageColorFeature.initializecld(Dictionaryfile);
     }
     
-    public static void query(String Fpath, String img, Score score) throws IOException
+    private CompareColorFeature ccf;
+
+    public CLD_Controller(String Fpath, Score qdetails) throws IOException { 
+        CompareColorFeature ccf = new CompareColorFeature(Fpath);
+        this.ccf = ccf;
+        qdetails.cldVector = ccf.ivsrccolorlayout.getFeatureVector();
+    }
+    
+    
+    
+    
+    public void query(String img, Score score) throws IOException
     {
         
-        new CompareColorFeature().compare(Fpath, img, score);
+        ccf.compare(img, score);
         
     }
     

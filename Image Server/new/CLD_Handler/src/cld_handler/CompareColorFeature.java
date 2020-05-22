@@ -27,10 +27,11 @@ import net.semanticmetadata.lire.imageanalysis.features.global.ColorLayout;
 public class CompareColorFeature {
 
     private BufferedImage ivsrcimg;
-    private ColorLayout ivsrccolorlayout;
+    public ColorLayout ivsrccolorlayout;
 
-    public CompareColorFeature() {
+    public CompareColorFeature(String img) throws IOException {
         ivsrccolorlayout = new ColorLayout();
+        extractqueryimage(img);
     }
 
     public HashMap<String, Double> comparewithquery(String pfpath, HashMap<String, ColorLayout> lvshpmap) throws IOException {
@@ -40,7 +41,7 @@ public class CompareColorFeature {
         Double lvdistance;
 
         for (Map.Entry lvshapemap : lvshpmap.entrySet()) {
-            System.out.println(lvshapemap.getKey() + "----->" + lvshapemap.getValue());
+            //System.out.println(lvshapemap.getKey() + "----->" + lvshapemap.getValue());
             ColorLayout lvcldobj = new ColorLayout();
             //BaseImageColorFeature  lvbaseimgobj = new BaseImageColorFeature();
             lvcldobj = (ColorLayout) lvshapemap.getValue();//.getbaseshapelayout();
@@ -89,7 +90,7 @@ public class CompareColorFeature {
         //lvbaseimage.setByteArrayRepresentation(pbasefeaturevector,0,pbasefeaturevector.length);
         lvbaseimage.setByteArrayRepresentation(pbasefeaturevector);
 
-        System.out.println("query image clr vector = " + Arrays.toString(ivsrccolorlayout.getByteArrayRepresentation()));
+        //System.out.println("query image clr vector = " + Arrays.toString(ivsrccolorlayout.getByteArrayRepresentation()));
 
         //return ivsrccolorlayout.getDistance(lvbaseimage);
         return lvbaseimage.getDistance(ivsrccolorlayout);
@@ -98,7 +99,7 @@ public class CompareColorFeature {
     }
 
     public void extractqueryimage(String pfpath) throws IOException {
-        System.out.println("source file path: " + pfpath);
+        //System.out.println("source file path: " + pfpath);
         File lvsrcfile = new File(pfpath);
         //FileUtils.get
         //File lvsrcfile = FileUtils.getAllImageFiles(new File(pfilepath), true);
@@ -107,14 +108,15 @@ public class CompareColorFeature {
     }
 
     //subhajit: added the code to be inline with the Score and Scoring utilities
-    public void compare(String img, String cmpImg, Score imgscr) throws IOException
+    public void compare(String compare_Img, Score imgscr)
     {
 
-        ColorLayout entry = BaseImageColorFeature.ivcldhandlermap.get(cmpImg);
+        ColorLayout entry = BaseImageColorFeature.ivcldhandlermap.get(compare_Img);
 
-        extractqueryimage(img);
 
-        imgscr.cldScore(img, (float) entry.getDistance(ivsrccolorlayout));
+        imgscr.cldScore(compare_Img, (float) entry.getDistance(ivsrccolorlayout));
+        
+        imgscr.cldVector = entry.getFeatureVector();
     }
 
 }

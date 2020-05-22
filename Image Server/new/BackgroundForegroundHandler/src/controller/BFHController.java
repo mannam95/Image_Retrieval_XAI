@@ -22,16 +22,24 @@ public class BFHController {
         Bovw.deserialiseBovw(bagOfWordFile);
     }
     
-    public static void query(String Fpath, String img, Score score) throws IRTEX_Exception
+    
+    Bovw query;
+    
+    public BFHController(String Fpath, Score qdetails) throws IRTEX_Exception
     {
         
         BackgroundForegroundHandler handler = new BackgroundForegroundHandler(BackgroundForegroundHandler.SegmentationAlgorithm.WATERSHED_SEGMENTATION, Fpath);
         handler.extract();
         
-        Bovw query = new Bovw();
+        query = new Bovw();
         query.loadQueryData(handler.name, handler.feature);
         
+        qdetails.features = query.featureVector;
         
+    }
+    
+    public void query(String img, Score score) throws IRTEX_Exception
+    {
         query.compare(img, score);
     }
     

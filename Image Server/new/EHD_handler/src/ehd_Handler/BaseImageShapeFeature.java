@@ -56,9 +56,6 @@ public class BaseImageShapeFeature {
       
       for(int i=0;i<lvjsonarray.size();i++){
         lvjsonobj = lvjsonarray.get(i);
-        System.out.println((String)lvjsonobj.get("name")+":"+
-                               (String)lvjsonobj.get("vector"));
-         
         lvbytearrayvec = lvreadf.convertstrtobytearray((String)lvjsonobj.get("vector"));
         EdgeHistogram lvbaseimage = new EdgeHistogram();
         lvbaseimage.setByteArrayRepresentation(lvbytearrayvec);
@@ -105,7 +102,7 @@ public class BaseImageShapeFeature {
     } 
   
   public void populateehdmap(String pfilepath) throws IOException{
-      System.out.println("source file path: " + pfilepath);
+      //System.out.println("source file path: " + pfilepath);
       File lvsrcfile = new File(pfilepath);
       ivbaseimage = ImageIO.read(lvsrcfile); 
       ivbaseshapelayout.extract(ivbaseimage);
@@ -121,7 +118,7 @@ public class BaseImageShapeFeature {
     
   public byte[] getsrcShapefeaturevectors(String pfilepath) throws IOException{
       
-      System.out.println("source file path: " + pfilepath);
+      //System.out.println("source file path: " + pfilepath);
       File lvsrcfile = new File(pfilepath);
       ivbaseimage = ImageIO.read(lvsrcfile); 
       ivbaseshapelayout.extract(ivbaseimage);

@@ -6,6 +6,7 @@
 package models;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -19,21 +20,37 @@ public class Score {
     
     //these are for background foreground
     public float[] region_scores;
+    @Expose(serialize = true)
+    @SerializedName("TotalAveragedRegionDistance")
     public float average;
     @Expose(serialize = true)
     public ArrayList<float[]>features;
     
     @Expose(serialize = true)
+    @SerializedName("OverallDistance")
     public float overallScore;
     
     
     //this is for cld score
+    @Expose(serialize = true)
+    @SerializedName("CLDDistance")
     public float cldScore;
+    
+    @Expose(serialize = true)
+    @SerializedName("CLDVector")
+    public double[] cldVector;
     
     
     
     //this is for cld score
+    @Expose(serialize = true)
+    @SerializedName("EHDDistance")
     public float ehdScore;
+    
+    
+    @Expose(serialize = true)
+    @SerializedName("EHDVector")
+    public double[] ehdVector;
     
     
     public void ehdScore(String name, float score) {

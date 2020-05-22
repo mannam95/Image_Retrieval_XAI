@@ -20,10 +20,20 @@ public class EHD_Controller {
         BaseImageShapeFeature.initializeshapedes(Dictionaryfile);
     }
     
-    public static void query(String Fpath, String img, Score score) throws IOException
+    
+    private CompareShapeFeature csf;
+
+    public EHD_Controller(String Fpath, Score qdetails) throws IOException {
+        CompareShapeFeature csf = new CompareShapeFeature(Fpath);
+        this.csf = csf;
+        qdetails.ehdVector = csf.ivsrcshapelayout.getFeatureVector();
+    }
+    
+    
+    public void query(String img, Score score) throws IOException
     {
         
-        new CompareShapeFeature().compare(Fpath, img, score);
+        csf.compare(img, score);
         
     }
 }

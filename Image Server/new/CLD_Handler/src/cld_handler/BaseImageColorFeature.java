@@ -62,8 +62,6 @@ public class BaseImageColorFeature {
       
     for(int i=0;i<lvjsonarray.size();i++){
        lvjsonobj = lvjsonarray.get(i);
-       System.out.println((String)lvjsonobj.get("name")+":"+
-                              (String)lvjsonobj.get("vector"));
          
        lvbytearrayvec = lvreadf.convertstrtobytearray((String)lvjsonobj.get("vector"));
        ColorLayout lvbaseimage = new ColorLayout();
@@ -116,7 +114,7 @@ public class BaseImageColorFeature {
     } 
   
   public void populatecldmap(String pfilepath) throws IOException{
-      System.out.println("source file path: " + pfilepath);
+      //System.out.println("source file path: " + pfilepath);
       File lvsrcfile = new File(pfilepath);
       ivbaseimage = ImageIO.read(lvsrcfile); 
       ivbasecolorlayout.extract(ivbaseimage);
@@ -133,7 +131,7 @@ public class BaseImageColorFeature {
   public byte[] getsrcfeaturevectors(String pfilepath) throws IOException
   {
       
-      System.out.println("source file path: " + pfilepath);
+      //System.out.println("source file path: " + pfilepath);
       File lvsrcfile = new File(pfilepath);
       ivbaseimage = ImageIO.read(lvsrcfile); 
       ivbasecolorlayout.extract(ivbaseimage);

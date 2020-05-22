@@ -5,6 +5,7 @@
  */
 package scoring;
 
+import com.google.gson.annotations.Expose;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,16 +18,22 @@ import models.Score;
  * @author SUBHAJIT
  */
 public class Scoring {
-
+    
+    @Expose(serialize = true)
     public HashMap<String, Score> topScores;
+    @Expose(serialize = true)
+    Score QueryImgDetails;
+    
+    
     int max_elemets;
 
     float max = -1;
     Score max_elem = null;
 
-    public Scoring(int max) {
+    public Scoring(int max, Score QueryImgDetails) {
         topScores = new HashMap<>(max);
         max_elemets = max;
+        this.QueryImgDetails = QueryImgDetails;
     }
 
     void findMax() {

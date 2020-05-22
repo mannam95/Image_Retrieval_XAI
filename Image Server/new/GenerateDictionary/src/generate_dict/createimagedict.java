@@ -5,6 +5,7 @@
  */
 //package net.applicationstart.lire.codeentry;
 package generate_dict;
+import IRTEX_Exception.IRTEX_Exception;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,6 +21,8 @@ import org.json.simple.JSONObject;
 //import org.json.simple.JSONObject;
 import cld_handler.BaseImageColorFeature;
 import ehd_Handler.BaseImageShapeFeature;
+import fileUtils.FileUtils;
+import java.util.ArrayList;
 /**
  *
  * @author lenovo
@@ -28,25 +31,16 @@ public class createimagedict {
     
     FileWriter ivfilewriter;
         
-    public void getfiles(String pfpath,String outfpath, boolean type) throws IOException{
+    public void getfiles(String pfpath,String outfpath, boolean type) throws IOException, IRTEX_Exception{
         
-        List<String> lvfilelist = null;
-        try (Stream<Path> walk = Files.walk(Paths.get(pfpath))) {
-
-	lvfilelist = walk.map(x -> x.toString())
-			.filter(f -> f.endsWith(".jpg")).collect(Collectors.toList());
-        
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-          }
-                
+        ArrayList<String> lvfilelist = new ArrayList<>();
+        FileUtils.listf(pfpath, lvfilelist);
        
         Iterator<String> lvfilelistIterator = lvfilelist.iterator();
         
         try {
         //try ( ivfilewriter = new FileWriter(outfpath)) {
-            ivfilewriter = new FileWriter(outfpath);
+            ivfilewriter = new FileWriter(FileUtils.createFile(outfpath));
             while(lvfilelistIterator.hasNext()) {
                 //System.out.println(lvfilelistIterator.next());
                 String lvfile = lvfilelistIterator.next();

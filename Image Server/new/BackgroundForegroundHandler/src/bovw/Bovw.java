@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import models.Score;
 import scoring.Scoring;
 
@@ -46,7 +47,7 @@ public class Bovw {
     ArrayList<Mat> descriptors;
     
     @Expose(serialize = true, deserialize = true)
-    ArrayList<float[]> featureVector;
+    public ArrayList<float[]> featureVector;
     
     Mat m;
     static ArrayList<Bovw> allBovw;
@@ -242,9 +243,19 @@ public class Bovw {
     {
         Type listType = new TypeToken<ArrayList<Bovw>>(){}.getType();
         allBovw = (ArrayList<Bovw>) FileUtils.loadGsonData(listType, fname);
+        convertHash();
         return allBovw;
     }
     
+    public static HashMap<String, Bovw> allBovwHash;
+    public static void convertHash()
+    {
+        allBovwHash = new HashMap<>(allBovw.size());
+        for(int i=0; i<allBovw.size(); i++)
+        {
+            allBovwHash.put(allBovw.get(i).name, allBovw.get(i));
+        }
+    }
     
     public void getDataVector() {
         for(int p = 0; p<descriptors.size(); p++)
@@ -375,15 +386,10 @@ public class Bovw {
         Score counter = imgscr;
         
         
-        query = findObj(img);
+        query = allBovwHash.get(img);
         query_array = query.featureVector;
         if(query_array == null)
             throw new IRTEX_Exception(IRTEX_Exception.ArrayNull);
-
-        if(query.name.endsWith("bird_batch_1_42.jpg"))
-        {
-            System.out.println("bovw.Bovw.compare()");
-        }
 
         counter.bfScore(query.name, query_array.size());
         for(int j=0; j<query_array.size(); j++)

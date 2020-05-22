@@ -18,7 +18,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import models.Score;
-import net.semanticmetadata.lire.imageanalysis.features.global.ColorLayout;
 //import java.util.ArrayList;
 //import java.util.Arrays;
 //import java.util.Iterator;
@@ -31,16 +30,17 @@ import net.semanticmetadata.lire.imageanalysis.features.global.EdgeHistogram;
 public class CompareShapeFeature {
 
     private BufferedImage ivsrcimage;
-    private EdgeHistogram ivsrcshapelayout;
+    public EdgeHistogram ivsrcshapelayout;
 
-    public CompareShapeFeature() {
+    public CompareShapeFeature(String img) throws IOException {
 
         ivsrcshapelayout = new EdgeHistogram();
+        extractqueryimage(img);
 
     }
 
     public void extractqueryimage(String pfpath) throws IOException {
-        System.out.println("source file path: " + pfpath);
+        //System.out.println("source file path: " + pfpath);
         File lvsrcfile = new File(pfpath);
         //FileUtils.get
         //File lvsrcfile = FileUtils.getAllImageFiles(new File(pfilepath), true);
@@ -55,7 +55,7 @@ public class CompareShapeFeature {
         Double lvdistance;
 
         for (Map.Entry lvshapemap : lvshpmap.entrySet()) {
-            System.out.println(lvshapemap.getKey() + "----->" + lvshapemap.getValue());
+            //System.out.println(lvshapemap.getKey() + "----->" + lvshapemap.getValue());
             EdgeHistogram lvehdobj = new EdgeHistogram();
             //BaseImageShapeFeature  lvbaseimgobj = new BaseImageShapeFeature();
             lvehdobj = (EdgeHistogram) lvshapemap.getValue();//.getbaseshapelayout();
@@ -110,12 +110,13 @@ public class CompareShapeFeature {
     }
 
     //subhajit: added the code to be inline with the Score and Scoring utilities
-    public void compare(String img, String cmpImg, Score imgscr) throws IOException {
+    public void compare(String compare_Img, Score imgscr){
 
-        EdgeHistogram entry = BaseImageShapeFeature.ivehdhandlermap.get(cmpImg);
+        EdgeHistogram entry = BaseImageShapeFeature.ivehdhandlermap.get(compare_Img);
 
-        extractqueryimage(img);
 
-        imgscr.ehdScore(img, (float) entry.getDistance(ivsrcshapelayout));
+        imgscr.ehdScore(compare_Img, (float) entry.getDistance(ivsrcshapelayout));
+        
+        imgscr.ehdVector = entry.getFeatureVector();
     }
 }
