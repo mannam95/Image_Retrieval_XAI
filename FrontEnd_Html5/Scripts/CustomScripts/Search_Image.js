@@ -9,7 +9,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
             displayImageCharacterslen: 15,
             currentBrowserURL: $(location).attr('href'),
             idDetails: ['#MainDiv', '#hideLabelId', '#fileUploadID', '#fileNameId', '#fileImgID', '#SearchBtn'],
-            supportedImageFormats: [".XBM", ".TIF", ".PJP", ".PJPEG", ".JFIF", ".WEBP", ".ICO", ".TIFF", ".BMP", ".PNG", ".JPEG",  ".SVGZ", ".JPG", ".GIF", ".SVG", "EXIF"],
+            supportedImageFormats: [".XBM", ".TIF", ".PJP", ".PJPEG", ".JFIF", ".WEBP", ".ICO", ".TIFF", ".BMP", ".PNG", ".JPEG", ".SVGZ", ".JPG", ".GIF", ".SVG", "EXIF"],
             singlediffarray: [],
             singlefirstlevedata: [],
             singleSecondleveldata: [],
@@ -18,144 +18,67 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
             currentsingleIndex: '',
             extractCurResind: '',
             queryFileData: '',
+            mainTableData: '',
+            baseImagedata: ''
+
         };
 
-        var tableData = [{
-            ID: 0,
-            imageURL: 'imagesData/Sample1.jpg',
-            imageDetails: 'Dog'
-        }, {
-            ID: 1,
-            imageURL: 'imagesData/Sample2.jpg',
-            imageDetails: 'Butterfly'
-        }, {
-            ID: 2,
-            imageURL: 'imagesData/Sample3.jpg',
-            imageDetails: 'Parrot'
-        }, {
-            ID: 3,
-            imageURL: 'imagesData/Sample4.jpg',
-            imageDetails: 'Nature'
-        }, {
-            ID: 4,
-            imageURL: 'imagesData/Sample5.jpg',
-            imageDetails: 'Riding Bycycle'
-        }];
 
-        var apiresult =
-        {
-            baseImagedata: {
-                ImageID: 'Img-3',
-                ImageURL: 'Image URL',
-                SimilarityScore: '',
-                SubFeatures: {
-                    color: {
-                        F0: 0.0319,
-                        F1: 0.2402,
-                        F2: 0.2972,
-                        F3: 0.117,
-                        F4: 0.0287,
-                        F5: 0.0201,
-                        F6: 0.0364,
-                    },
-                    shape: {
-                        F7: 0.0544,
-                        F8: 0.0535,
-                        F9: 0.0011,
-                        F10: 0.0034,
-                        F11: 0.0049,
-                        F12: 0.0114,
-                        F13: 0.1002,
-                        F14: -0.096,
-                    },
-                    semantics: {
-                        F15: 0.0251,
-                        F16: 0.4,
-                        F17: 0.2222,
-                        F18: 0.3778,
-                        F19: 0.8296,
-                        F20: -0.1032,
-                        F21: -1.1811
-                    },
-                },
-            },
-            resultImagedata: [
+        var endpointresult = {
+            "topScores": [
                 {
-                    ImageID: 'Img-4',
-                    ImageURL: 'Image URL',
-                    SimilarityScore: '',
-                    Rank: '',
-                    Local_Explantion: 'Based on what this image is ranked first',
-                    SubFeatures: {
-                        color: {
-                            F0: 0.0324,
-                            F1: 0.2286,
-                            F2: 0.2739,
-                            F3: 0.1117,
-                            F4: 0.0252,
-                            F5: 0.0241,
-                            F6: 0.0344,
-                        },
-                        shape: {
-                            F7: 0.0519,
-                            F8: 0.0505,
-                            F9: 0.0015,
-                            F10: 0.0023,
-                            F11: 0.0055,
-                            F12: 0.0096,
-                            F13: 0.0956,
-                            F14: -0.091,
-                        },
-                        semantics: {
-                            F15: 0.027,
-                            F16: 0.2444,
-                            F17: 0.2667,
-                            F18: 0.4889,
-                            F19: 0.8133,
-                            F20: -0.1032,
-                            F21: -1.1811
-                        },
-                    },
-                },
-                {
-                    ImageID: 'Img-5',
-                    ImageURL: 'Image URL',
-                    SimilarityScore: '',
-                    Rank: '',
-                    Local_Explantion: 'Based on what this image is ranked first',
-                    SubFeatures: {
-                        color: {
-                            F0: 0.0356,
-                            F1: 0.2546,
-                            F2: 0.4151,
-                            F3: 0.1019,
-                            F4: 0.0353,
-                            F5: 0.0277,
-                            F6: 0.0331,
-                        },
-                        shape: {
-                            F7: 0.0485,
-                            F8: 0.0521,
-                            F9: 0.0013,
-                            F10: 0.0024,
-                            F11: 0.0062,
-                            F12: 0.0102,
-                            F13: 0.0916,
-                            F14: -0.0965,
-                        },
-                        semantics: {
-                            F15: 0.0203,
-                            F16: 0.3111,
-                            F17: 0.3111,
-                            F18: 0.3778,
-                            F19: 0.8005,
-                            F20: -0.1032,
-                            F21: -1.1811
-                        },
-                    },
-                },
-            ],
-
+                    "name": "imagesData/Sample1.jpg",
+                    "overallDistScore": 264.55603,
+                    "backforegrounddistance": 18.712542,
+                    "colordistance": 63.15092,
+                    "shapedistance": 182.69258,
+                    "mainFeatures": [
+                        {
+                            "BackgroundForeground": [[1, 2, 1, 1, 4, 3, 6, 14, 55, 15, 2, 0, 2, 0, 9, 0, 0, 2, 4, 3, 8, 5, 7, 0, 5, 4, 3, 8, 6, 9], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0, 0, 0, 0, 3, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0]]
+                        }, {
+                            "Color": [10, 14, 15, 15, 21, 7, 18, 12, 14, 18, 14, 15, 18, 10, 18, 22, 19, 15, 14, 15, 14, 25, 17, 17, 16, 14, 18, 36, 16, 14, 15, 15, 15]
+                        }, {
+                            "Shape": [0, 4, 0, 1, 0, 4, 2, 1, 1, 1, 1, 5, 0, 0, 0, 7, 0, 2, 2, 1, 3, 0, 1, 1, 1, 6, 1, 3, 2, 1, 2, 0, 1, 0, 0, 7, 0, 0, 0, 0, 1, 1, 5, 4, 5, 2, 1, 5, 5, 4, 1, 4, 1, 1, 1, 5, 0, 0, 0, 0, 0, 2, 0, 3, 2, 1, 3, 2, 4, 3, 1, 2, 0, 3, 2, 1, 1, 1, 1, 3]
+                        }]
+                }, {
+                    "name": "imagesData/Sample2.jpg",
+                    "overallDistScore": 240.3624,
+                    "backforegrounddistance": 19.28962,
+                    "colordistance": 47.43347,
+                    "shapedistance": 173.63931,
+                    "mainFeatures": [{
+                        "BackgroundForeground": [[1, 2, 5, 4, 22, 2, 7, 9, 28, 13, 3, 7, 1, 6, 10, 7, 14, 6, 19, 6, 3, 4, 8, 5, 7, 3, 10, 3, 0, 15], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 2, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0]]
+                    }, {
+                        "Color": [18, 14, 8, 13, 15, 13, 17, 21, 18, 19, 16, 14, 12, 18, 11, 13, 13, 13, 14, 17, 16, 24, 16, 15, 13, 15, 15, 31, 15, 16, 17, 16, 14]
+                    }, {
+                        "Shape": [5, 4, 2, 2, 1, 4, 5, 0, 0, 0, 1, 2, 0, 0, 0, 5, 2, 3, 5, 0, 4, 1, 3, 2, 1, 6, 0, 0, 0, 0, 2, 0, 3, 1, 2, 5, 1, 3, 2, 1, 2, 2, 3, 5, 4, 4, 6, 4, 3, 1, 4, 4, 4, 2, 5, 4, 1, 2, 2, 4, 2, 4, 6, 7, 5, 4, 5, 5, 4, 4, 1, 4, 5, 6, 6, 4, 4, 6, 5, 4]
+                    }]
+                }, {
+                    "name": "imagesData/Sample3.jpg",
+                    "overallDistScore": 238.21576,
+                    "backforegrounddistance": 21.703552,
+                    "colordistance": 53.582546,
+                    "shapedistance": 162.92966,
+                    "mainFeatures": [{
+                        "BackgroundForeground": [[0, 0, 0, 0, 1, 2, 2, 4, 68, 2, 0, 0, 1, 0, 1, 0, 1, 3, 10, 2, 2, 5, 8, 1, 0, 2, 4, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0], [3, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 3, 0, 0, 0, 0, 0, 0, 1, 3, 0]]
+                    }, {
+                        "Color": [38, 11, 29, 19, 22, 23, 16, 7, 16, 9, 18, 12, 16, 17, 20, 14, 10, 16, 16, 17, 17, 30, 15, 15, 15, 15, 16, 31, 15, 15, 16, 15, 15]
+                    }, {
+                        "Shape": [5, 1, 2, 0, 1, 0, 2, 0, 0, 0, 1, 2, 0, 1, 0, 5, 0, 1, 1, 0, 6, 1, 1, 0, 0, 6, 0, 0, 0, 0, 7, 1, 0, 0, 1, 6, 1, 0, 1, 0, 2, 2, 0, 0, 0, 0, 3, 2, 2, 0, 4, 5, 1, 3, 1, 5, 2, 0, 2, 0, 1, 1, 0, 1, 0, 0, 2, 0, 0, 0, 4, 2, 3, 5, 1, 5, 0, 1, 1, 0]
+                    }]
+                }], "QueryImgDetails": {
+                    "overallDistScore": 0,
+                    "backforegrounddistance": 0,
+                    "colordistance": 0,
+                    "shapedistance": 0,
+                    "mainFeatures": [{
+                        "BackgroundForeground": [[7, 4, 10, 3, 7, 12, 7, 3, 40, 5, 7, 5, 12, 8, 9, 1, 2, 17, 15, 10, 3, 5, 11, 6, 8, 20, 17, 6, 13, 7], [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 1, 2, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 4, 5, 0, 0, 0, 0, 0, 3, 0], [1, 0, 0, 1, 1, 0, 7, 2, 2, 1, 1, 0, 1, 1, 1, 1, 0, 21, 0, 0, 8, 3, 4, 0, 0, 0, 2, 2, 2, 3]]
+                    }, {
+                        "Color": [24, 16, 11, 24, 14, 23, 14, 14, 14, 25, 20, 17, 13, 14, 24, 14, 19, 14, 15, 15, 20, 31, 16, 14, 16, 15, 16, 26, 15, 17, 14, 16, 14]
+                    }, {
+                        "Shape": [4, 3, 2, 3, 1, 3, 6, 0, 0, 0, 1, 5, 0, 0, 0, 3, 4, 0, 1, 1, 2, 0, 0, 0, 0, 3, 0, 0, 0, 0, 2, 0, 0, 0, 0, 4, 1, 0, 0, 0, 4, 5, 4, 4, 4, 1, 6, 2, 1, 4, 2, 6, 2, 3, 3, 4, 5, 4, 2, 3, 0, 6, 0, 0, 2, 0, 6, 0, 0, 0, 0, 7, 0, 0, 0, 0, 6, 3, 0, 0]
+                    }]
+                }
         };
 
         //When everything is loaded what to do first
@@ -208,10 +131,10 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                             };
 
                             reader.onloadend = function (e) {
-                                setTimeout(function(){
+                                setTimeout(function () {
                                     $('#viewPartdiv').show();
                                     $('.dropzone-wrapper').css("height", $('.preview-zone').height());
-                                  }, 200);
+                                }, 200);
                             };
 
                             reader.readAsDataURL(input.files[0]);
@@ -294,15 +217,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                     });
                 } else {
 
-                    if ($.fn.DataTable.isDataTable('#irtexdbID')) {
-                        pageDetails.tabledetails.destroy();
-                    }
-
-                    CreateDatatable('irtexdbID', tableData);
-                    $("[id^='accordion']").accordion({ header: "h3", collapsible: true, active: false, heightStyle: "content" });
-                    $('#irtexdbID').show();
-                    $("#irtexdbID").css("width", "100%");
-
+                    makeTableData();
                 }
             } catch (error) {
                 swal.fire({
@@ -330,6 +245,47 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
             }
         });
 
+        //creates the data into our custom way for table creation
+        function makeTableData() {
+            try {
+                var tempTabData = endpointresult.topScores;
+
+                tempTabData = sortArrayByObj(tempTabData, 'overallDistScore');
+
+                tempTabData = addIndToArr(tempTabData, 'ID');
+
+                pageDetails.mainTableData = tempTabData;
+
+                pageDetails.baseImagedata = endpointresult.QueryImgDetails;
+
+                pageDetails.baseImagedata['mainFeatures'][0]['BackgroundForeground'] = [].concat.apply([],pageDetails.baseImagedata['mainFeatures'][0]['BackgroundForeground']);
+
+                pageDetails.subFeaturesNames = [];
+                for(var fn=0; fn< pageDetails.baseImagedata['mainFeatures'].length; fn++){
+                    pageDetails.subFeaturesNames.push(Object.keys(pageDetails.baseImagedata['mainFeatures'][fn])[0]);
+                }
+
+
+                if ($.fn.DataTable.isDataTable('#irtexdbID')) {
+                    pageDetails.tabledetails.destroy();
+                }
+
+                CreateDatatable('irtexdbID', pageDetails.mainTableData);
+
+                $("[id^='accordion']").accordion({ header: "h3", collapsible: true, active: false, heightStyle: "content" });
+                $('#irtexdbID').show();
+                $("#irtexdbID").css("width", "100%");
+
+            } catch (error) {
+                swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!',
+                    footer: JSON.stringify(error)
+                });
+            }
+        }
+
 
         //to create the data table
         function CreateDatatable(TableName, BindingData) {
@@ -356,7 +312,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                         }
                     },
                     {
-                        "data": "imageURL",
+                        "data": "name",
                         "className": 'thirdColumnClass',
                         render: function (data, type, row) {
                             return '<img class="tableImgClass" src="' + data + '"/>';
@@ -371,7 +327,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                                 '<div id="accordion' + (row.ID + 1) + '">' +
                                 '<h3>Explain</h3>' +
                                 '<div style="height: auto !important;">' +
-                                '<p>' + data + '</p>' +
+                                '<p>Local Explanation</p>' +
                                 '<p><input class="VisualBtnClass" data-target="#exampleModalCenter" data-toggle="modal" type="button" value="Visual Explanation" id="VisualBtn' + (row.ID + 1) + '"></p>' +
                                 '</div>' +
                                 '</div>' +
@@ -431,20 +387,23 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
         //this function calculates the difference between base image and result image
         function calculatesingleVisualData(imageIndex) {
             try {
-                var subFeatures = Object.keys(apiresult.resultImagedata[imageIndex].SubFeatures);
+                var mainFeatures = pageDetails.mainTableData[imageIndex].mainFeatures;
 
                 //loop for every feature
-                for (countf = 0; countf < subFeatures.length; countf++) {
+                for (countf = 0; countf < mainFeatures.length; countf++) {
 
-                    var childFeatures = Object.keys(apiresult.resultImagedata[imageIndex].SubFeatures[subFeatures[countf]]);
+                    var childFeatures = pageDetails.mainTableData[imageIndex].mainFeatures[countf];
+
+                    currentObjName = Object.keys(childFeatures)[0];
+                    childFeatures = childFeatures[Object.keys(childFeatures)[0]];
 
                     //loop for every individual feature
                     for (countsf = 0; countsf < childFeatures.length; countsf++) {
 
                         var temp = {
-                            diff: Math.abs((apiresult.baseImagedata.SubFeatures[subFeatures[countf]][childFeatures[countsf]]) - (apiresult.resultImagedata[imageIndex].SubFeatures[subFeatures[countf]][childFeatures[countsf]])),
+                            diff: Math.abs((pageDetails.baseImagedata.mainFeatures[countf][currentObjName][countsf]) - (pageDetails.mainTableData[imageIndex].mainFeatures[countf][currentObjName][countsf])),
                         };
-                        temp[subFeatures[countf]] = [childFeatures[countsf]];
+                        temp[currentObjName] = [countsf];
 
                         pageDetails.singlediffarray.push(temp);
                     }
@@ -772,11 +731,13 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                 pageDetails.pyramidresults['topPyramid'] = [];
                 pageDetails.pyramidresults['bottomPyramid'] = [];
 
+                var tempsubFInd = pageDetails['subFeaturesNames'].indexOf(pageDetails.level2SelectdText);
+
                 for (p1 = 0; p1 < pageDetails.pyramidresults.childfeaturesNames.length; p1++) {
 
-                    pageDetails.pyramidresults.topPyramid.push(Math.abs(apiresult['baseImagedata']['SubFeatures'][pageDetails.level2SelectdText][pageDetails.pyramidresults.childfeaturesNames[p1]]));
+                    pageDetails.pyramidresults.topPyramid.push(Math.abs(((pageDetails['baseImagedata']['mainFeatures'][tempsubFInd])[pageDetails.level2SelectdText])[pageDetails.pyramidresults.childfeaturesNames[p1]]));
 
-                    pageDetails.pyramidresults.bottomPyramid.push(Math.abs(apiresult['resultImagedata'][0]['SubFeatures'][pageDetails.level2SelectdText][pageDetails.pyramidresults.childfeaturesNames[p1]]));
+                    pageDetails.pyramidresults.bottomPyramid.push(Math.abs(((pageDetails.mainTableData[pageDetails.extractCurResind]['mainFeatures'][tempsubFInd])[pageDetails.level2SelectdText])[pageDetails.pyramidresults.childfeaturesNames[p1]]));
                 }
             } catch (error) {
                 swal.fire({
@@ -819,7 +780,9 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                                 "text-align": "middle"
                             },
                             "values": pageDetails.pyramidresults.childfeaturesNames,
-                            "visible": false
+                            "visible": false,
+                            itemsOverlap: true,
+                            maxItems: pageDetails.pyramidresults.childfeaturesNames.length,
                         },
                         "series": [
                             {
@@ -830,13 +793,13 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                             }
                         ],
                         "scale-y": {
-                            "short": true
+                            "short": true,
                         },
                         "scale-x-2": {
                             "item": {
                                 "text-align": "middle"
                             },
-                            "values": pageDetails.pyramidresults.childfeaturesNames
+                            "values": pageDetails.pyramidresults.childfeaturesNames,
                         }
                     },
                     {
@@ -862,7 +825,9 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                             "item": {
                                 "text-align": "middle"
                             },
-                            "values": pageDetails.pyramidresults.childfeaturesNames
+                            "values": pageDetails.pyramidresults.childfeaturesNames,
+                            itemsOverlap: true,
+                            maxItems: pageDetails.pyramidresults.childfeaturesNames.length,
                         },
                         "series": [
                             {
@@ -872,6 +837,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                                 "values": pageDetails.pyramidresults.bottomPyramid
                             }
                         ],
+                        itemsOverlap: true,
                         "scale-y": {
                             "mirrored": true,
                             "short": true
@@ -1181,6 +1147,22 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                 if (x[objname] == objvalue)
                     return index;
             });
+        }
+
+        //sorts the array of values based on a specific property value
+        function sortArrayByObj(inpArr, ObjName) {
+            return inpArr.sort(function (a, b) {
+                return a[ObjName] > b[ObjName] ? 1 : -1;
+            });
+        }
+
+        //to ad an additional property to array of objects
+        function addIndToArr(inpArr, ObjName) {
+            for(var a1=0; a1< inpArr.length; a1++){
+                inpArr[a1][ObjName] = a1;
+                inpArr[a1]['mainFeatures'][0]['BackgroundForeground'] = [].concat.apply([],inpArr[a1]['mainFeatures'][0]['BackgroundForeground']);
+            }
+            return inpArr;
         }
 
         //detect window changes and maje responsive

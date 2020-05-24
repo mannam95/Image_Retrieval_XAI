@@ -25,35 +25,37 @@
 
 <body class="body-cls">
 
-    <div id="MainDiv" class="MainClass" style="display: none;">
-        <div id="SearchTableDiv">
-            <div class="SearchOptions">
-                <div class="bootstrfileInput">
-                    <div class="container">
-                        <div class="row row-flex" style="justify-content: center;">
-                            <div class="col-xs-3">
-                                <div class="form-group">
-                                    <div class="dropzone-wrapper">
-                                        <div class="box dropzone-desc">
-                                            <div class="respDiv">
-                                                <i class="glyphicon glyphicon-download-alt"></i>
-                                                <p>Choose an image file or drag it here.</p>
+    <form>
+        <div id="MainDiv" class="MainClass" style="display: none;">
+            <div id="SearchTableDiv">
+                <div class="SearchOptions">
+                    <div class="bootstrfileInput">
+                        <div class="container">
+                            <div class="row row-flex" style="justify-content: center;">
+                                <div class="col-xs-3">
+                                    <div class="form-group">
+                                        <div class="dropzone-wrapper">
+                                            <div class="box dropzone-desc">
+                                                <div class="respDiv">
+                                                    <i class="glyphicon glyphicon-download-alt"></i>
+                                                    <p>Choose an image file or drag it here.</p>
+                                                </div>
                                             </div>
+                                            <input type="file" name="img_logo" class="dropzone" accept="Image/*">
                                         </div>
-                                        <input type="file" name="img_logo" class="dropzone" accept="Image/*">
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-xs-3 text-right" id="viewPartdiv" style="display: none;">
-                                <div class="form-group">
-                                    <div class="preview-zone hidden">
-                                        <div class="box box-solid">
-                                            <!-- <div class="box-header with-border">
+                                <div class="col-xs-3 text-right" id="viewPartdiv" style="display: none;">
+                                    <div class="form-group">
+                                        <div class="preview-zone hidden">
+                                            <div class="box box-solid">
+                                                <!-- <div class="box-header with-border">
                                                     <button type="button" class="btn btn-danger btn-xs remove-preview">
                                                         <i class="fa fa-times"></i> Remove the Image
                                                     </button>
                                                 </div> -->
-                                            <div class="box-body"></div>
+                                                <div class="box-body"></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -62,24 +64,24 @@
                     </div>
                 </div>
             </div>
+            <br><br>
+            <div class="BtnDivClass">
+                <input class="BtnClass" type="button" value="Search" id="SearchBtn">
+                <!-- <input class="BtnClass" type="button" value="Reset" id="ResetBtn"> -->
+            </div>
+            <br /><br />
+            <table id="irtexdbID" class="irtexdbClass">
+                <thead class="TheadClass">
+                    <tr>
+                        <th>Select</th>
+                        <th>Ranking</th>
+                        <th>Image</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+            </table>
         </div>
-        <br><br>
-        <div class="BtnDivClass">
-            <input class="BtnClass" type="button" value="Search" id="SearchBtn">
-            <!-- <input class="BtnClass" type="button" value="Reset" id="ResetBtn"> -->
-        </div>
-        <br /><br />
-        <table id="irtexdbID" class="irtexdbClass">
-            <thead class="TheadClass">
-                <tr>
-                    <th>Select</th>
-                    <th>Ranking</th>
-                    <th>Image</th>
-                    <th>Details</th>
-                </tr>
-            </thead>
-        </table>
-    </div>
+    </form>
 
     <div class="modal fade bd-example-modal-lg" id="exampleModalCenter" tabindex="-1" role="dialog"
         aria-labelledby="myLargeModalLabel" aria-hidden="true">

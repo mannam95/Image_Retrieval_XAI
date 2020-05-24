@@ -296,20 +296,22 @@ table th {
 .bootstrfileInput {
     margin: auto;
 }
- 
+
 .row {
     /* display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox; */
-    display:         flex;
-  }
-  /*
+    display: flex;
+}
+
+/*
   .row > [class*='col-'] {
        display: flex;
        flex-direction: column;
   } */
-  .respDiv{
-      padding-top: 25%;
-  }
 
-  /* End drag and drop classses */
+.respDiv {
+    padding-top: 25%;
+}
+
+/* End drag and drop classses */
