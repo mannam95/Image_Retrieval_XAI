@@ -1056,6 +1056,8 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                     url: 'localhost:3000/lireq',
                     type: 'POST',
                     data: formdata,
+                    processData: false,
+                    contentType: false,
                     success: function (response) {
                         endpointresult = response;
 
