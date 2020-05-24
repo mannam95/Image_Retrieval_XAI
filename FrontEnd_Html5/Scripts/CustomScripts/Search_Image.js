@@ -129,6 +129,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
 
                     $('#viewPartdiv').hide();
                     $('.dropzone').val('')
+                    $('.dropzone-wrapper').css("height", '187px');
 
                     pageDetails.imageName = pageDetails.duplicateImageName = '';
                     pageDetails.queryFileData = '';
