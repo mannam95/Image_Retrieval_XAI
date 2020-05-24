@@ -2,28 +2,17 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
-const fs = require('fs');
 const app = express();
 const axios = require("axios");
-
-// Kush - commented mongodb connection code. since we will be using filesystem.
-//mean-course will be my database that will be created on the fly
-//mongoose.connect("mongodb+srv://subhajit:tDaIPDU8Nfa8NWzS@cluster0-kkltl.mongodb.net/mean-course?retryWrites=true&w=majority")
-//.then(()=>{console.log("connected to database");})
-//.catch(()=>{console.log("connection failed")});
-
-app.use('/images', express.static(path.join('backend/images')));
+const searchRouter = express.Router();
+const multer = require('multer');
+const fs = require('fs');
 
 // load configuration file.
 const conf = require('./config.json');
 
 //map the base image absolute path to proxy resultimages directory.
 app.use('/resultimages', express.static(path.join(conf.baseimgdir)));
-
-
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use((req, res, next) =>{
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -32,26 +21,53 @@ app.use((req, res, next) =>{
   next();
 });
 
-//app.use('/api/posts', postRouter);
+// url to the image server. This param has to be configured in conf.json. 
+const imagerserverurl = conf.protocol + "://" + conf.iserverhostip + ":" + conf.iserverportnumber 
 
-//Kush: Dummy code to fetch query image path for testing get request to image server. This can be replaced with acutual query image path. 
-let qimagepath;
-fs.readdirSync( __dirname +'/query_image/' ).forEach( file => {
+// validate json received from image server.
+function checkresponse(data){
+  return JSON.stringify(data).includes('topScores');
+}
 
-  const extname = path.extname( file );
-  const filename = path.basename( file, extname );
-  qimagepath = __dirname + '\\query_image\\' + file; 
+var httpurl = conf.protocol + "://" + conf.bserverhostip + ":" + conf.bserverportnumber 
+
+function readjsonobject(obj){
+  var dirPath;
+  var imgpath;
+  var imagename;
+  for (var i = 0;i<obj.topScores.length;i++){
+        imgpath = obj.topScores[i].name;
+        newimgpath = imgpath.replace(conf.baseimgdir+'\\','');
+        newimgpath = newimgpath.split('\\').join('\/');
+        imagename = path.basename(imgpath);
+        var newurl = httpurl + "/resultimages/" + newimgpath;
+        obj.topScores[i].url = newurl;
+        }
+}
+
+
+const storage = multer.diskStorage({
+  destination:(req, file, cb)=>{
+    cb(null, 'backend/images')
+  },
+  filename:(req, file, cb)=>{
+    const name = file.originalname.toLowerCase().split(' ').join('-');
+    cb(null, name+"-"+Date.now());
+  }
 });
 
-// Kush - fire a get request to the Image(dummy) server with image path as request param on arrival of get request from the client.
-// It is important to set 'qimagepath' variable before the sending the get the request.
+// Kush - fire a GET request to the Image server with image path as request param on arrival of POST request from the client.
+// It is important to set 'filename' variable before the sending the get the request.
 
-// url to the image server. This param has to be configured in conf.json. 
-const imagerserverurl = conf.protocol + "://" + conf.iserverhostip + ":" + conf.iserverportnumber //"http://localhost:5100";
-
-app.get('/',(req, res, next)=>{
+app.post('/lireq', multer({ storage: storage }).single('urld'), (req, res, next)=>{
+  if(req.file){
+    filename =req.file.filename;
+  }
+  else{
+    res.status(404).json({message:'image is mandatory for this query'});
+  }  
   axios.get(imagerserverurl,{ params: {
-    queryimagepath: qimagepath
+    file: filename
   }
 }).then(response => {
       const data = response.data;
@@ -59,8 +75,6 @@ app.get('/',(req, res, next)=>{
       // check if response data is correct.
       if (checkresponse(data)){
       readjsonobject(obj);
-      // TODO: Writing the json object to a file.Keeping it for time being. If not required will remove the below line.
-      fs.writeFileSync('received_response.json', JSON.stringify(obj,null,2));
       res.status(200).json(obj);
     }
     else{
@@ -74,31 +88,7 @@ app.get('/',(req, res, next)=>{
     });
 });
 
-// validate json received from image server.
-function checkresponse(data){
-  return JSON.stringify(data).includes('topScores');
-}
-
-var httpurl = conf.protocol + "://" + conf.bserverhostip + ":" + conf.bserverportnumber  //http://localhost:3000";
-function readjsonobject(obj){
-  var dirPath;
-  var imgpath;
-  var imagename;
-  for (var i = 0;i<obj.topScores.length;i++){
-        imgpath = obj.topScores[i].name;
-        newimgpath = imgpath.replace(conf.baseimgdir+'\\','');
-        newimgpath = newimgpath.split('\\').join('\/');
-        imagename = path.basename(imgpath);
-        var newurl = httpurl + "/resultimages/" + newimgpath;
-        console.log(newurl);
-        obj.topScores[i].url = newurl;
-        }
-}
-
-
-
 module.exports = app;
-
 
 //mongo db
 //subhajit
