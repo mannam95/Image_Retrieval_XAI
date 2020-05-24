@@ -6,17 +6,30 @@
 package scoring;
 
 import com.google.gson.annotations.Expose;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import models.Score;
 
 /**
  *
  * @author SUBHAJIT
  */
+
+class Scoring_Serialise
+{
+    @Expose(serialize = true)
+    public Collection<Score> topScores;
+    @Expose(serialize = true)
+    Score QueryImgDetails;
+    
+    public Scoring_Serialise(Score QueryImgDetails, HashMap<String, Score> topScores)
+    {
+        this.QueryImgDetails = QueryImgDetails;
+        this.topScores = topScores.values();
+    }
+}
+
 public class Scoring {
     
     @Expose(serialize = true)
@@ -95,6 +108,16 @@ public class Scoring {
         }
 
         return null;
+    }
+    
+    
+    public static Object serialiseObj(Scoring sc)
+    {
+        sc.QueryImgDetails.addVectorToCategorised();
+        sc.topScores.entrySet().forEach((entry) -> {  
+            entry.getValue().addVectorToCategorised();
+        });
+        return new Scoring_Serialise(sc.QueryImgDetails, sc.topScores);
     }
 
 //    static int comparators(Score a, Score b) {

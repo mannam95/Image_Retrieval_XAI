@@ -362,23 +362,24 @@ public class Bovw {
 //    }
 //    
     
-    private Bovw findObj(String img)
-    {
-        for(int i=0; i<allBovw.size(); i++)
-        {
-            if(allBovw.get(i).name.equals(img))
-            {
-                return allBovw.get(i);
-            }
-        }
-        return null;
-    }
+//    private Bovw findObj(String img)
+//    {
+//        for(int i=0; i<allBovw.size(); i++)
+//        {
+//            if(allBovw.get(i).name.equals(img))
+//            {
+//                return allBovw.get(i);
+//            }
+//        }
+//        return null;
+//    }
     
     public void compare(String img, Score imgscr) throws IRTEX_Exception
     {
         Bovw query;
         ArrayList<float[]>query_array;
         float max = -1;
+        float[] feature = null;
         float total;
         float a[], b[];
         
@@ -391,29 +392,30 @@ public class Bovw {
         if(query_array == null)
             throw new IRTEX_Exception(IRTEX_Exception.ArrayNull);
 
-        counter.bfScore(query.name, query_array.size());
-        for(int j=0; j<query_array.size(); j++)
+        counter.bfScore(query.name, featureVector.size());
+        for(int j=0; j<featureVector.size(); j++)
         {
             //REGION OF base image
-            a = query_array.get(j);
+            a = this.featureVector.get(j);
             if(a==null)
                 continue;
-            max = -1;
-            for(int k=0; k< this.featureVector.size(); k++)
+            max = -1;feature = null;
+            for(int k=0; k< query_array.size(); k++)
             {
                 //REGION OF query IMAGE
-                b = this.featureVector.get(k);
+                b = query_array.get(k);
 
                 //calculate distance
                 total = l2dist(a, b);
-                if(max == -1)max = total;
-                else if(total<max)max = total;                
+                if(max == -1){max = total;feature = b;}
+                else if(total<max){max = total;feature = b;}
             }
             counter.add(max, j);
+            counter.addbfvector(feature);
         }
         counter.average();
         
-        counter.features = featureVector;
+        //counter.features = featureVector;
         
     }
     

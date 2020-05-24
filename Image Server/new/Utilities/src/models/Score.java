@@ -7,6 +7,7 @@ package models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import constants.Handlers;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -18,40 +19,45 @@ public class Score {
     @Expose(serialize = true)
     public String name;
     
+    
+    
+    @Expose(serialize = true)
+    @SerializedName("overallDistScore")
+    public float overallScore;
+    
+    
     //these are for background foreground
     public float[] region_scores;
     @Expose(serialize = true)
-    @SerializedName("TotalAveragedRegionDistance")
+    @SerializedName("backforegrounddistance")
     public float average;
-    @Expose(serialize = true)
-    public ArrayList<float[]>features;
     
-    @Expose(serialize = true)
-    @SerializedName("OverallDistance")
-    public float overallScore;
+    public ArrayList<float[]>features = new ArrayList<>();
+    
     
     
     //this is for cld score
     @Expose(serialize = true)
-    @SerializedName("CLDDistance")
+    @SerializedName("colordistance")
     public float cldScore;
     
-    @Expose(serialize = true)
-    @SerializedName("CLDVector")
     public double[] cldVector;
     
     
     
     //this is for cld score
     @Expose(serialize = true)
-    @SerializedName("EHDDistance")
+    @SerializedName("shapedistance")
     public float ehdScore;
+    
+    public double[] ehdVector;
+    
     
     
     @Expose(serialize = true)
-    @SerializedName("EHDVector")
-    public double[] ehdVector;
+    ArrayList<HashMap<String, Object>> mainFeatures;
     
+            
     
     public void ehdScore(String name, float score) {
         this.name = name;
@@ -64,6 +70,12 @@ public class Score {
         cldScore = score;
     }
     
+    
+    
+    public void addbfvector(float[] vect)
+    {
+        this.features.add(vect);
+    }
 
     public void bfScore(String name, int numregions) {
         this.name = name;
@@ -85,4 +97,28 @@ public class Score {
         average = sum/region_scores.length;
     }
     
+    
+    
+    public void addVectorToCategorised()
+    {
+        mainFeatures = new ArrayList<>();
+        HashMap<String, Object> obj = new HashMap<>();
+        obj.put(Handlers.backgroundForegroundHandler, features);
+        mainFeatures.add(obj);
+        
+        obj = new HashMap<>();
+        obj.put(Handlers.ColorHandler, cldVector);
+        mainFeatures.add(obj);
+        
+        obj = new HashMap<>();
+        obj.put(Handlers.ShapeHandler, ehdVector);
+        mainFeatures.add(obj);
+        
+    }
+    
+}
+
+
+class features
+{
 }

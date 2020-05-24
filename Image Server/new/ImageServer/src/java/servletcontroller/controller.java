@@ -131,7 +131,7 @@ public class controller {
             }
             
             //topdoc.sort();
-            String s =  new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(topdoc);
+            String s =  new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(Scoring.serialiseObj(topdoc));
             return s;
             
             
