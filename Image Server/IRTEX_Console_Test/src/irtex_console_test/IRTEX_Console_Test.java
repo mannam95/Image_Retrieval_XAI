@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.ImageFeature;
@@ -24,12 +25,13 @@ public class IRTEX_Console_Test {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         
+        
         ArrayList<String> images = new ArrayList<>();
-        //images.add("D:\\dke\\2ND SEM\\IRTEX\\resource\\test_images\\cat\\cat_test_1.jpg");
-        listf("D:\\dke\\2ND SEM\\IRTEX\\resource\\images", images);
+        images.add("D:\\dke\\2ND SEM\\IRTEX\\resource\\test_images\\cat\\cat_test_1.jpg");
+        //listf("D:\\dke\\2ND SEM\\IRTEX\\resource\\images", images);
         ArrayList<ImageFeature> loadedImages = new ArrayList<>();
         
         for(int i=0; i<images.size(); i++){
@@ -40,8 +42,8 @@ public class IRTEX_Console_Test {
         
         
         ArrayList<String> testImages = new ArrayList<>();
-        //testImages.add("D:\\dke\\2ND SEM\\IRTEX\\resource\\images\\airplane\\airplane_batch_1_1013.jpg");
-        listf("D:\\dke\\2ND SEM\\IRTEX\\resource\\test_images", testImages);
+        testImages.add("D:\\dke\\2ND SEM\\IRTEX\\resource\\images\\airplane\\airplane_batch_1_1013.jpg");
+        //listf("D:\\dke\\2ND SEM\\IRTEX\\resource\\test_images", testImages);
         ArrayList<ImageFeature> loadedTestImages = new ArrayList<>();
         
         for(int i=0; i<testImages.size(); i++){
@@ -55,17 +57,19 @@ public class IRTEX_Console_Test {
     }
     
     
-    public static void compareImages(ArrayList<ImageFeature> databaseImages, ArrayList<ImageFeature> testImages)
+    public static void compareImages(ArrayList<ImageFeature> databaseImages, ArrayList<ImageFeature> testImages) throws IOException
     {
         System.out.println("writing");
         ArrayList<score> matchScore = new ArrayList<>();
-        File file = new File("D:\\dke\\2ND SEM\\IRTEX\\resource\\report.txt");
+        File file = new File("D:\\dke\\2ND SEM\\IRTEX\\resource\\report"+System.currentTimeMillis()+".txt");
         if(file.exists())file.delete();
+        file.createNewFile();
         FileWriter fr = null;
         try{
             fr = new FileWriter(file, true);
             for(int i=0;i<testImages.size(); i++)
             {
+                fr.flush();
                 matchScore.clear();
                 ImageFeature testimg = testImages.get(i);
                 for(int j=0;j<databaseImages.size();j++)
@@ -103,6 +107,7 @@ public class IRTEX_Console_Test {
         }
         finally{
             if(fr!=null) try {
+                fr.flush();
                 fr.close();
             } catch (IOException ex) {
                 Logger.getLogger(IRTEX_Console_Test.class.getName()).log(Level.SEVERE, null, ex);
@@ -120,7 +125,7 @@ public class IRTEX_Console_Test {
         for (File file : fList) {i++;
             if (file.isFile()) {
                 images.add(file.getAbsolutePath());
-                if(i==10)return;
+                //if(i==10)return;
             }
             else
             {
