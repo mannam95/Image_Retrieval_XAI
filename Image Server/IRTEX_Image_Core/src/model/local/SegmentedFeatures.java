@@ -50,10 +50,16 @@ public class SegmentedFeatures extends LocalImageFeature{
             System.err.println("Cannot read image: " + filename);
             System.exit(0);
         }
+        
+        Imgproc.resize(srcOriginal, srcOriginal, new Size(128,128), 0,0, Imgproc.INTER_CUBIC);
+        
         Mat src = srcOriginal.clone();
         
         //Imgproc.cvtColor(src, src, Imgproc.COLOR_BGR2HSV);
         
+        
+        
+         
         Mat src_org = new Mat();
         
         srcOriginal.convertTo(src_org, CvType.CV_8UC3);
@@ -270,22 +276,44 @@ public class SegmentedFeatures extends LocalImageFeature{
         {
             for(int j=0; j<descriptors2.size(); j++)
             {
+//                DescriptorMatcher matcher = DescriptorMatcher.create(DescriptorMatcher.BRUTEFORCE);
+//                MatOfDMatch matches = new MatOfDMatch();
+//                matcher.match(descriptors1.get(i), descriptors2.get(j), matches);
+//                if(matches.rows() == 0)
+//                {
+//                    scoreAccumulator.add(0f);
+//                    continue;
+//                }
+//                float sum = 0;
+//                for(int k=0; k<matches.rows(); k++)
+//                {
+//                    DMatch[] dm = matches.toArray();
+//                    //System.out.println(dm[0].distance);
+//                    sum += 1- 0.5 * dm[0].distance;
+//                }
+//                scoreAccumulator.add(sum/matches.rows());
+                
+                
                 DescriptorMatcher matcher = DescriptorMatcher.create(DescriptorMatcher.BRUTEFORCE);
-                MatOfDMatch matches = new MatOfDMatch();
-                matcher.match(descriptors1.get(i), descriptors2.get(j), matches);
-                if(matches.rows() == 0)
-                {
-                    scoreAccumulator.add(0f);
-                    continue;
-                }
+                ArrayList<MatOfDMatch> matches = new ArrayList<>();
+                matcher.knnMatch(descriptors1.get(i), descriptors2.get(j), matches , 2);
+                
                 float sum = 0;
-                for(int k=0; k<matches.rows(); k++)
+                for(int k=0; k<matches.size(); k++)
                 {
-                    DMatch[] dm = matches.toArray();
-                    //System.out.println(dm[0].distance);
-                    sum += 1- 0.5 * dm[0].distance;
+                    MatOfDMatch match = matches.get(k);
+                    if(match.rows() == 0)
+                    {
+                        continue;
+                    }
+                    DMatch[] dm = match.toArray();
+                    if(dm.length>1 && dm[0].distance<(0.75*dm[1].distance))
+                    {
+                        sum += 1-(.5*dm[0].distance);
+                    }
                 }
-                scoreAccumulator.add(sum/matches.rows());
+                
+                scoreAccumulator.add(sum/matches.size());                
             }
         }
         
