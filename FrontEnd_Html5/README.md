@@ -1,5 +1,8 @@
 # Front End Using Html
 
+Major Update: Cannot be tested this alone as of now from May-25-2020, Integration process is going on
+
+
 Offline Usage:
 ->Download or Clone the git repository.
 ->open the index file in a browser like chrome or firefox etc.
