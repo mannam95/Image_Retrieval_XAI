@@ -25,7 +25,7 @@
 
 <body class="body-cls">
 
-    <form id="mainFormID" method="post" enctype="multipart/form-data">
+    <!-- <form id="mainFormID" action="localhost:3000/lireq" method="post" enctype="multipart/form-data"> -->
         
         <div id="MainDiv" class="MainClass" style="display: none;">
             <div id="SearchTableDiv">
@@ -42,7 +42,7 @@
                                                     <p>Choose an image file or drag it here.</p>
                                                 </div>
                                             </div>
-                                            <input type="file" name="img_logo" class="dropzone" accept="Image/*" name="file">
+                                            <input type="file" name="img_logo" class="dropzone" accept="Image/*" id="upload-image">
                                         </div>
                                     </div>
                                 </div>
@@ -82,7 +82,7 @@
                 </thead>
             </table>
         </div>
-    </form>
+    <!-- </form> -->
 
     <div class="modal fade bd-example-modal-lg" id="exampleModalCenter" tabindex="-1" role="dialog"
         aria-labelledby="myLargeModalLabel" aria-hidden="true">
