@@ -25,7 +25,8 @@
 
 <body class="body-cls">
 
-    <form>
+    <form id="mainFormID" method="post" enctype="multipart/form-data">
+        
         <div id="MainDiv" class="MainClass" style="display: none;">
             <div id="SearchTableDiv">
                 <div class="SearchOptions">
@@ -41,7 +42,7 @@
                                                     <p>Choose an image file or drag it here.</p>
                                                 </div>
                                             </div>
-                                            <input type="file" name="img_logo" class="dropzone" accept="Image/*">
+                                            <input type="file" name="img_logo" class="dropzone" accept="Image/*" name="file">
                                         </div>
                                     </div>
                                 </div>
