@@ -208,7 +208,8 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
         //On click of the search button
         $(pageDetails.idDetails[5]).click(function () {
             try {
-                pageDetails.imageName
+
+                returnDataFromServer();
                 if (pageDetails.imageName == '' || pageDetails.imageName == null || pageDetails.imageName == undefined || pageDetails.queryFileData.files[0].size <= 0) {
                     swal.fire({
                         icon: 'error',
@@ -258,10 +259,10 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
 
                 pageDetails.baseImagedata = endpointresult.QueryImgDetails;
 
-                pageDetails.baseImagedata['mainFeatures'][0]['BackgroundForeground'] = [].concat.apply([],pageDetails.baseImagedata['mainFeatures'][0]['BackgroundForeground']);
+                pageDetails.baseImagedata['mainFeatures'][0]['BackgroundForeground'] = [].concat.apply([], pageDetails.baseImagedata['mainFeatures'][0]['BackgroundForeground']);
 
                 pageDetails.subFeaturesNames = [];
-                for(var fn=0; fn< pageDetails.baseImagedata['mainFeatures'].length; fn++){
+                for (var fn = 0; fn < pageDetails.baseImagedata['mainFeatures'].length; fn++) {
                     pageDetails.subFeaturesNames.push(Object.keys(pageDetails.baseImagedata['mainFeatures'][fn])[0]);
                 }
 
@@ -1097,6 +1098,31 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
             }
         }
 
+
+        //get the data from backend
+        function returnDataFromServer() {
+            try {
+                $('#myForm')
+                    .ajaxForm({
+                        url: 'localhost:3000/lireq', // or whatever
+                        dataType: 'json',
+                        success: function (response) {
+                            console.log(response);
+                        },
+                        error: function (errresponse) {
+                            console.log(errresponse)
+                        }
+                    });
+            } catch (error) {
+                swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!',
+                    footer: JSON.stringify(error)
+                });
+            }
+        }
+
         //generic funtions
 
         //to get array unique values
@@ -1158,9 +1184,9 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
 
         //to ad an additional property to array of objects
         function addIndToArr(inpArr, ObjName) {
-            for(var a1=0; a1< inpArr.length; a1++){
+            for (var a1 = 0; a1 < inpArr.length; a1++) {
                 inpArr[a1][ObjName] = a1;
-                inpArr[a1]['mainFeatures'][0]['BackgroundForeground'] = [].concat.apply([],inpArr[a1]['mainFeatures'][0]['BackgroundForeground']);
+                inpArr[a1]['mainFeatures'][0]['BackgroundForeground'] = [].concat.apply([], inpArr[a1]['mainFeatures'][0]['BackgroundForeground']);
             }
             return inpArr;
         }
