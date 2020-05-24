@@ -1053,7 +1053,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                 formdata.append("urld", file);
 
                 $.ajax({
-                    url: 'localhost:3000/lireq',
+                    url: 'http://localhost:3000/lireq',
                     type: 'POST',
                     data: formdata,
                     processData: false,
