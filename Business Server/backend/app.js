@@ -12,7 +12,8 @@ const fs = require('fs');
 const conf = require('./config.json');
 
 //map the base image absolute path to proxy resultimages directory.
-app.use('/resultimages', express.static(path.join(conf.baseimgdir)));
+//app.use('/resultimages', express.static(path.join(conf.baseimgdir)));
+app.use('/resultimages',express.static('E:\\SummerSem\\Project_XAI\\temporary data\\less image'));
 
 app.use((req, res, next) =>{
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -22,7 +23,7 @@ app.use((req, res, next) =>{
 });
 
 // url to the image server. This param has to be configured in conf.json. 
-const imagerserverurl = conf.protocol + "://" + conf.iserverhostip + ":" + conf.iserverportnumber 
+const imagerserverurl = 'http://localhost:8080/ImageServer/qbe'//conf.protocol + "://" + conf.iserverhostip + ":" + conf.iserverportnumber 
 
 // validate json received from image server.
 function checkresponse(data){
@@ -60,32 +61,39 @@ const storage = multer.diskStorage({
 // It is important to set 'filename' variable before the sending the get the request.
 
 app.post('/lireq', multer({ storage: storage }).single('urld'), (req, res, next)=>{
+  console.log(req)
   if(req.file){
     filename =req.file.filename;
+    imagePath = __dirname + 'backend/images' +req.file.filename;
+    console.log("path: "+imagePath);
+    
+    axios.get(imagerserverurl,{ params: {
+      file: imagePath
+    }
+    }).then(response => {
+        const data = response.data;
+        obj = JSON.parse(JSON.stringify(data));
+        // check if response data is correct.
+        if (checkresponse(data)){
+        readjsonobject(obj);
+        res.status(200).json(obj);
+      }
+      else{
+        // setting error respone code to 412. (Precondition Failed)
+        res.status(412).json(obj)
+      }
+        
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
+
   else{
+
     res.status(404).json({message:'image is mandatory for this query'});
   }  
-  axios.get(imagerserverurl,{ params: {
-    file: filename
-  }
-}).then(response => {
-      const data = response.data;
-      obj = JSON.parse(JSON.stringify(data));
-      // check if response data is correct.
-      if (checkresponse(data)){
-      readjsonobject(obj);
-      res.status(200).json(obj);
-    }
-    else{
-      // setting error respone code to 412. (Precondition Failed)
-      res.status(412).json(obj)
-    }
-      
-    })
-    .catch(error => {
-      console.log(error);
-    });
+
 });
 
 module.exports = app;
