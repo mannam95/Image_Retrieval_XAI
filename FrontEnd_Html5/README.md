@@ -7,7 +7,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-* Now in order see the UI page running properly, you need to condifure and run the business server(The instructions can be seen in business server part)  
+* Now in order see the UI page running properly, you need to configure and run the business server(The instructions can be seen in business server part)  
 
 ### Installing
 
