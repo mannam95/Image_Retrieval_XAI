@@ -2,6 +2,8 @@ const app = require("./backend/app");
 const debug = require("debug")("node-angular");
 const http = require("http");
 
+const conf = require('./backend/config.json');
+
 const normalizePort = val => {
   var port = parseInt(val, 10);
 
@@ -43,8 +45,11 @@ const onListening = () => {
   debug("Listening on " + bind);
 };
 
-const port = normalizePort(process.env.PORT || "3000");
-app.set("port", port);
+const port = normalizePort(process.env.PORT || conf.bserverportnumber);
+// kush - commeted below line because throwing error.
+//app.set("port", port);
+console.log("port number: " +port);
+
 
 const server = http.createServer(app);
 server.on("error", onError);
