@@ -16,15 +16,15 @@ These instructions will get you a copy of the project up and running on your loc
 
 ```
 FrontEnd_Html5(Parent Folder)
--->Images  
--->imagesData  
--->Scripts  
----->CustomScripts
----->Libraries
--->Styles  
--->config.js  
--->index.html  
--->require.js  
+    Images  
+    imagesData  
+    Scripts  
+            CustomScripts
+            Libraries
+    Styles  
+    config.js  
+    index.html  
+    require.js  
 ```
 
 ## Running the tests
