@@ -423,7 +423,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
         function prepareData() {
             try {
                 var tempUniqueValues = pageDetails.singlediffarray.map(function (item) {
-                    return item.diff.toFixed(3);
+                    return item.diff.toFixed(0);
                 }).filter(function (value, index, self) {
                     return self.indexOf(value) === index;
                 });
@@ -432,7 +432,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                 //get the unique values
                 for (tempi = 0; tempi < tempUniqueValues.length; tempi++) {
                     pageDetails.singlefirstlevedata.push(pageDetails.singlediffarray.filter(function (e1, index1) {
-                        return e1.diff.toFixed(3) === tempUniqueValues[tempi];
+                        return e1.diff.toFixed(0) === tempUniqueValues[tempi];
                     }).map(function (e2, index2) {
                         return e2;
                     }));
@@ -453,7 +453,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                                     }
                                 } else {
                                     if (!isNaN(currentObject[key])) {
-                                        result[key] = currentObject[key].toFixed(3);
+                                        result[key] = currentObject[key].toFixed(0);
                                     } else {
                                         result[key] = currentObject[key];
                                     }
@@ -467,6 +467,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
 
                 pageDetails.singlefirstlevedata = resultObject;
                 pageDetails.singlefirstlevedata.sort(compareValues('diff', 'asc'));
+                pageDetails.singlefirstlevedata = sortArrayByObj(pageDetails.singlefirstlevedata, 'diff');
 
             } catch (error) {
                 swal.fire({
@@ -532,8 +533,14 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
 
                 var level1XCords = returnArrayObj(pageDetails.singlefirstlevedata, 'diff');
                 var level1barData = returnArrayObj(pageDetails.singlefirstlevedata, 'totalLength');
-                maxvalue = Math.max.apply(Math, level1barData)
-                var level1YCords = 0 + ":" + (maxvalue + 2) + ":0.5";
+                maxvalue = Math.max.apply(Math, level1barData) + 10
+                var level1YCords = 0 + ":" + (maxvalue) + ":0.5";
+
+                var yTempData = [];
+
+                for(var yt1=0; yt1<yTempData.length; yt1++){
+                    yTempData.push(maxvalue);
+                }
 
                 var level1config = {
                     "id": "uniquelevel1",
@@ -586,7 +593,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                             "z-index": 1
                         },
                         {//just to make the background gray...
-                            "values": [150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150],
+                            "values": yTempData,
                             "background-color": "#E8E7E8",
                             "maxTrackers": 0,
                             "z-index": 0
@@ -862,8 +869,15 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
             try {
                 var level1XCords = returnArrayObj(pageDetails.singlefirstlevedata, 'diff');
                 var level1barData = returnArrayObj(pageDetails.singlefirstlevedata, 'totalLength');
-                maxvalue = Math.max.apply(Math, level1barData)
-                var level1YCords = 0 + ":" + (maxvalue + 2) + ":0.5";
+                maxvalue = Math.max.apply(Math, level1barData) + 10
+                var level1YCords = 0 + ":" + (maxvalue) + ":0.5";
+
+                var yTempData = [];
+
+                for(var yt1=0; yt1<yTempData.length; yt1++){
+                    yTempData.push(maxvalue);
+                }
+
                 var chartConfig = {
                     "graphset": [
                         {
@@ -917,7 +931,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                                     "z-index": 1
                                 },
                                 {//just to make the background gray...
-                                    "values": [150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150],
+                                    "values": yTempData,
                                     "background-color": "#E8E7E8",
                                     "maxTrackers": 0,
                                     "z-index": 0
@@ -952,8 +966,15 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
             try {
                 var level1XCords = returnArrayObj(pageDetails.singlefirstlevedata, 'diff');
                 var level1barData = returnArrayObj(pageDetails.singlefirstlevedata, 'totalLength');
-                maxvalue = Math.max.apply(Math, level1barData)
-                var level1YCords = 0 + ":" + (maxvalue + 2) + ":0.5";
+                maxvalue = Math.max.apply(Math, level1barData) + 10
+                var level1YCords = 0 + ":" + (maxvalue) + ":0.5";
+
+                var yTempData = [];
+
+                for(var yt1=0; yt1<yTempData.length; yt1++){
+                    yTempData.push(maxvalue);
+                }
+
                 var chartConfig = {
                     "graphset": [
                         {
@@ -1007,7 +1028,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                                     "z-index": 1,
                                 },
                                 {//just to make the background gray...
-                                    "values": [150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150],
+                                    "values": yTempData,
                                     "background-color": "#E8E7E8",
                                     "maxTrackers": 0,
                                     "z-index": 0
@@ -1196,7 +1217,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
         //sorts the array of values based on a specific property value
         function sortArrayByObj(inpArr, ObjName) {
             return inpArr.sort(function (a, b) {
-                return a[ObjName] > b[ObjName] ? 1 : -1;
+                return Number(a[ObjName]) > Number(b[ObjName]) ? 1 : -1;
             });
         }
 
