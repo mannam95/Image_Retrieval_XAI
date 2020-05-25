@@ -56,5 +56,8 @@ FrontEnd_Html5(Parent Folder)
 
 ## Authors
 
-* **Venkata Srinath Mannam**
+* **Venkata Srinath Mannam** - *UI Developer*
+
+### Contributors
+* **Subhankar Patra** - *Contributed in visual explanation design part*
 
