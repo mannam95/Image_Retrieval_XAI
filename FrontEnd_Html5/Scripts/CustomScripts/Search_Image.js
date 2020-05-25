@@ -19,8 +19,11 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
             extractCurResind: '',
             queryFileData: '',
             mainTableData: '',
-            baseImagedata: ''
-
+            baseImagedata: '',
+            serverHostedDetails: {
+                url: 'http://localhost:3000/lireq', 
+                urlkey: 'urld'
+            }
         };
 
 
@@ -30,11 +33,13 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
         $(document).ready(function () {
             try {
                 //loader before loading the data
-                // $('body').addClass("loading");
+                $('body').addClass("loading");
                 $(pageDetails.idDetails[0]).css("display", "block");
                 $(pageDetails.idDetails[1]).hide();
 
                 createdragview();
+
+                $('body').removeClass("loading");
 
             } catch (error) {
                 swal.fire({
@@ -129,6 +134,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
 
                     $('#viewPartdiv').hide();
                     $('.dropzone').val('')
+                    $('.dropzone-wrapper').css("height", '187px');
 
                     pageDetails.imageName = pageDetails.duplicateImageName = '';
                     pageDetails.queryFileData = '';
@@ -1050,10 +1056,10 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                 var formdata = new FormData();
                 var file = $('#upload-image')[0].files[0];
 
-                formdata.append("urld", file);
+                formdata.append(pageDetails.serverHostedDetails.urlkey, file);
 
                 $.ajax({
-                    url: 'http://localhost:3000/lireq',
+                    url: pageDetails.serverHostedDetails.url,
                     type: 'POST',
                     data: formdata,
                     processData: false,
