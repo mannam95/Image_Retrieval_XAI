@@ -1,0 +1,21 @@
+{
+	"log":"",
+	"pipe":[
+		{
+			"name":"bf",
+			"dictionary":"D:\\dke\\2ND SEM\\IRTEX\\resource\\pascal data\\dictionaries\\bovw\\1590075647105_30.txt",
+			"center":"D:\\dke\\2ND SEM\\IRTEX\\resource\\pascal data\\dictionaries\\center\\1590075647850_30.txt",
+			"weight":.33
+		},
+		{
+			"name":"cld",
+			"dictionary":"D:\\dke\\2ND SEM\\IRTEX\\resource\\pascal data\\dictionaries\\chd\\1590073561256.txt",
+			"weight":.33
+		},
+		{
+			"name":"ehd",
+			"dictionary":"D:\\dke\\2ND SEM\\IRTEX\\resource\\pascal data\\dictionaries\\ehd\\1590073572715.txt",
+			"weight":.34
+		}
+	]
+}
