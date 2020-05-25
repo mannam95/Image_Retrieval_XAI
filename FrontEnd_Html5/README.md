@@ -31,8 +31,8 @@ FrontEnd_Html5(Parent Folder)
 
 ### Offline Usage:
 
-*open the index.html file in a browser(for example google chrome)
-*Browse a valid image file, test it. 
+-open the index.html file in a browser(for example google chrome)
+-Browse a valid image file, test it. 
 *You can find the results in a tabular view.
 *You can see further details by clicking on Explain
 *Now you have local textual explanation
