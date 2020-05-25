@@ -195,6 +195,19 @@ table th {
     font-weight: bolder;
 }
 
+.visualCloseBtn, .visualCloseBtn:hover {
+    background-color: RGB(46, 101, 38) !important;
+    color: white !important;
+    padding: 9px 12px !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    font-size: 16px !important;
+    cursor: pointer !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+}
+
 .swalClass {
     width: 80% !important;
     height: 80% !important;
