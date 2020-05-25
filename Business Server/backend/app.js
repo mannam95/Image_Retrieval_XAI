@@ -23,7 +23,7 @@ app.use((req, res, next) =>{
 });
 
 // url to the image server. This param has to be configured in conf.json. 
-const imagerserverurl = 'http://localhost:8080/ImageServer/qbe'//conf.protocol + "://" + conf.iserverhostip + ":" + conf.iserverportnumber 
+const imagerserverurl = conf.protocol + "://" + conf.iserverhostip + ":" + conf.iserverportnumber + 'ImageServer/qbe' // 'http://localhost:8080/ImageServer/qbe'
 
 // validate json received from image server.
 function checkresponse(data){
