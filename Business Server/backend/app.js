@@ -1,10 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
 const path = require('path');
 const app = express();
 const axios = require("axios");
-const searchRouter = express.Router();
 const multer = require('multer');
 const fs = require('fs');
 
@@ -23,8 +21,8 @@ app.use((req, res, next) =>{
 });
 
 // url to the image server. This param has to be configured in conf.json. 
-const imagerserverurl = conf.protocol + "://" + conf.iserverhostip + ":" + conf.iserverportnumber + 'ImageServer/qbe' // 'http://localhost:8080/ImageServer/qbe'
-
+const imagerserverurl = conf.protocol + "://" + conf.iserverhostip + ":" + conf.iserverportnumber + '/'+'ImageServer/qbe' // 'http://localhost:8080/ImageServer/qbe'
+//console.log("imagerserverurl: "+imagerserverurl);
 // validate json received from image server.
 function checkresponse(data){
   return JSON.stringify(data).includes('topScores');
@@ -42,7 +40,7 @@ function readjsonobject(obj){
         newimgpath = newimgpath.split('\\').join('\/');
         imagename = path.basename(imgpath);
         var newurl = httpurl + "/resultimages/" + newimgpath;
-        obj.topScores[i].url = newurl;
+        obj.topScores[i].name = newurl;
         }
 }
 
@@ -61,11 +59,9 @@ const storage = multer.diskStorage({
 // It is important to set 'filename' variable before the sending the get the request.
 
 app.post('/lireq', multer({ storage: storage }).single('urld'), (req, res, next)=>{
-  console.log(req)
   if(req.file){
     filename =req.file.filename;
-    imagePath = __dirname + 'backend/images' +req.file.filename;
-    console.log("path: "+imagePath);
+    imagePath = __dirname + '\\images\\' +req.file.filename;
     
     axios.get(imagerserverurl,{ params: {
       file: imagePath
