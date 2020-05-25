@@ -6,6 +6,7 @@
 package scoring;
 
 import com.google.gson.annotations.Expose;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -111,11 +112,11 @@ public class Scoring {
     }
     
     
-    public static Object serialiseObj(Scoring sc)
+    public static Object serialiseObj(Scoring sc, ArrayList<String> handlers)
     {
-        sc.QueryImgDetails.addVectorToCategorised();
+        sc.QueryImgDetails.addVectorToCategorised(handlers);
         sc.topScores.entrySet().forEach((entry) -> {  
-            entry.getValue().addVectorToCategorised();
+            entry.getValue().addVectorToCategorised(handlers);
         });
         return new Scoring_Serialise(sc.QueryImgDetails, sc.topScores);
     }

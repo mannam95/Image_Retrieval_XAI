@@ -7,7 +7,6 @@ package models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import constants.Handlers;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -16,64 +15,50 @@ import java.util.HashMap;
  * @author SUBHAJIT
  */
 public class Score {
+
     @Expose(serialize = true)
     public String name;
-    
-    
-    
+
     @Expose(serialize = true)
     @SerializedName("overallDistScore")
     public float overallScore;
-    
-    
+
     //these are for background foreground
     public float[] region_scores;
     @Expose(serialize = true)
     @SerializedName("backforegrounddistance")
     public float average;
-    
-    public ArrayList<float[]>features = new ArrayList<>();
-    
-    
-    
+
+    public ArrayList<float[]> features = new ArrayList<>();
+
     //this is for cld score
     @Expose(serialize = true)
     @SerializedName("colordistance")
     public float cldScore;
-    
+
     public double[] cldVector;
-    
-    
-    
+
     //this is for cld score
     @Expose(serialize = true)
     @SerializedName("shapedistance")
     public float ehdScore;
-    
+
     public double[] ehdVector;
-    
-    
-    
+
     @Expose(serialize = true)
     ArrayList<HashMap<String, Object>> mainFeatures;
-    
-            
-    
+
     public void ehdScore(String name, float score) {
         this.name = name;
         ehdScore = score;
     }
-    
-    
+
     public void cldScore(String name, float score) {
         this.name = name;
         cldScore = score;
     }
-    
-    
-    
-    public void addbfvector(float[] vect)
-    {
+
+    public void addbfvector(float[] vect) {
         this.features.add(vect);
     }
 
@@ -81,39 +66,40 @@ public class Score {
         this.name = name;
         region_scores = new float[numregions];
     }
-    
-    public void add(float data, int pos)
-    {
+
+    public void add(float data, int pos) {
         region_scores[pos] = data;
     }
-    
-    public void average()
-    {
+
+    public void average() {
         float sum = 0;
-        for(int i=0;i<region_scores.length; i++)
-        {
+        for (int i = 0; i < region_scores.length; i++) {
             sum += region_scores[i];
         }
-        average = sum/region_scores.length;
+        average = sum / region_scores.length;
     }
-    
-    
-    
-    public void addVectorToCategorised()
-    {
+
+    public void addVectorToCategorised(ArrayList<String> handlers) {
         mainFeatures = new ArrayList<>();
-        HashMap<String, Object> obj = new HashMap<>();
-        obj.put("BackgroundForeground", features);
-        mainFeatures.add(obj);
-        
-        obj = new HashMap<>();
-        obj.put("Color", cldVector);
-        mainFeatures.add(obj);
-        
-        obj = new HashMap<>();
-        obj.put("Shape", ehdVector);
-        mainFeatures.add(obj);
-        
+        HashMap<String, Object> obj;
+
+        if (handlers.contains("bf")) {
+            obj = new HashMap<>();
+            obj.put("BackgroundForeground", features);
+            mainFeatures.add(obj);
+        }
+
+        if (handlers.contains("cld")) {
+            obj = new HashMap<>();
+            obj.put("Color", cldVector);
+            mainFeatures.add(obj);
+        }
+        if (handlers.contains("ehd")) {
+            obj = new HashMap<>();
+            obj.put("Shape", ehdVector);
+            mainFeatures.add(obj);
+        }
+
     }
-    
+
 }
