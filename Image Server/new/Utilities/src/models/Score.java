@@ -103,22 +103,17 @@ public class Score {
     {
         mainFeatures = new ArrayList<>();
         HashMap<String, Object> obj = new HashMap<>();
-        obj.put(Handlers.backgroundForegroundHandler, features);
+        obj.put("BackgroundForeground", features);
         mainFeatures.add(obj);
         
         obj = new HashMap<>();
-        obj.put(Handlers.ColorHandler, cldVector);
+        obj.put("Color", cldVector);
         mainFeatures.add(obj);
         
         obj = new HashMap<>();
-        obj.put(Handlers.ShapeHandler, ehdVector);
+        obj.put("Shape", ehdVector);
         mainFeatures.add(obj);
         
     }
     
-}
-
-
-class features
-{
 }
