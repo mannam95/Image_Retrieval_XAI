@@ -11,7 +11,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Installing
 
-*Clone the repository or download an unzip it.    
+*Clone the repository or download and unzip it.    
 *Make sure that all the files are present in folder and in the following similar structure.  
 
 ```
