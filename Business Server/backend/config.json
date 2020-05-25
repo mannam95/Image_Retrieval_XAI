@@ -1,0 +1,8 @@
+{
+    "bserverhostip" : "localhost",
+    "bserverportnumber" : "3000",
+    "protocol" : "http",
+    "iserverhostip" : "localhost",
+    "iserverportnumber" : "5100",
+    "baseimgdir" : "E:\\SummerSem\\Project_XAI\\IRTEX_NEW\\Business Server\\backend\\testimages"
+}
