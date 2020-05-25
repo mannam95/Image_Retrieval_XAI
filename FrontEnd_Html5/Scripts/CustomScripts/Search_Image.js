@@ -1211,12 +1211,12 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
 
         //calculates the eucleadean distance between two vectors
         function eucDistance(a, b) {
-            return ((a.map(function (x, i) {
+            return ((1/(1+(a.map(function (x, i) {
                 return Math.abs(x - b[i]) ** 2;
             }).reduce(function (sum, now) {
                 return sum + now;
             })
-                ** (1 / 2)));
+                ** (1 / 2)))) * 100);
         }
 
         //detect window changes and maje responsive
