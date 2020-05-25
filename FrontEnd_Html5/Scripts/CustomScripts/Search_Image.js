@@ -21,13 +21,13 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
             mainTableData: '',
             baseImagedata: '',
             serverHostedDetails: {
-                url: 'http://localhost:3000/lireq', 
+                url: 'http://localhost:3000/lireq',
                 urlkey: 'urld'
             }
         };
 
 
-        var endpointresult;
+        var endpointresult = {};
 
         //When everything is loaded what to do first
         $(document).ready(function () {
@@ -168,6 +168,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                     });
                 } else {
 
+                    $('body').addClass("loading");
                     returnDataFromServer();
                 }
             } catch (error) {
@@ -186,6 +187,11 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
             try {
                 $("[id^='accordion']:not(#" + this.id + ")").accordion({ header: "h3", collapsible: true, active: false, heightStyle: "content" });
 
+                var getcurrentid = this.id;
+                getcurrentid = Number(getcurrentid.replace("accordion", "") - 1);
+
+                prepareExpData(getcurrentid);
+
             } catch (error) {
                 swal.fire({
                     icon: 'error',
@@ -195,6 +201,49 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                 });
             }
         });
+
+        function prepareExpData(currentaccID) {
+            try {
+
+                var createRankList = [];
+
+                for (var br = 0; br < pageDetails.baseImagedata.mainFeatures.length; br++) {
+
+                    var tempcurrentObjName = Object.keys(pageDetails.baseImagedata.mainFeatures[br])[0];
+
+                    createRankList[br] = [];
+                    createRankList[br].push(tempcurrentObjName);
+                    createRankList[br].push(eucDistance(pageDetails.mainTableData[currentaccID].mainFeatures[br][tempcurrentObjName], pageDetails.baseImagedata.mainFeatures[br][tempcurrentObjName]));
+                }
+
+                var listData = '<h4>This image is ranked No:' + (currentaccID + 1) + ' because</h4>' +
+                    '<ul class="list-group">';
+
+                var litempdata = '';
+                for (var li1 = 0; li1 < createRankList.length; li1++) {
+
+                    litempdata = litempdata + '<li class="list-group-item">' +
+                        createRankList[li1][0] +
+                        ' is having ' +
+                        createRankList[li1][1].toFixed(2) +
+                        '% similarity' +
+                        '</li>';
+                }
+
+                listData = listData + litempdata + '</ul>';
+
+                $('#expDiv' + (currentaccID + 1)).empty();
+                $('#expDiv' + (currentaccID + 1)).append(listData);
+
+            } catch (error) {
+                swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!',
+                    footer: JSON.stringify(error)
+                });
+            }
+        }
 
         //creates the data into our custom way for table creation
         function makeTableData() {
@@ -278,7 +327,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                                 '<div id="accordion' + (row.ID + 1) + '">' +
                                 '<h3>Explain</h3>' +
                                 '<div style="height: auto !important;">' +
-                                '<p>Local Explanation</p>' +
+                                '<div class="expDivCls" id="expDiv' + (row.ID + 1) + '"></div>' +
                                 '<p><input class="VisualBtnClass" data-target="#exampleModalCenter" data-toggle="modal" type="button" value="Visual Explanation" id="VisualBtn' + (row.ID + 1) + '"></p>' +
                                 '</div>' +
                                 '</div>' +
@@ -312,7 +361,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
         $(document).on('click', '[id^="VisualBtn"]', function () {
             try {
                 var getcurrentid = this.id;
-                pageDetails.extractCurResind = (Number(getcurrentid.replace("VisualBtn", "") - 1) > 1 ? 0 : Number(getcurrentid.replace("VisualBtn", "") - 1));
+                pageDetails.extractCurResind = Number(getcurrentid.replace("VisualBtn", "") - 1);
                 // visualPopUp(extractindex);
 
                 pageDetails.singlediffarray = [];
@@ -955,7 +1004,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                                 {
                                     "values": level1barData,
                                     "cursor": "pointer",
-                                    "z-index": 1
+                                    "z-index": 1,
                                 },
                                 {//just to make the background gray...
                                     "values": [150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150],
@@ -1068,8 +1117,12 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                         endpointresult = response;
 
                         makeTableData();
+                        $('body').removeClass("loading");
                     },
                     error: function (errres) {
+
+                        // makeTableData();
+                        // $('body').removeClass("loading");
                         swal.fire({
                             icon: 'error',
                             title: 'Oops...',
@@ -1156,15 +1209,21 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
             return inpArr;
         }
 
+        //calculates the eucleadean distance between two vectors
+        function eucDistance(a, b) {
+            return ((a.map(function (x, i) {
+                return Math.abs(x - b[i]) ** 2;
+            }).reduce(function (sum, now) {
+                return sum + now;
+            })
+                ** (1 / 2)));
+        }
+
         //detect window changes and maje responsive
         $(window).resize(function () {
 
             if (pageDetails.imageName != '')
                 $('.dropzone-wrapper').css("height", $('.preview-zone').height());
         });
-
-
-
-
     });
 });
