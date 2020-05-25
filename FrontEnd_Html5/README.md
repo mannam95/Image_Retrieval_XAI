@@ -1,5 +1,7 @@
 # IRTEX
 
+## Online usage will not work as of now, since business server is not hosted, Please test only for offline
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes
