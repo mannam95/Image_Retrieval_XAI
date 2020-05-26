@@ -390,15 +390,18 @@ public class Bovw {
         query = allBovwHash.get(img);
         query_array = query.featureVector;
         if(query_array == null)
-            throw new IRTEX_Exception(IRTEX_Exception.ArrayNull);
+        {
+            imgscr.average = -1;
+            return;
+        }
 
         counter.bfScore(query.name, featureVector.size());
         for(int j=0; j<featureVector.size(); j++)
         {
             //REGION OF base image
             a = this.featureVector.get(j);
-            if(a==null)
-                continue;
+            if(a==null)                
+                throw new IRTEX_Exception(IRTEX_Exception.ArrayNull);
             max = -1;feature = null;
             for(int k=0; k< query_array.size(); k++)
             {

@@ -61,6 +61,7 @@ public class Scoring {
     }
 
     public Score add(Score sc) {
+        if(sc.average == -1) return null;
         sc.overallScore = sc.average + sc.cldScore + sc.ehdScore;
         
         

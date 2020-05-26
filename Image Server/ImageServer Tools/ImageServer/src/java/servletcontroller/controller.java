@@ -111,23 +111,26 @@ public class controller {
             Scoring topdoc = new Scoring(60, QueryDetails);
             for(String img: images)
             {
-                Score sc = new Score();
-                if(handlers.contains("bf"))
+                try
                 {
-                    bfhc.query(img, sc);
-                    
+                    Score sc = new Score();
+                    if(handlers.contains("bf"))
+                    {
+                        bfhc.query(img, sc);
+                    }
+                    if(handlers.contains("cld"))
+                    {
+                        cldc.query(img, sc);
+                    }
+                    if(handlers.contains("ehd"))
+                    {
+                        ehdc.query(img, sc);
+                    }
+                    //all other descriptprs here
+
+                    topdoc.add(sc);
                 }
-                if(handlers.contains("cld"))
-                {
-                    cldc.query(img, sc);
-                }
-                if(handlers.contains("ehd"))
-                {
-                    ehdc.query(img, sc);
-                }
-                //all other descriptprs here
-                
-                topdoc.add(sc);
+                catch(Exception e){}
             }
             
             //topdoc.sort();
