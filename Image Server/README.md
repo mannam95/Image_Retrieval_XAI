@@ -22,7 +22,7 @@ All the libraries are required to be added to PATH
 ### Installing
 
 * Build the BackgroundForegroundExtractor jar and create the a file, which is then to be fed to bovwExtractor jar, which creates 2 dictionary files, one is the centers file(the lower sized file), and the disctionary file. Update the config accordingly
-* DO same for cld and ehd extractor, and they will generate only the dictionary files. Update them too in config.
+* DO same for MPEG7 extractor, and they will generate only the dictionary files for color and shape. Update them too in config.
 
 use the generated files to deploy the imageserver in a standard servlet setting
 
