@@ -391,8 +391,7 @@ public class Bovw {
         query_array = query.featureVector;
         if(query_array == null)
         {
-            imgscr.average = -1;
-            return;
+            throw new IRTEX_Exception(IRTEX_Exception.ArrayNull);
         }
 
         counter.bfScore(query.name, featureVector.size());
