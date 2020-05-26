@@ -38,7 +38,8 @@ Open config.js file present in Business Server/backend and edit below parameters
 "protocol" : http 
 "iserverhostip" : IP of image server.
 "iserverportnumber" : port number of image server.
-"baseimgdir" : path to the directory where base images are stored.
+"baseimgdir" : path to the directory where base images are stored while generating feature vectors on image server..
+"staticimgpath" : path to the directory where base images are stored.
 
 
 ## Running the Business Server
