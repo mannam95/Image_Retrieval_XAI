@@ -11,7 +11,8 @@ const conf = require('./config.json');
 
 //map the base image absolute path to proxy resultimages directory.
 //app.use('/resultimages', express.static(path.join(conf.baseimgdir)));
-app.use('/resultimages',express.static('E:\\SummerSem\\Project_XAI\\temporary data\\less image'));
+//app.use('/resultimages',express.static('E:\\SummerSem\\Project_XAI\\temporary data\\less image'));
+app.use('/resultimages',express.static(conf.staticimgpath));
 
 app.use((req, res, next) =>{
   res.setHeader("Access-Control-Allow-Origin", "*");
