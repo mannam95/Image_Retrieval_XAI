@@ -16,6 +16,7 @@ import ehd_Handler.BaseImageShapeFeature;
 import fileUtils.FileUtils;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
 import model.HandlerConfig;
 import model.imageserver_config;
@@ -29,7 +30,8 @@ import scoring.Scoring;
  */
 public class controller {
     
-    static ArrayList<String> handlers = new ArrayList<>();
+    static imageserver_config conf;
+    static HashMap<String, Object> handlers = new HashMap<>();
     
     static Set<String> images = null;
     
@@ -39,9 +41,8 @@ public class controller {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         System.loadLibrary("native_handler");
         Type listType = new TypeToken<imageserver_config>(){}.getType();
-        imageserver_config conf = (imageserver_config) FileUtils.loadGsonData(listType, isconfig);
+        conf = (imageserver_config) FileUtils.loadGsonData(listType, isconfig);
         conf.validate();
-
 
         for(int i=0; i<conf.pipe.size(); i++)
         {
@@ -49,7 +50,7 @@ public class controller {
 
             if(hc.name.equals("bf"))//means it is a background foreground handler
             {
-                handlers.add(hc.name);
+                handlers.put(hc.name, hc);
                 BFHController.initialise(hc.center, hc.dictionary);
                 if(images == null)images = Bovw.allBovwHash.keySet();
             }
@@ -57,7 +58,7 @@ public class controller {
             
             if(hc.name.equals("cld"))
             {
-                handlers.add(hc.name);
+                handlers.put(hc.name, hc);
                 CLD_Controller.initialise(hc.dictionary);
                 
                 if(images == null)images = BaseImageColorFeature.ivcldhandlermap.keySet();
@@ -66,7 +67,7 @@ public class controller {
             
             if(hc.name.equals("ehd"))
             {
-                handlers.add(hc.name);
+                handlers.put(hc.name, hc);
                 EHD_Controller.initialise(hc.dictionary);
                 
                 if(images == null) images = BaseImageShapeFeature.ivehdhandlermap.keySet();
@@ -82,27 +83,20 @@ public class controller {
         System.loadLibrary("native_handler");
         try
         {
-//            Scoring topdoc = new Scoring(60);
-//            if(handlers.contains("bf"))
-//            {
-//                BFHController.query(Filename, topdoc);
-//                topdoc.sort();
-//                String s =  new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(topdoc.topScores.values());
-//                return s;
-//            }
             Score QueryDetails = new Score();
             BFHController bfhc = null;
             CLD_Controller cldc = null;
             EHD_Controller ehdc = null;
-            if(handlers.contains("bf"))
+            if(handlers.containsKey("bf"))
             {
-                bfhc = new BFHController(Filename, QueryDetails);
+                HandlerConfig hc = (HandlerConfig)handlers.get("bf");
+                bfhc = new BFHController(Filename, QueryDetails, hc.WorkingDir, hc.URL);
             }
-            if(handlers.contains("cld"))
+            if(handlers.containsKey("cld"))
             {
                 cldc = new CLD_Controller(Filename, QueryDetails);
             }
-            if(handlers.contains("ehd"))
+            if(handlers.containsKey("ehd"))
             {
                 ehdc = new EHD_Controller(Filename, QueryDetails);
             }
@@ -114,15 +108,15 @@ public class controller {
                 try
                 {
                     Score sc = new Score();
-                    if(handlers.contains("bf"))
+                    if(handlers.containsKey("bf"))
                     {
                         bfhc.query(img, sc);
                     }
-                    if(handlers.contains("cld"))
+                    if(handlers.containsKey("cld"))
                     {
                         cldc.query(img, sc);
                     }
-                    if(handlers.contains("ehd"))
+                    if(handlers.containsKey("ehd"))
                     {
                         ehdc.query(img, sc);
                     }

@@ -62,7 +62,7 @@ public class Scoring {
 
     public Score add(Score sc) {
         if(sc.average == -1) return null;
-        sc.overallScore = sc.average + sc.cldScore + sc.ehdScore;
+        sc.overallScore = sc.average + sc.cldScore + sc.ehdScore + sc.HSLFScore;
         
         
         if (topScores.containsKey(sc.name)) {
@@ -113,7 +113,7 @@ public class Scoring {
     }
     
     
-    public static Object serialiseObj(Scoring sc, ArrayList<String> handlers)
+    public static Object serialiseObj(Scoring sc, HashMap<String, Object> handlers)
     {
         sc.QueryImgDetails.addVectorToCategorised(handlers);
         sc.topScores.entrySet().forEach((entry) -> {  
@@ -121,17 +121,5 @@ public class Scoring {
         });
         return new Scoring_Serialise(sc.QueryImgDetails, sc.topScores);
     }
-
-//    static int comparators(Score a, Score b) {
-//        float c = a.average - b.average;
-//        if (c == 0) {
-//            return 0;
-//        }
-//        return c > 0 ? 1 : -1;
-//    }
-//
-//    public void sort() {
-//        topScores.entrySet().stream().sorted(HashMap.Entry.<String, Score>comparingByValue((a, b) -> comparators(a, b)));
-//    }
 
 }

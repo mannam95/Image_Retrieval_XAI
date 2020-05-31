@@ -14,6 +14,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.stream.JsonWriter;
+import customs.NoSegmentation;
+import customs.SemanticSegmentation;
 import java.io.File;
 import java.io.FileWriter;
 import org.opencv.core.CvType;
@@ -24,6 +26,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import org.opencv.core.Core;
 
 
@@ -45,7 +48,9 @@ public class BackgroundForegroundHandler {
     public ArrayList<float[][]> vector;
     
     public enum SegmentationAlgorithm {
-        WATERSHED_SEGMENTATION
+        WATERSHED_SEGMENTATION,
+        SEMANTIC_SEGMENTATION,
+        NO_SEGMENTATION
     }
     
     static {
@@ -53,11 +58,19 @@ public class BackgroundForegroundHandler {
         System.loadLibrary("native_handler");
     }
     
-    public BackgroundForegroundHandler(SegmentationAlgorithm algo, String img)
+    public BackgroundForegroundHandler(SegmentationAlgorithm algo, String img, String WorkingDir, String URL)
     {
         if(algo == SegmentationAlgorithm.WATERSHED_SEGMENTATION)
         {
             segmenter = new WatershedSegmentation();
+        }
+        else if(algo == SegmentationAlgorithm.NO_SEGMENTATION)
+        {
+            segmenter = new NoSegmentation();
+        }
+        else
+        {
+            segmenter = new SemanticSegmentation(URL, WorkingDir);
         }
         this.name = img;
     }
@@ -99,7 +112,7 @@ public class BackgroundForegroundHandler {
 
     
     
-    public static void extract_n_write(String fileName, String pathOfImg) throws IRTEX_Exception, FileNotFoundException, IOException
+    public static void extract_n_write(String fileName, String pathOfImg, String WorkingDir, String URL) throws IRTEX_Exception, FileNotFoundException, IOException
     {
         ArrayList<String> images = new ArrayList<>();
         FileUtils.listf(pathOfImg, images);
@@ -120,7 +133,7 @@ public class BackgroundForegroundHandler {
             for(int i=0; i<images.size(); i++)
             {
                 System.out.println(images.get(i));
-                BackgroundForegroundHandler handler = new BackgroundForegroundHandler(SegmentationAlgorithm.WATERSHED_SEGMENTATION, images.get(i));
+                BackgroundForegroundHandler handler = new BackgroundForegroundHandler(SegmentationAlgorithm.WATERSHED_SEGMENTATION, images.get(i), WorkingDir, URL);
                 handler.extract_nGetFeatureVector();
                 gson.toJson(handler, BackgroundForegroundHandler.class, writer);
                 //handlers.add(handler);

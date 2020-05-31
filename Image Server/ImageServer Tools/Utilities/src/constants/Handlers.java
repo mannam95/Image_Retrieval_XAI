@@ -10,7 +10,10 @@ package constants;
  * @author SUBHAJIT
  */
 public class Handlers {
+
     public static String backgroundForegroundHandler = "bf";
     public static String ColorHandler = "cld";
     public static String ShapeHandler = "ehd";
+    public static String HighLevelSemanticFeatureHandler = "hdlf";
+
 }

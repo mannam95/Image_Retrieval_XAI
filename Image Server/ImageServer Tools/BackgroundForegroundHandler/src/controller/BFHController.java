@@ -7,9 +7,7 @@ package controller;
 import IRTEX_Exception.IRTEX_Exception;
 import bovw.Bovw;
 import backgroundForegroundHandler.BackgroundForegroundHandler;
-import java.util.HashMap;
 import models.Score;
-import scoring.Scoring;
 
 /**
  *
@@ -25,10 +23,10 @@ public class BFHController {
     
     Bovw query;
     
-    public BFHController(String Fpath, Score qdetails) throws IRTEX_Exception
+    public BFHController(String Fpath, Score qdetails, String WorkingDir, String URL) throws IRTEX_Exception
     {
         
-        BackgroundForegroundHandler handler = new BackgroundForegroundHandler(BackgroundForegroundHandler.SegmentationAlgorithm.WATERSHED_SEGMENTATION, Fpath);
+        BackgroundForegroundHandler handler = new BackgroundForegroundHandler(BackgroundForegroundHandler.SegmentationAlgorithm.WATERSHED_SEGMENTATION, Fpath, WorkingDir, URL);
         handler.extract();
         
         query = new Bovw();

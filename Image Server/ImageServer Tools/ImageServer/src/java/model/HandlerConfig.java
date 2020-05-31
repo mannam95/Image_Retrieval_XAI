@@ -20,4 +20,8 @@ public class HandlerConfig {
     public String center;
     @Expose(deserialize = true)
     public float weight;
+    @Expose(deserialize = true)
+    public String URL;
+    @Expose(deserialize = true)
+    public String WorkingDir;
 }

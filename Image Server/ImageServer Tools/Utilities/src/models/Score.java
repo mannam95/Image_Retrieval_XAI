@@ -38,12 +38,20 @@ public class Score {
 
     public double[] cldVector;
 
-    //this is for cld score
+    //this is for ehd score
     @Expose(serialize = true)
     @SerializedName("shapedistance")
     public float ehdScore;
 
     public double[] ehdVector;
+    
+    
+    //this is for hlsf score
+    @Expose(serialize = true)
+    @SerializedName("HighLevelSemanticFeatureDistance")
+    public float HSLFScore;
+
+    public float[] HSLFVector;
 
     @Expose(serialize = true)
     ArrayList<HashMap<String, Object>> mainFeatures;
@@ -56,6 +64,12 @@ public class Score {
     public void cldScore(String name, float score) {
         this.name = name;
         cldScore = score;
+    }
+    
+    
+    public void HLSFScore(String name, float score) {
+        this.name = name;
+        HSLFScore = score;
     }
 
     public void addbfvector(float[] vect) {
@@ -79,24 +93,28 @@ public class Score {
         average = sum / region_scores.length;
     }
 
-    public void addVectorToCategorised(ArrayList<String> handlers) {
+    public void addVectorToCategorised(HashMap<String, Object> handlers) {
         mainFeatures = new ArrayList<>();
         HashMap<String, Object> obj;
 
-        if (handlers.contains("bf")) {
+        if (handlers.containsKey("bf")) {
             obj = new HashMap<>();
             obj.put("BackgroundForeground", features);
             mainFeatures.add(obj);
         }
-
-        if (handlers.contains("cld")) {
+        if (handlers.containsKey("cld")) {
             obj = new HashMap<>();
             obj.put("Color", cldVector);
             mainFeatures.add(obj);
         }
-        if (handlers.contains("ehd")) {
+        if (handlers.containsKey("ehd")) {
             obj = new HashMap<>();
             obj.put("Shape", ehdVector);
+            mainFeatures.add(obj);
+        }
+        if (handlers.containsKey("hslf")) {
+            obj = new HashMap<>();
+            obj.put("HighLevelSemanticFeature", HSLFVector);
             mainFeatures.add(obj);
         }
 

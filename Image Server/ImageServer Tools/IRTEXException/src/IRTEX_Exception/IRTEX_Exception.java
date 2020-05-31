@@ -36,6 +36,11 @@ public class IRTEX_Exception extends Exception {
     public static int ArrayNull = 6;
     
     
+    public static int HighLevelFeatureExtractionFailure = 7;
+    
+    public static int URLException = 8;
+    
+    
     
     {
         messages.add("The supplied parameter is not anstanceof same kind");
@@ -51,11 +56,10 @@ public class IRTEX_Exception extends Exception {
         //write to file errors utils
         messages.add("Error Writing FIle");
         messages.add("Error Deserialising FIle");
-        
-        
-        
         messages.add("Error array null");
-        
+        messages.add("cannot extract high level semantic feature");
+        messages.add("URL either null or not valid");
+                
         
     }
     

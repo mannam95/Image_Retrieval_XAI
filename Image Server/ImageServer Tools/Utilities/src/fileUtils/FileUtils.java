@@ -65,8 +65,17 @@ public class FileUtils {
         String s;
         try {
             s = new String( Files.readAllBytes(Paths.get(Fname)), StandardCharsets.UTF_8);
-            return new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().fromJson(s, t);
+            return loadGsonStringData(t, s);
         } catch (IOException ex) {
+            throw new IRTEX_Exception(IRTEX_Exception.errorDeserialisingFile, ex.getMessage());
+        }
+    }
+    
+    public static Object loadGsonStringData(Type t, String str) throws IRTEX_Exception
+    {
+        try {
+            return new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().fromJson(str, t);
+        } catch (Exception ex) {
             throw new IRTEX_Exception(IRTEX_Exception.errorDeserialisingFile, ex.getMessage());
         }
     }
