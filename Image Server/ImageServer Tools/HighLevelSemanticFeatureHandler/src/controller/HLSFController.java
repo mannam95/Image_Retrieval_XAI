@@ -25,6 +25,7 @@ public class HLSFController {
         hslf = new HighLevelSemanticFeatureHandler(Fpath, url);
         hslf.getFeature();
         qdetails.HSLFVector = hslf.feature;
+        qdetails.shapesemantic = hslf.classes;
     }
     
     

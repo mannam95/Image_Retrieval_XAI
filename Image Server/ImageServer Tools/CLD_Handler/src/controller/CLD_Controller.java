@@ -28,6 +28,7 @@ public class CLD_Controller {
         CompareColorFeature ccf = new CompareColorFeature(Fpath, url);
         this.ccf = ccf;
         qdetails.cldVector = ccf.ivsrccolorlayout.getFeatureVector();
+        qdetails.colorSemanticData = ccf.semanticInformation;
     }
     
     

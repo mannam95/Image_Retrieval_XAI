@@ -35,6 +35,10 @@ public class Score {
     @Expose(serialize = true)
     @SerializedName("colordistance")
     public float cldScore;
+    
+    @Expose(serialize = true)
+    @SerializedName("semanticcolordistance")
+    public float scolScore;
 
     public double[] cldVector;
     public float[] colorSemanticData;

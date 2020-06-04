@@ -29,9 +29,9 @@ public class CompareColorFeature {
 
     private BufferedImage ivsrcimg;
     public ColorLayout ivsrccolorlayout;
-    float[] semanticInformation;
+    public float[] semanticInformation;
 
-    public CompareColorFeature(String img, String Url)throws IRTEX_Exception {
+    public CompareColorFeature(String img, String Url) throws IRTEX_Exception {
         ivsrccolorlayout = new ColorLayout();
         extractqueryimage(img);
         getColorSemanticInformation(img, Url);
@@ -64,8 +64,9 @@ public class CompareColorFeature {
         if (str == null || str.getStatus() == 500) {
             throw new IRTEX_Exception(IRTEX_Exception.ColorSemanticInformationExtractionException);
         }
-        
-        Type t = new TypeToken<float[]>() {}.getType();
+
+        Type t = new TypeToken<float[]>() {
+        }.getType();
 
         info = (float[]) FileUtils.loadGsonStringData(t, str.getBody());
         this.semanticInformation = info;
@@ -80,8 +81,30 @@ public class CompareColorFeature {
 
         imgscr.cldScore(compare_Img, (float) entry.getDistance(ivsrccolorlayout));
 
+        imgscr.scolScore = intersection(feature.semanticInformation, semanticInformation);
+
         imgscr.cldVector = entry.getFeatureVector();
         imgscr.colorSemanticData = feature.semanticInformation;
     }
 
+    static float intersection(float[] a, float[] b) {
+        float sum = 0;
+        for(int index  = 0;index< a.length; index++) {
+            sum += Math.min(a[index], b[index]);
+        }
+        sum = sum / Math.max(sum(a), sum(b));
+        return sum;
+    }
+
+    static float sum(float[]arr) {
+        float sum = 0; // initialize sum 
+        int i;
+
+        // Iterate through all elements and add them to sum 
+        for (i = 0; i < arr.length; i++) {
+            sum += arr[i];
+        }
+
+        return sum;
+    }
 }
