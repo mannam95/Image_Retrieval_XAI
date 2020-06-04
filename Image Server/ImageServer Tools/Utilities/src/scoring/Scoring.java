@@ -60,8 +60,28 @@ public class Scoring {
 
     }
 
-    public Score add(Score sc) {
+    public Score add(Score sc, HashMap<String, Float> weightmap) {
         if(sc.average == -1) return null;
+        
+        
+        if (weightmap.containsKey("bf")) {
+            Float f = weightmap.get("bf");
+            sc.average = sc.average*f;
+        }
+        if (weightmap.containsKey("cld")) {
+            Float f = weightmap.get("cld");
+            sc.cldScore = sc.cldScore*f;
+        }
+        if (weightmap.containsKey("ehd")) {
+            Float f = weightmap.get("ehd");
+            sc.ehdScore = sc.ehdScore*f;
+        }
+        if (weightmap.containsKey("hlsf")) {
+            Float f = weightmap.get("hlsf");
+            sc.HSLFScore = sc.HSLFScore*f;
+        }
+        
+        
         sc.overallScore = sc.average + sc.cldScore + sc.ehdScore + sc.HSLFScore;
         
         

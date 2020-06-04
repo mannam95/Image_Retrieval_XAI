@@ -37,6 +37,7 @@ public class Score {
     public float cldScore;
 
     public double[] cldVector;
+    public float[] colorSemanticData;
 
     //this is for ehd score
     @Expose(serialize = true)
@@ -52,9 +53,10 @@ public class Score {
     public float HSLFScore;
 
     public float[] HSLFVector;
+    public String[] shapesemantic;
 
     @Expose(serialize = true)
-    ArrayList<HashMap<String, Object>> mainFeatures;
+    HashMap<String, Object> mainFeatures;
 
     public void ehdScore(String name, float score) {
         this.name = name;
@@ -94,28 +96,30 @@ public class Score {
     }
 
     public void addVectorToCategorised(HashMap<String, Object> handlers) {
-        mainFeatures = new ArrayList<>();
-        HashMap<String, Object> obj;
+        //mainFeatures = new ArrayList<>();
+        mainFeatures = new HashMap<>();
 
         if (handlers.containsKey("bf")) {
-            obj = new HashMap<>();
-            obj.put("BackgroundForeground", features);
-            mainFeatures.add(obj);
+            //obj = new HashMap<>();
+            mainFeatures.put("BackgroundForeground", features);
+            //mainFeatures.add(obj);
         }
         if (handlers.containsKey("cld")) {
-            obj = new HashMap<>();
-            obj.put("Color", cldVector);
-            mainFeatures.add(obj);
+            //obj = new HashMap<>();
+            mainFeatures.put("Color", cldVector);
+            mainFeatures.put("colorSemanticData", colorSemanticData);
+            //mainFeatures.add(obj);
         }
         if (handlers.containsKey("ehd")) {
-            obj = new HashMap<>();
-            obj.put("Shape", ehdVector);
-            mainFeatures.add(obj);
+            //obj = new HashMap<>();
+            mainFeatures.put("Shape", ehdVector);
+            //mainFeatures.add(obj);
         }
-        if (handlers.containsKey("hslf")) {
-            obj = new HashMap<>();
-            obj.put("HighLevelSemanticFeature", HSLFVector);
-            mainFeatures.add(obj);
+        if (handlers.containsKey("hlsf")) {
+            //obj = new HashMap<>();
+            mainFeatures.put("HighLevelSemanticFeature", HSLFVector);
+            mainFeatures.put("shapesemantic", shapesemantic);
+            //mainFeatures.add(obj);
         }
 
     }

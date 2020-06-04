@@ -26,7 +26,7 @@ public class BFHController {
     public BFHController(String Fpath, Score qdetails, String WorkingDir, String URL) throws IRTEX_Exception
     {
         
-        BackgroundForegroundHandler handler = new BackgroundForegroundHandler(BackgroundForegroundHandler.SegmentationAlgorithm.WATERSHED_SEGMENTATION, Fpath, WorkingDir, URL);
+        BackgroundForegroundHandler handler = new BackgroundForegroundHandler(BackgroundForegroundHandler.SegmentationAlgorithm.SEMANTIC_SEGMENTATION, Fpath, WorkingDir, URL);
         handler.extract();
         
         query = new Bovw();

@@ -133,7 +133,7 @@ public class BackgroundForegroundHandler {
             for(int i=0; i<images.size(); i++)
             {
                 System.out.println(images.get(i));
-                BackgroundForegroundHandler handler = new BackgroundForegroundHandler(SegmentationAlgorithm.WATERSHED_SEGMENTATION, images.get(i), WorkingDir, URL);
+                BackgroundForegroundHandler handler = new BackgroundForegroundHandler(SegmentationAlgorithm.SEMANTIC_SEGMENTATION, images.get(i), WorkingDir, URL);
                 handler.extract_nGetFeatureVector();
                 gson.toJson(handler, BackgroundForegroundHandler.class, writer);
                 //handlers.add(handler);

@@ -5,20 +5,21 @@
  */
 package cld_handler;
 
+import IRTEX_Exception.IRTEX_Exception;
+import com.google.gson.reflect.TypeToken;
+import fileUtils.FileUtils;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Type;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import kong.unirest.HttpResponse;
+import kong.unirest.Unirest;
 import models.Score;
 import net.semanticmetadata.lire.imageanalysis.features.global.ColorLayout;
+import stringutils.StringUtils;
 
 /**
  *
@@ -28,95 +29,59 @@ public class CompareColorFeature {
 
     private BufferedImage ivsrcimg;
     public ColorLayout ivsrccolorlayout;
+    float[] semanticInformation;
 
-    public CompareColorFeature(String img) throws IOException {
+    public CompareColorFeature(String img, String Url)throws IRTEX_Exception {
         ivsrccolorlayout = new ColorLayout();
         extractqueryimage(img);
+        getColorSemanticInformation(img, Url);
     }
 
-    public HashMap<String, Double> comparewithquery(String pfpath, HashMap<String, ColorLayout> lvshpmap) throws IOException {
-
-        HashMap<String, Double> lvdistmap = new HashMap<>();
-        extractqueryimage(pfpath);
-        Double lvdistance;
-
-        for (Map.Entry lvshapemap : lvshpmap.entrySet()) {
-            //System.out.println(lvshapemap.getKey() + "----->" + lvshapemap.getValue());
-            ColorLayout lvcldobj = new ColorLayout();
-            //BaseImageColorFeature  lvbaseimgobj = new BaseImageColorFeature();
-            lvcldobj = (ColorLayout) lvshapemap.getValue();//.getbaseshapelayout();
-            //lvcldobj = lvbaseimgobj.getbasecolorlayout();
-
-            // ColorLayout ivbasecolorlayout
-            double temp = lvcldobj.getDistance(ivsrccolorlayout);
-            lvdistance = temp;
-
-            lvdistmap.put((String) lvshapemap.getKey(), lvdistance);
-
+    public void extractqueryimage(String pfpath) throws IRTEX_Exception {
+        try {
+            //System.out.println("source file path: " + pfpath);
+            File lvsrcfile = new File(pfpath);
+            ivsrcimg = ImageIO.read(lvsrcfile);
+            ivsrccolorlayout.extract(ivsrcimg);
+        } catch (IOException ex) {
+            throw new IRTEX_Exception(IRTEX_Exception.IOException, ex.getMessage());
         }
+    }
 
-        // Create a list from elements of HashMap 
-        List<Map.Entry<String, Double>> list;
-        list = new LinkedList<>(lvdistmap.entrySet());
+    public float[] getColorSemanticInformation(String pfilepath, String URL) throws IRTEX_Exception {
+        float[] info;
 
-        // Sort the list 
-        Collections.sort(list, new Comparator<Map.Entry<String, Double>>() {
-            public int compare(Map.Entry<String, Double> o1,
-                    Map.Entry<String, Double> o2) {
-                return (o1.getValue()).compareTo(o2.getValue());
-            }
-        });
-
-        // put data from sorted list to hashmap  
-        HashMap<String, Double> temp = new LinkedHashMap<String, Double>();
-        for (Map.Entry<String, Double> aa : list) {
-            temp.put(aa.getKey(), aa.getValue());
+        if (URL.endsWith("/")) {
+            URL = StringUtils.replaceLast(URL, "/", "");
         }
-        return temp;
+        if (URL == null) {
+            throw new IRTEX_Exception(IRTEX_Exception.URLException);
+        }
+        String strURL = URL + "/color";
 
-        //x.floatValue();
-        // return lvdistmap;
-    }
+        HttpResponse<String> str = Unirest.get(strURL).queryString("fileName", pfilepath).asString();
 
-    /**
-     * Kush - OLD API. Keeping it for some time , later to be removed *
-     */
-    public double comparewithquery(String pfpath, byte[] pbasefeaturevector) throws IOException {
+        if (str == null || str.getStatus() == 500) {
+            throw new IRTEX_Exception(IRTEX_Exception.ColorSemanticInformationExtractionException);
+        }
+        
+        Type t = new TypeToken<float[]>() {}.getType();
 
-        //double distance = 0;
-        extractqueryimage(pfpath);
-
-        ColorLayout lvbaseimage = new ColorLayout();
-        //lvbaseimage.setByteArrayRepresentation(pbasefeaturevector,0,pbasefeaturevector.length);
-        lvbaseimage.setByteArrayRepresentation(pbasefeaturevector);
-
-        //System.out.println("query image clr vector = " + Arrays.toString(ivsrccolorlayout.getByteArrayRepresentation()));
-
-        //return ivsrccolorlayout.getDistance(lvbaseimage);
-        return lvbaseimage.getDistance(ivsrccolorlayout);
-
-        //return distance;
-    }
-
-    public void extractqueryimage(String pfpath) throws IOException {
-        //System.out.println("source file path: " + pfpath);
-        File lvsrcfile = new File(pfpath);
-        //FileUtils.get
-        //File lvsrcfile = FileUtils.getAllImageFiles(new File(pfilepath), true);
-        ivsrcimg = ImageIO.read(lvsrcfile);
-        ivsrccolorlayout.extract(ivsrcimg);
+        info = (float[]) FileUtils.loadGsonStringData(t, str.getBody());
+        this.semanticInformation = info;
+        return this.semanticInformation;
     }
 
     //subhajit: added the code to be inline with the Score and Scoring utilities
-    public void compare(String compare_Img, Score imgscr)
-    {
+    public void compare(String compare_Img, Score imgscr) {
 
-        ColorLayout entry = BaseImageColorFeature.ivcldhandlermap.get(compare_Img);
-
+        BaseImageColorFeature feature = BaseImageColorFeature.ivcldhandlermap.get(compare_Img);
+        ColorLayout entry = feature.getbasecolorlayout();
 
         imgscr.cldScore(compare_Img, (float) entry.getDistance(ivsrccolorlayout));
-        
+
         imgscr.cldVector = entry.getFeatureVector();
+        imgscr.colorSemanticData = feature.semanticInformation;
     }
 
 }

@@ -15,4 +15,7 @@ public class response {
     
     @Expose(serialize = true, deserialize = true)
     public float[] feature;
+    
+    @Expose(serialize = true, deserialize = true)
+    public String[] classes;
 }

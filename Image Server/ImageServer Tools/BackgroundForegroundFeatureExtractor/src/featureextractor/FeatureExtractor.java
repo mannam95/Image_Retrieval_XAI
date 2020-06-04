@@ -25,7 +25,7 @@ public class FeatureExtractor {
         if(args.length!=4)
         {
             Scanner sc = new Scanner(System.in);
-            args = new String[2];
+            args = new String[4];
             System.out.println("Please enter the path where the dictionary is to be written");
             args[0] = sc.nextLine();
             System.out.println("Please enter the path where the images are located");
