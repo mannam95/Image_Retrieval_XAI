@@ -9,6 +9,7 @@ requirejs.config({
         'es6promise': ['Libraries/Polyfill/es6-promise.auto'],
         'zingchart': ['Libraries/zingchart/zingchart.min'],
         'bootstrap': ['Libraries/bootstrap-3.3.7-dist/js/bootstrap'],
+        'tensorflowjs': ['Libraries/tensorflow/tf.min'],
 
         'datatables.net': ['Libraries/DataTables/jquery.dataTables.min'],
         'datatables.net-buttons': ['//cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min'],
