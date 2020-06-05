@@ -2368,9 +2368,9 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
         //get the max value by range index
         function minmax(arr, begin, end) {
             arr = [].slice.apply(arr, [].slice.call(arguments, 1));
-            var max1 = Math.max.apply(Math, arr);
+            var max1 = Math.min.apply(Math, arr);
             arr.splice(arr.indexOf(max1), 1);
-            return [max1, Math.max.apply(null, arr)];
+            return [max1, Math.min.apply(null, arr)];
         }
 
         //detect window changes and maje responsive
