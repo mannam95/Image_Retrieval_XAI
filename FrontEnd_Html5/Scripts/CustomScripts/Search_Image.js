@@ -21,7 +21,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
             mainTableData: '',
             baseImagedata: '',
             serverHostedDetails: {
-                url: 'http://localhost:8080/imageserver',
+                url: 'http://localhost:8080/ImageServer',
                 urlkey: 'qbe'
             },
             colorConstants: ['Black', 'Maroon', 'Green', 'Olive', 'Navy', 'Purple', 'Teal', 'Silver', 'Grey', 'Red', 'Lime', 'Yellow', 'Blue', 'Fuchsia', 'Aqua', 'White'],
