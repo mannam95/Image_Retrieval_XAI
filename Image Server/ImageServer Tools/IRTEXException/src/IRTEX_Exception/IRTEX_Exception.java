@@ -40,6 +40,11 @@ public class IRTEX_Exception extends Exception {
     
     public static int URLException = 8;
     
+    public static int FileNotFoundException = 9;
+    public static int IOException = 10;
+    
+    public static int ColorSemanticInformationExtractionException = 11;
+    
     
     
     {
@@ -59,7 +64,11 @@ public class IRTEX_Exception extends Exception {
         messages.add("Error array null");
         messages.add("cannot extract high level semantic feature");
         messages.add("URL either null or not valid");
-                
+        
+        messages.add("File not Found");
+        messages.add("Input Output Exception");
+        
+        messages.add("Exception while trying to extract color semantic information");
         
     }
     

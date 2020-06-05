@@ -7,7 +7,6 @@ package controller;
 
 import IRTEX_Exception.IRTEX_Exception;
 import highlevelsemanticfeaturehandler.HighLevelSemanticFeatureHandler;
-import java.io.IOException;
 import models.Score;
 
 /**
@@ -15,17 +14,18 @@ import models.Score;
  * @author SUBHAJIT
  */
 public class HLSFController {
-    public static void initialise(String Dictionaryfile) throws IRTEX_Exception, IOException
+    public static void initialise(String Dictionaryfile) throws IRTEX_Exception
     {
         HighLevelSemanticFeatureHandler.load_HLSF_data_with_stream(Dictionaryfile);
     }
     
     private HighLevelSemanticFeatureHandler hslf;
 
-    public HLSFController(String Fpath, Score qdetails, String url) throws IOException, IRTEX_Exception { 
+    public HLSFController(String Fpath, Score qdetails, String url) throws IRTEX_Exception { 
         hslf = new HighLevelSemanticFeatureHandler(Fpath, url);
         hslf.getFeature();
         qdetails.HSLFVector = hslf.feature;
+        qdetails.shapesemantic = hslf.classes;
     }
     
     
@@ -33,8 +33,6 @@ public class HLSFController {
     
     public void query(String img, Score score) throws IRTEX_Exception
     {
-        
         hslf.compare(img, score);
-        
     }
 }

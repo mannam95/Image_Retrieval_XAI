@@ -31,7 +31,7 @@ public class createimagedict {
     
     FileWriter ivfilewriter;
         
-    public void getfiles(String pfpath,String outfpath, boolean type) throws IOException, IRTEX_Exception{
+    public void getfiles(String pfpath,String outfpath, String url, boolean type) throws IOException, IRTEX_Exception{
         
         ArrayList<String> lvfilelist = new ArrayList<>();
         FileUtils.listf(pfpath, lvfilelist);
@@ -45,7 +45,7 @@ public class createimagedict {
                 //System.out.println(lvfilelistIterator.next());
                 String lvfile = lvfilelistIterator.next();
                 System.out.println(lvfile);
-                create_image_dictionary(lvfile,type);
+                create_image_dictionary(lvfile,url,type);
                
             }
             ivfilewriter.close();
@@ -56,23 +56,30 @@ public class createimagedict {
         
     } 
           
-    public void create_image_dictionary(String pfile, boolean type) throws IOException{
+    public void create_image_dictionary(String pfile, String url, boolean type) throws IRTEX_Exception{
         
         String lvdescriptor;
+        String semanticInformation ;
         /* 1 for color 
            0 for shape
         */
         if (type){
             BaseImageColorFeature lvclrobj = new BaseImageColorFeature();
             lvdescriptor = Arrays.toString(lvclrobj.getsrcfeaturevectors(pfile));
+            semanticInformation = Arrays.toString(lvclrobj.getColorSemanticInformation(pfile, url));
+            
         }else{
             BaseImageShapeFeature lvshpobj = new BaseImageShapeFeature();
             lvdescriptor = Arrays.toString(lvshpobj.getsrcShapefeaturevectors(pfile));
+            semanticInformation = null;
         }
                 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("name",pfile);
         jsonObject.put("vector",lvdescriptor);
+        
+        if(type)
+            jsonObject.put("semanticvector",semanticInformation);
         
         try{
             ivfilewriter.write(jsonObject.toJSONString());

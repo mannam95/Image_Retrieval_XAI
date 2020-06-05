@@ -5,6 +5,7 @@
  */
 package controller;
 
+import IRTEX_Exception.IRTEX_Exception;
 import cld_handler.BaseImageColorFeature;
 import cld_handler.CompareColorFeature;
 import java.io.IOException;
@@ -23,10 +24,11 @@ public class CLD_Controller {
     
     private CompareColorFeature ccf;
 
-    public CLD_Controller(String Fpath, Score qdetails) throws IOException { 
-        CompareColorFeature ccf = new CompareColorFeature(Fpath);
+    public CLD_Controller(String Fpath, String url, Score qdetails) throws IRTEX_Exception { 
+        CompareColorFeature ccf = new CompareColorFeature(Fpath, url);
         this.ccf = ccf;
         qdetails.cldVector = ccf.ivsrccolorlayout.getFeatureVector();
+        qdetails.colorSemanticData = ccf.semanticInformation;
     }
     
     
