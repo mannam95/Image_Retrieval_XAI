@@ -21,8 +21,8 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
             mainTableData: '',
             baseImagedata: '',
             serverHostedDetails: {
-                url: 'http://localhost:8080/ImageServer',
-                urlkey: 'qbe'
+                url: 'http://localhost:3000/lireq',
+                urlkey: 'urld'
             },
             colorConstants: ['Black', 'Maroon', 'Green', 'Olive', 'Navy', 'Purple', 'Teal', 'Silver', 'Grey', 'Red', 'Lime', 'Yellow', 'Blue', 'Fuchsia', 'Aqua', 'White'],
             semanticsConstants: ['aeroplane', 'bicycle', 'bird', 'boat', 'bottle', 'bus', 'car', 'cat', 'chair', 'cow', 'diningtable', 'dog', 'horse', 'motorbike', 'person', 'pottedplant', 'sheep', 'sofa', 'train', 'tvmonitor'],
