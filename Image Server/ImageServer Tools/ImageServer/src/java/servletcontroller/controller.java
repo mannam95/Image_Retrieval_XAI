@@ -110,14 +110,14 @@ public class controller {
             }
             if(handlers.containsKey("cld"))
             {
-                HandlerConfig hc = (HandlerConfig)handlers.get("bf");
+                HandlerConfig hc = (HandlerConfig)handlers.get("cld");
                 cldc = new CLD_Controller(Filename, hc.URL, QueryDetails);
             }
             if(handlers.containsKey("ehd"))
             {
                 ehdc = new EHD_Controller(Filename, QueryDetails);
             }
-            if(handlers.containsKey("ehd"))
+            if(handlers.containsKey("hlsf"))
             {
                 HandlerConfig hc = (HandlerConfig)handlers.get("hlsf");
                 hlsf = new HLSFController(Filename, QueryDetails, hc.URL);
