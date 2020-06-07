@@ -29,6 +29,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
             constantDetails: ['colorConstants', 'semanticsConstants'],
             excludedFeatures: ['shapesemantic', 'colorSemanticData'],
             normalizeFeatures: ['overallDistScore', 'backforegrounddistance', 'colordistance', 'semanticcolordistance', 'shapedistance', 'HighLevelSemanticFeatureDistance'],
+            normalizeFeatures2: ['backforegrounddistance', 'colordistance', 'semanticcolordistance', 'shapedistance', 'HighLevelSemanticFeatureDistance'],
             explainFeatures: ['shapedistance', 'colordistance', 'backforegrounddistance', 'HighLevelSemanticFeatureDistance'],
             explainFeatureNames: ['Shape', 'Color', 'BackgroundForeground', 'HighLevelSemanticFeature'],
             endpointresult: {
@@ -2005,6 +2006,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                         pageDetails.baseImagedata = pageDetails.endpointresult.QueryImgDetails;
                         $('#globalDivID').empty();
                         $('#globalDivID').append('<h4><b>Global Explanation Loading...</b></h4>');
+                        normalizeServerData();
                         globalExplanationData();
                         makeTableData();
                         $('body').removeClass("loading");
@@ -2026,6 +2028,31 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                         // });
                     }
                 });
+            } catch (error) {
+                swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!',
+                    footer: JSON.stringify(error)
+                });
+            }
+        }
+
+        //calculates the regression for the features based on similarity
+        function calculateReg2() {
+            try {
+                var xPrepData = [];
+                var yPrepData = [];
+                for (var cTemp1 = 0; cTemp1 < pageDetails.mainTableData.length; cTemp1++) {
+                    xPrepData[cTemp1] = [];
+                    pageDetails.normalizeFeatures2.forEach(function (currF, currInd) {
+                        xPrepData[cTemp1].push(pageDetails.mainTableData[cTemp1][currF]);
+                    });
+                    yPrepData.push(pageDetails.mainTableData[cTemp1]['overallDistScore']);
+                }
+
+                return ([xPrepData, yPrepData]);
+
             } catch (error) {
                 swal.fire({
                     icon: 'error',
@@ -2105,8 +2132,6 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                     serverResultTemp[stemp2]['colorData'] = tempcolorArr;
                 }
 
-
-
                 var finalVec = [];
 
                 for (var gtemp1 = 0; gtemp1 < serverResultTemp.length; gtemp1++) {
@@ -2120,10 +2145,17 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                     targetVec[tt] = pageDetails.mainTableData[tt]['overallDistScore'];
                 }
 
+                finalVec = spliceArr(finalVec);
                 var linSucc = linearRegCalc(finalVec, targetVec);
 
                 linSucc.done(function (wRes) {
                     returnGlobalText(wRes);
+                    // var ArrTempData = calculateReg2();
+                    // var linSucc1 = linearRegCalc(ArrTempData[0], ArrTempData[1]);
+
+                    // linSucc1.done(function (wRes1) {
+                    //     console.log(wRes1);
+                    // });
                 });
 
             } catch (error) {
@@ -2136,6 +2168,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
             }
         }
 
+        //removes a complete column if all the values of one column is 0
         function spliceArr(tempArr) {
             try {
                 var spliInd = [];
@@ -2153,14 +2186,14 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                     }
                 }
 
-                pageDetails.newColorConstants =  pageDetails.colorConstants;
+                pageDetails.newColorConstants = pageDetails.colorConstants;
                 pageDetails.newSemanticsConstants = pageDetails.semanticsConstants;
 
-                for(var t3 = 0; t3 < spliInd.length; t3++){
-                    if(spliInd[t3] < pageDetails.colorConstants.length){
+                for (var t3 = 0; t3 < spliInd.length; t3++) {
+                    if (spliInd[t3] < pageDetails.colorConstants.length) {
                         pageDetails.newColorConstants.splice(spliInd[t3], 1);
                     } else {
-                        pageDetails.newSemanticsConstants.splice(spliInd[t3]-pageDetails.colorConstants.length, 1);
+                        pageDetails.newSemanticsConstants.splice(spliInd[t3] - pageDetails.colorConstants.length, 1);
                     }
                 }
 
@@ -2192,8 +2225,6 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
         function linearRegCalc(regData, targetData) {
             var deferred = $.Deferred();
             try {
-
-                regData = spliceArr(regData);
                 // higher=better but slower
                 var nr_epochs = 2048;
                 var learningRate = 0.00000000001;
