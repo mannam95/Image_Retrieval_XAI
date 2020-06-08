@@ -147,7 +147,6 @@ public class controller {
 
                     topdoc.add(sc);
                 } catch (Exception e) {
-                    System.out.println("here");
                 }
             }
             topdoc.getClassificationData();
