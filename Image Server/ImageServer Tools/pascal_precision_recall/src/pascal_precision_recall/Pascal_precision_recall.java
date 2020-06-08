@@ -136,9 +136,9 @@ public class Pascal_precision_recall {
                     recall_denom = num;
             }
 
-            if (recall_denom > onCount) {
-                recall_denom = onCount;
-            }
+//            if (recall_denom > onCount) {
+//                recall_denom = onCount;
+//            }
             (new stat_calc(fname, count, recall_denom, onCount)).calc(onCount);
         }
 
@@ -224,9 +224,9 @@ class stat_calc {
     }
 
     public void calc(int onCount) {
-        if (recall_count > onCount) {
-            recall_count = onCount;
-        }
+//        if (recall_count > onCount) {
+//            recall_count = onCount;
+//        }
         if (precision_count > onCount) {
             precision_count = onCount;
         }

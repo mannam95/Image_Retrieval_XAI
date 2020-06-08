@@ -188,16 +188,16 @@ public class Scoring {
             ArrayList<Float> row = new ArrayList();
             
             if (weightmap.containsKey("bf")) {
-                row.add(sc.average);
+                row.add(getSimilar(sc.average));
             }
             if (weightmap.containsKey("cld")) {
-                row.add(sc.cldScore);
+                row.add(getSimilar(sc.cldScore));
             }
             if (weightmap.containsKey("ehd")) {
-                row.add(sc.ehdScore);
+                row.add(getSimilar(sc.ehdScore));
             }
             if (weightmap.containsKey("hlsf")) {
-                row.add(sc.HSLFScore);
+                row.add(getSimilar(sc.HSLFScore));
             }
             xval.add(row);
         }
@@ -211,20 +211,24 @@ public class Scoring {
             ArrayList<Float> row = new ArrayList();
             
             if (weightmap.containsKey("bf")) {
-                row.add(sc.average);
+                row.add(getSimilar(sc.average));
             }
             if (weightmap.containsKey("cld")) {
-                row.add(sc.cldScore);
+                row.add(getSimilar(sc.cldScore));
             }
             if (weightmap.containsKey("ehd")) {
-                row.add(sc.ehdScore);
+                row.add(getSimilar(sc.ehdScore));
             }
             if (weightmap.containsKey("hlsf")) {
-                row.add(sc.HSLFScore);
+                row.add(getSimilar(sc.HSLFScore));
             }
             
             xval.add(row);
         }
+    }
+    private Float getSimilar(Float distance)
+    {
+        return (1/(1+distance));
     }
 
 }

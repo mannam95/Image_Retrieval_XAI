@@ -4,6 +4,7 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/dke/2ND%20SEM/IRTEX/R&amp;D/implementation/SegmentationHandler/src/customs/SemanticSegmentation.java</file>
+            <file>file:/D:/dke/2ND%20SEM/IRTEX/R&amp;D/implementation/SegmentationHandler/src/customs/NoSegmentation.java</file>
             <file>file:/D:/dke/2ND%20SEM/IRTEX/R&amp;D/implementation/SegmentationHandler/src/model/Segmenter.java</file>
             <file>file:/D:/dke/2ND%20SEM/IRTEX/R&amp;D/implementation/SegmentationHandler/src/customs/WatershedSegmentation.java</file>
         </group>

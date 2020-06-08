@@ -126,26 +126,30 @@ public class Cifar_precision_recall {
             if (str == null || str.getStatus() == 500) {
                 throw new Exception("status 500 on request");
             }
+            try {
+                int count = getRecall(fname_to_class_map, class_to_fname_map, fname, str.getBody());
 
-            int count = getRecall(fname_to_class_map, class_to_fname_map, fname, str.getBody());
+                fname = new File(fname).getName();
+                fname = FilenameUtils.removeExtension(fname);
 
-            fname = new File(fname).getName();
-            fname = FilenameUtils.removeExtension(fname);
-
-            int recall_denom = 0;
-            ArrayList<String> classes = fname_to_class_map.get(fname);
-            for (int k = 0; k < classes.size(); k++) {
-                String cls = classes.get(k);
-                int num = class_to_fname_map.get(cls).size();
-                if (num > recall_denom) {
-                    recall_denom = num;
+                int recall_denom = 0;
+                ArrayList<String> classes = fname_to_class_map.get(fname);
+                for (int k = 0; k < classes.size(); k++) {
+                    String cls = classes.get(k);
+                    int num = class_to_fname_map.get(cls).size();
+                    if (num > recall_denom) {
+                        recall_denom = num;
+                    }
                 }
-            }
 
-            if (recall_denom > onCount) {
-                recall_denom = onCount;
+//            if (recall_denom > onCount) {
+//                recall_denom = onCount;
+//            }
+                (new stat_calc(fname, count, recall_denom, onCount)).calc(onCount);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                System.out.println("cannot calculate for "+fname);
             }
-            (new stat_calc(fname, count, recall_denom, onCount)).calc(onCount);
         }
 
         System.out.println(stat_calc.tostring());
@@ -230,9 +234,9 @@ class stat_calc {
     }
 
     public void calc(int onCount) {
-        if (recall_count > onCount) {
-            recall_count = onCount;
-        }
+//        if (recall_count > onCount) {
+//            recall_count = onCount;
+//        }
         if (precision_count > onCount) {
             precision_count = onCount;
         }
