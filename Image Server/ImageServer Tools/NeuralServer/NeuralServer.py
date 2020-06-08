@@ -29,6 +29,7 @@ import json
 
 
 
+
 app = FlaskAPI(__name__)
 
 
@@ -283,6 +284,8 @@ def get_classification():
         print(inst.args)
         print(inst)
         return {'status':'failure'}, status.HTTP_500_INTERNAL_SERVER_ERROR
+        
+        
 
     
 if __name__ == '__main__':
