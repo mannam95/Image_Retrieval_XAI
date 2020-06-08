@@ -21,6 +21,9 @@ from flask import request, url_for, jsonify
 from flask_api import FlaskAPI, status, exceptions
 import gc
 from PIL import Image
+from sklearn import datasets, linear_model
+from sklearn.metrics import mean_squared_error, r2_score
+import json
 
 
 
@@ -239,6 +242,48 @@ def get_color():
         print(inst.args)
         print(inst)
         return {'status':'failure'}, status.HTTP_500_INTERNAL_SERVER_ERROR
+        
+
+@app.route('/classification', methods=['POST'])
+def get_classification():
+    try:
+        
+        # Load the diabetes dataset
+        
+        
+        X = request.form['xcomp']
+        y = request.form['ycomp']
+        
+        X = json.loads(X)
+        y = json.loads(y)
+        
+        #print(type(diabetes_X))
+        #print(X)
+        #print(y)
+        
+        X = numpy.array(X)
+        y = numpy.array(y)
+        
+        #diabetes_X, diabetes_y = datasets.load_diabetes(return_X_y=True)
+
+        #print(X.shape)
+        #print(y.shape)
+
+
+        # Create linear regression object
+        regr = linear_model.LinearRegression()
+
+        # Train the model using the training sets
+        regr.fit(X, y)
+
+
+        return jsonify(regr.coef_.tolist()), status.HTTP_200_OK
+    except Exception as inst:
+        print(type(inst))
+        print(inst.args)
+        print(inst)
+        return {'status':'failure'}, status.HTTP_500_INTERNAL_SERVER_ERROR
+
     
 if __name__ == '__main__':
     app.run(debug=True)

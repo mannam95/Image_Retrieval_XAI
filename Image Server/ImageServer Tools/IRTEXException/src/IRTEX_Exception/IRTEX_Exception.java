@@ -44,6 +44,7 @@ public class IRTEX_Exception extends Exception {
     public static int IOException = 10;
     
     public static int ColorSemanticInformationExtractionException = 11;
+    public static int ClassificationException = 12;
     
     
     
@@ -69,6 +70,7 @@ public class IRTEX_Exception extends Exception {
         messages.add("Input Output Exception");
         
         messages.add("Exception while trying to extract color semantic information");
+        messages.add("error in classification");
         
     }
     

@@ -7,7 +7,6 @@ package model;
 
 import com.google.gson.annotations.Expose;
 import java.util.ArrayList;
-import jdk.Exported;
 
 /**
  *
@@ -20,6 +19,9 @@ public class imageserver_config {
     
     @Expose(deserialize = true)
     public ArrayList<HandlerConfig> pipe;
+    
+    @Expose(deserialize = true)
+    public String classificationURL;
     
     public boolean validate()
     {

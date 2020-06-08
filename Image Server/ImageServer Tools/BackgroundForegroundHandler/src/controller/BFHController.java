@@ -23,10 +23,16 @@ public class BFHController {
     
     Bovw query;
     
-    public BFHController(String Fpath, Score qdetails, String WorkingDir, String URL) throws IRTEX_Exception
+    public BFHController(String Fpath, Score qdetails, String WorkingDir, String URL, String segmentation) throws IRTEX_Exception
     {
-        
-        BackgroundForegroundHandler handler = new BackgroundForegroundHandler(BackgroundForegroundHandler.SegmentationAlgorithm.SEMANTIC_SEGMENTATION, Fpath, WorkingDir, URL);
+        BackgroundForegroundHandler handler;
+        if(segmentation == null) segmentation = "no";
+        if("SEMANTIC_SEGMENTATION".toLowerCase().contains(segmentation.toLowerCase()))
+            handler = new BackgroundForegroundHandler(BackgroundForegroundHandler.SegmentationAlgorithm.SEMANTIC_SEGMENTATION, Fpath, WorkingDir, URL);
+        else if("WATERSHED_SEGMENTATION".toLowerCase().contains(segmentation.toLowerCase()))
+            handler = new BackgroundForegroundHandler(BackgroundForegroundHandler.SegmentationAlgorithm.WATERSHED_SEGMENTATION, Fpath, WorkingDir, URL);
+        else
+            handler = new BackgroundForegroundHandler(BackgroundForegroundHandler.SegmentationAlgorithm.NO_SEGMENTATION, Fpath, WorkingDir, URL);
         handler.extract();
         
         query = new Bovw();

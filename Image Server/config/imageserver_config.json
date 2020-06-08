@@ -1,15 +1,16 @@
 {
 	"log":"",
+	"classificationURL":"http://127.0.0.1:5000",
 	"pipe":[
-		/*{
+		{
 			"name":"bf",
 			"dictionary":"D:\\dke\\2ND SEM\\IRTEX\\resource\\pascal data\\dictionaries\\bovw\\1591204550447.txt",
 			"center":"D:\\dke\\2ND SEM\\IRTEX\\resource\\pascal data\\dictionaries\\centers\\1591204550827.txt",
 			"URL":"http://127.0.0.1:5000",
 			"WorkingDir":"D:\\dke\\2ND SEM\\IRTEX\\resource\\pascal data\\dictionaries\\masks",
+			"Segmentation" : "semantic",//watershed, no
 			"weight":.1
-		}
-		,*/
+		},
 		{
 			"name":"cld",
 			"dictionary":"D:\\dke\\2ND SEM\\IRTEX\\resource\\pascal data\\dictionaries\\cld\\1591204785788.txt",
@@ -21,13 +22,12 @@
 			"dictionary":"D:\\dke\\2ND SEM\\IRTEX\\resource\\pascal data\\dictionaries\\ehd\\1591204868203.txt",
 			"URL":"http://127.0.0.1:5000",
 			"weight":.5
-		}
-		/*,
+		},
 		{
 			"name":"hlsf",
 			"dictionary":"D:\\dke\\2ND SEM\\IRTEX\\resource\\pascal data\\dictionaries\\hlsf\\1591213458667.txt",
 			"URL":"http://127.0.0.1:5000",
 			"weight":.7
-		}*/
+		}
 	]
 }

@@ -22,10 +22,10 @@ public class FeatureExtractor {
      */
     public static void main(String[] args) throws IOException {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        if(args.length!=4)
+        if(args.length!=5)
         {
             Scanner sc = new Scanner(System.in);
-            args = new String[4];
+            args = new String[5];
             System.out.println("Please enter the path where the dictionary is to be written");
             args[0] = sc.nextLine();
             System.out.println("Please enter the path where the images are located");
@@ -34,9 +34,11 @@ public class FeatureExtractor {
             args[2] = sc.nextLine();
             System.out.println("Please enter the URL for Semantic segmentation");
             args[3] = sc.nextLine();
+            System.out.println("Please enter the segmentation algo");
+            args[4] = sc.nextLine();
         }
         try {
-            BackgroundForegroundHandler.extract_n_write(args[0], args[1], args[2], args[3]);
+            BackgroundForegroundHandler.extract_n_write(args[0], args[1], args[2], args[3], args[4]);
         } catch (IRTEX_Exception ex) {
             System.out.println(ex.getMessage());
             
