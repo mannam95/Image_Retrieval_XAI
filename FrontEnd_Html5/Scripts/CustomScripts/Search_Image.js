@@ -2338,7 +2338,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                 var gData = [cData, sData];
                 var gText = ['Colors', 'Objects']
 
-                var listData = '<div class="col-xs-3"><div style="background-color: cadetblue;"  class="card"><div class="card-body"><h4 style="padding-top: 10px;"><b>3.)These image results are because:</b></h4>' + '<ul class="list-group" >';
+                var listData = '<div class="col-xs-3"><div style="background-color: cadetblue;"  class="card"><div class="card-body"><h4 style="padding-top: 10px;"><b>2.)These image results are because:</b></h4>' + '<ul class="list-group" >';
 
                 var litempdata = '';
                 for (gTemp1 = 0; gTemp1 < gText.length; gTemp1++) {
