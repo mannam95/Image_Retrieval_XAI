@@ -24,4 +24,7 @@ public class HandlerConfig {
     public String URL;
     @Expose(deserialize = true)
     public String WorkingDir;
+    @Expose(deserialize = true)
+    public String Segmentation;
+    
 }
