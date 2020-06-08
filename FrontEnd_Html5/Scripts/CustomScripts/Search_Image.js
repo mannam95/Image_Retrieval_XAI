@@ -1077,7 +1077,11 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                             reader.onloadend = function (e) {
                                 setTimeout(function () {
                                     $('#viewPartdiv').show();
-                                    $('.dropzone-wrapper').css("height", $('.preview-zone').height());
+                                    if ($('.preview-zone').height() < $('.dropzone-wrapper').height()) {
+                                        //do nothing
+                                    } else {
+                                        $('.dropzone-wrapper').css("height", $('.preview-zone').height());
+                                    }
                                 }, 200);
                             };
 
@@ -2582,8 +2586,13 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
         //detect window changes and maje responsive
         $(window).resize(function () {
 
-            if (pageDetails.imageName != '')
-                $('.dropzone-wrapper').css("height", $('.preview-zone').height());
+            if (pageDetails.imageName != '') {
+                if ($('.preview-zone').height() < $('.dropzone-wrapper').height()) {
+                    //do nothing
+                } else {
+                    $('.dropzone-wrapper').css("height", $('.preview-zone').height());
+                }
+            }
         });
     });
 });
