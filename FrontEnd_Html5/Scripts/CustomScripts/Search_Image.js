@@ -2101,7 +2101,11 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
 
                 for (var rTemp = 0; rTemp < pageDetails.mainTableData.length; rTemp++) {
                     colorDataRes[rTemp] = pageDetails.mainTableData[rTemp]['mainFeatures']['colorSemanticData'];
-                    semanticDataRes[rTemp] = pageDetails.mainTableData[rTemp]['mainFeatures']['shapesemantic'];
+                    if (pageDetails.mainTableData[rTemp]['mainFeatures']['shapesemantic'] === undefined || pageDetails.mainTableData[rTemp]['mainFeatures']['shapesemantic'] === null) {
+                        semanticDataRes[rTemp] = 0;
+                    } else {
+                        semanticDataRes[rTemp] = pageDetails.mainTableData[rTemp]['mainFeatures']['shapesemantic'];
+                    }
                 }
 
                 var serverResultTemp = [];
