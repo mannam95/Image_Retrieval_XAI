@@ -2106,7 +2106,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                 for (var rTemp = 0; rTemp < pageDetails.mainTableData.length; rTemp++) {
                     colorDataRes[rTemp] = pageDetails.mainTableData[rTemp]['mainFeatures']['colorSemanticData'];
                     if (pageDetails.mainTableData[rTemp]['mainFeatures']['shapesemantic'] === undefined || pageDetails.mainTableData[rTemp]['mainFeatures']['shapesemantic'] === null) {
-                        semanticDataRes[rTemp] = 0;
+                        semanticDataRes[rTemp] = [0];
                     } else {
                         semanticDataRes[rTemp] = pageDetails.mainTableData[rTemp]['mainFeatures']['shapesemantic'];
                     }
