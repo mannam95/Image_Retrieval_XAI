@@ -18,8 +18,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ```
 FrontEnd_Html5(Parent Folder)
-    Images  
-    imagesData  
+    Images    
     Scripts  
             CustomScripts
             Libraries
