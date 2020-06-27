@@ -338,12 +338,24 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
         $(document).on('click', '[id^="ExpBtnID"]', function () {
             try {
 
-                $("[id^='ExpID']:not(#" + this.id + ")").removeClass('in');
+                if ($('#' + this.id).attr('aria-expanded') == 'true') {
+                    $("[id^='ExpID']").removeClass('in');
 
-                var getcurrentid = this.id;
-                getcurrentid = Number(getcurrentid.replace("ExpBtnID", "") - 1);
+                    var getcurrentid = this.id;
+                    getcurrentid = Number(getcurrentid.replace("ExpBtnID", "") - 1);
 
-                prepareExpData(getcurrentid);
+                    var resImgNam = $('#resImgID' + (getcurrentid + 1)).attr('src').split('/').pop().split('#')[0].split('?')[0];
+                    var eventTrackObj = {
+                        eventName: 'Explain-Button-Clicked',
+                        resultImageName: resImgNam,
+                        baseImageName: pageDetails.imageName,
+                        resultRowNumber: (getcurrentid + 1)
+                    };
+                    setCookies(eventTrackObj);
+
+                    prepareExpData(getcurrentid);
+
+                }
 
             } catch (error) {
                 swal.fire({
@@ -456,7 +468,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                                     '<input type="checkbox" id="selectIndex' + row.ID + '">' +
                                     '</div>' +
                                     '<div class="col-xs-3 col-sm-3 match-thumb imgVerCenter">' +
-                                    '<img class="tableImgClass" src="' + data + '"/>' +
+                                    '<img class="tableImgClass" id="resImgID' + (row.ID + 1) + '" src="' + data + '"/>' +
                                     '</div>' +
                                     '<div class="col-xs-6 col-sm-6 match-details">' +
                                     '<div class="match">' +
@@ -510,6 +522,15 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                 var getcurrentid = this.id;
                 pageDetails.extractCurResind = Number(getcurrentid.replace("VisualBtn", "") - 1);
                 // visualPopUp(extractindex);
+
+                var resImgNam = $('#resImgID' + (pageDetails.extractCurResind + 1)).attr('src').split('/').pop().split('#')[0].split('?')[0];
+                var eventTrackObj = {
+                    eventName: 'Compare-Button-Clicked',
+                    resultImageName: resImgNam,
+                    baseImageName: pageDetails.imageName,
+                    resultRowNumber: (pageDetails.extractCurResind  + 1)
+                };
+                setCookies(eventTrackObj);
 
                 pageDetails.singlediffarray = [];
                 pageDetails.singlefirstlevedata = [];
@@ -1160,11 +1181,6 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                 } else {
                     formdata.append(pageDetails.serverHostedDetails.imgUrlKey, pageDetails.imageUrl);
                 }
-
-                var tempObj = {
-                    ['LoadingTest']: 'HelloTest',
-                };
-                setCookies(tempObj);
 
                 if (getCookies('sessionID')[1] != undefined && getCookies('sessionID')[1] != null && getCookies('sessionID')[1] != '' && getCookies('userData')[1] != undefined && getCookies('userData')[1] != null && getCookies('userData')[1] != '') {
                     formdata.append(pageDetails.serverHostedDetails.cookiesKey, JSON.stringify({ 'sessionID': getCookies('sessionID')[1], 'data': JSON.parse(getCookies('userData')[1]) }));
