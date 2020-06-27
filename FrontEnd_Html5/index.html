@@ -21,43 +21,44 @@
     <link rel="stylesheet" type="text/css" href="Scripts/Libraries/DataTables/datatables.css">
     <link rel="stylesheet" type="text/css" href="Scripts/Libraries/bootstrap-3.3.7-dist/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="Scripts/Libraries/bootstrap-3.3.7-dist/css/bootstrap-theme.css">
+    <link rel="shortcut icon" href="Images/favicon.ico">
 </head>
 
 <body class="body-cls">
 
     <!-- <form id="mainFormID" action="localhost:3000/lireq" method="post" enctype="multipart/form-data"> -->
-        
-        <div id="MainDiv" class="MainClass" style="display: none;">
-            <div id="SearchTableDiv">
-                <div class="SearchOptions">
-                    <div class="bootstrfileInput">
-                        <div class="container">
-                            <div class="row row-flex" style="justify-content: center;">
-                                <div class="col-xs-3">
-                                    <div class="form-group">
-                                        <div class="dropzone-wrapper">
-                                            <div class="box dropzone-desc">
-                                                <div class="respDiv">
-                                                    <i class="glyphicon glyphicon-download-alt"></i>
-                                                    <p>Choose an image file or drag it here.</p>
-                                                </div>
-                                            </div>
-                                            <input type="file" name="img_logo" class="dropzone" accept="Image/*" id="upload-image">
-                                        </div>
+
+    <div id="MainDiv" class="MainClass" style="display: none;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-1">
+                    <img src="Images/newLogo.PNG">
+                </div>
+                <div class="col-md-11">
+                    <h1 class="customh1" style="color: black;">XVISION</h1>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid" style="padding-top: 0px !important;justify-content: center;">
+            <div class="row row-flex search-container" style="justify-content: center;">
+                <div class="container" style="padding-top: 0;padding-bottom: 0;">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+                            <div class="imageSearchDiv">
+                                <div class="formsDiv">
+                                    <div>
+                                        <label for="upload_box" id="formupload-button" style="cursor: pointer;"></label>
+                                        <input id="formupload_box" type="file" name="image" title="Upload an image"
+                                            aria-label="Upload an image to search for" accept="Image/*">
                                     </div>
-                                </div>
-                                <div class="col-xs-3 text-right" id="viewPartdiv" style="display: none;">
-                                    <div class="form-group">
-                                        <div class="preview-zone hidden">
-                                            <div class="box box-solid">
-                                                <!-- <div class="box-header with-border">
-                                                    <button type="button" class="btn btn-danger btn-xs remove-preview">
-                                                        <i class="fa fa-times"></i> Remove the Image
-                                                    </button>
-                                                </div> -->
-                                                <div class="box-body"></div>
-                                            </div>
+                                    <div>
+                                        <div class="input-container">
+                                            <input class="image-url" id="url_box" name="url" maxlength="100000"
+                                                placeholder="Upload, paste or enter Image URL"
+                                                aria-label="Enter a link to an image to search for" type="text">
                                         </div>
+                                        <input class="submit-button" id="SearchBtn" name="search_button" value=""
+                                            type="submit">
                                     </div>
                                 </div>
                             </div>
@@ -65,24 +66,207 @@
                     </div>
                 </div>
             </div>
-            <br><br>
-            <div class="BtnDivClass">
-                <input class="BtnClass" type="button" value="Search" id="SearchBtn">
-                <!-- <input class="BtnClass" type="button" value="Reset" id="ResetBtn"> -->
+            <div class="row" id="queryImageID" style="display: none; background-color: rgba(246, 249, 253, 1);">
+                <div class="container" style="width: 70%;margin-top: 0.2em;margin-bottom: 0.2em;">
+                    <div class="row">
+                        <div class="col-sm-3 col-xs-3 imgVerCenter" id="viewPartdiv"></div>
+                        <div class="col-sm-9 col-xs-9" id="globalDivID" style="justify-content: center;"></div>
+                    </div>
+                </div>
             </div>
-            <br /><br />
-            <div class="row" id="globalDivID" style="justify-content: center;"></div>
+        </div>
+
+        <div id="carsContainerID" class="container" style="margin-top: 5em;">
+            <div class="row">
+                <h2 class="card-title">Explore the search with the following images!!</h2>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">Travel</h3>
+                            <div id="travelCarousel" class="carousel slide" data-ride="carousel">
+                                <!-- Indicators -->
+                                <ol class="carousel-indicators">
+                                    <li data-target="#travelCarousel" data-slide-to="0" class="active"></li>
+                                    <li data-target="#travelCarousel" data-slide-to="1"></li>
+                                    <li data-target="#travelCarousel" data-slide-to="2"></li>
+                                </ol>
+
+                                <!-- Wrapper for slides -->
+                                <div class="carousel-inner">
+                                    <div class="item active">
+                                        <img class="carImgHeight" src="Images/defaultImages/Travel/2007_004988.jpg">
+                                    </div>
+
+                                    <div class="item">
+                                        <img class="carImgHeight" src="Images/defaultImages/Travel/2007_002376.jpg">
+                                    </div>
+
+                                    <div class="item">
+                                        <img class="carImgHeight" src="Images/defaultImages/Travel/2007_000033.jpg">
+                                    </div>
+                                </div>
+
+                                <!-- Left and right controls -->
+                                <a class="left carousel-control" data-target="#travelCarousel" data-slide="prev"
+                                    href="javascript:;">
+                                    <span class="glyphicon glyphicon-chevron-left"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="right carousel-control" data-target="#travelCarousel" data-slide="next"
+                                    href="javascript:;">
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">People</h3>
+                            <div id="peopleCarousel" class="carousel slide" data-ride="carousel">
+                                <!-- Indicators -->
+                                <ol class="carousel-indicators">
+                                    <li data-target="#peopleCarousel" data-slide-to="0" class="active"></li>
+                                    <li data-target="#peopleCarousel" data-slide-to="1"></li>
+                                    <li data-target="#peopleCarousel" data-slide-to="2"></li>
+                                </ol>
+
+                                <!-- Wrapper for slides -->
+                                <div class="carousel-inner">
+                                    <div class="item active">
+                                        <img class="carImgHeight" src="Images/defaultImages/People/2007_004902.jpg">
+                                    </div>
+
+                                    <div class="item">
+                                        <img class="carImgHeight" src="Images/defaultImages/People/2007_006901.jpg">
+                                    </div>
+
+                                    <div class="item">
+                                        <img class="carImgHeight" src="Images/defaultImages/People/2007_008596.jpg">
+                                    </div>
+                                </div>
+
+                                <!-- Left and right controls -->
+                                <a class="left carousel-control" data-target="#peopleCarousel" data-slide="prev"
+                                    href="javascript:;">
+                                    <span class="glyphicon glyphicon-chevron-left"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="right carousel-control" data-target="#peopleCarousel" data-slide="next"
+                                    href="javascript:;">
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">Vehicles</h3>
+                            <div id="vehcilesCarousel" class="carousel slide" data-ride="carousel">
+                                <!-- Indicators -->
+                                <ol class="carousel-indicators">
+                                    <li data-target="#vehcilesCarousel" data-slide-to="0" class="active"></li>
+                                    <li data-target="#vehcilesCarousel" data-slide-to="1"></li>
+                                    <li data-target="#vehcilesCarousel" data-slide-to="2"></li>
+                                </ol>
+
+                                <!-- Wrapper for slides -->
+                                <div class="carousel-inner">
+                                    <div class="item active">
+                                        <img class="carImgHeight" src="Images/defaultImages/Vehicles/2007_001288.jpg">
+                                    </div>
+
+                                    <div class="item">
+                                        <img class="carImgHeight" src="Images/defaultImages/Vehicles/2007_001377.jpg">
+                                    </div>
+
+                                    <div class="item">
+                                        <img class="carImgHeight" src="Images/defaultImages/Vehicles/2007_003848.jpg">
+                                    </div>
+                                </div>
+
+                                <!-- Left and right controls -->
+                                <a class="left carousel-control" data-target="#vehcilesCarousel" data-slide="prev"
+                                    href="javascript:;">
+                                    <span class="glyphicon glyphicon-chevron-left"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="right carousel-control" data-target="#vehcilesCarousel" data-slide="next"
+                                    href="javascript:;">
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">Others</h3>
+                            <div id="othersCarousel" class="carousel slide" data-ride="carousel">
+                                <!-- Indicators -->
+                                <ol class="carousel-indicators">
+                                    <li data-target="#othersCarousel" data-slide-to="0" class="active"></li>
+                                    <li data-target="#othersCarousel" data-slide-to="1"></li>
+                                </ol>
+
+                                <!-- Wrapper for slides -->
+                                <div class="carousel-inner">
+                                    <div class="item active">
+                                        <img class="carImgHeight" src="Images/defaultImages/Others/2007_003872.jpg">
+                                    </div>
+
+                                    <div class="item">
+                                        <img class="carImgHeight" src="Images/defaultImages/Others/2007_004190.jpg">
+                                    </div>
+                                </div>
+
+                                <!-- Left and right controls -->
+                                <a class="left carousel-control" data-target="#othersCarousel" data-slide="prev"
+                                    href="javascript:;">
+                                    <span class="glyphicon glyphicon-chevron-left"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="right carousel-control" data-target="#othersCarousel" data-slide="next"
+                                    href="javascript:;">
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+        <div class="container" id="resTableContID" style="display: none;">
             <table id="irtexdbID" class="irtexdbClass">
                 <thead class="TheadClass">
                     <tr>
-                        <th>Select</th>
-                        <th>Ranking</th>
-                        <th>Image</th>
-                        <th>Details</th>
+                        <th>
+                            <div class="row match-row">
+                                <div class="col-xs-1 col-sm-1 match-thumb">
+                                    Select
+                                </div>
+                                <div class="col-xs-9 col-sm-9 match-details">
+                                    Result Image
+                                </div>
+                            </div>
+                        </th>
                     </tr>
                 </thead>
             </table>
         </div>
+    </div>
     <!-- </form> -->
 
     <div class="modal fade bd-example-modal-lg" id="exampleModalCenter" tabindex="-1" role="dialog"
@@ -98,6 +282,22 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-lg" id="cookieModal" tabindex="-1" role="dialog"
+        aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modalVertical" role="document">
+            <div class="modal-content" style="margin:auto;background-color: rgba(59, 54, 70, 1);">
+                <div class="modal-body">
+                    <h4 class="modal-title" id="exampleModalLongTitle">🍪 Accept Cookies &amp; Privacy Policy?</h4>
+                    <p>We will use cookies storage and store the events performed in this page, so that we can use for user studies, Please accept in-order to continue further.</p>
+                    <p>
+                        <button type="button" id="cookiesBtn" class="btn btn-secondary" data-dismiss="modal">Accept Cookies</button>
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="modal" id="modalDiv">&#160;</div>
