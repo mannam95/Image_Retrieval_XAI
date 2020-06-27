@@ -234,7 +234,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
 
                             var getretSucc = returnDataFromServer(false);
                             getretSucc.done(function () {
-                                $('#url_box').val('');
+                                // $('#url_box').val('');
                                 var htmlPreview = '<img style="max-height:100%;max-width:100%;margin:auto;" id="previewImgID" src="' + pageDetails.imageUrl + '" />';
                                 $('#viewPartdiv').empty();
                                 $('#viewPartdiv').append(htmlPreview);
