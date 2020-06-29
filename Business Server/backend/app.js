@@ -127,25 +127,24 @@ function sendgetrequest(imagePath,req,res){
 
 app.post('/lireq', multer({ storage: storage }).single('urld'), (req, res, next)=>{
 
-   // Kush: save the session id and session data from the incoming request.
-   //let sessionid = req.body.sessionid
-   let sessiondata = req.body.sessiondata
-   const jsonobj = JSON.parse(req.body.sessiondata);
-   //ip = ip.replace(/:/g,'')
-   let sessionid = jsonobj.sessionID.split('@')
-   console.log("sessionid: ",sessionid)
-   sessionid = sessionid[0].replace('\"','')
-   console.log("replace sessionid: ",sessionid)
-
-
-   const file = './' + sessiondatapath + '/' + sessionid
-   //console.log(jsonobj.sessionid)
-   console.log(sessiondata)
-   console.log(file)
-   fs.appendFile(file, sessiondata + os.EOL, function (err) {
-     if (err) throw err;
-     console.log('Saved!');
-   });
+   // Kush: save the session id and session data from the incoming request if it is present. 
+   if(req.body.sessiondata !== undefined && req.body.sessiondata !== null && req.body.sessiondata !== "")
+   {
+    let sessiondata = req.body.sessiondata
+    const jsonobj = JSON.parse(req.body.sessiondata);
+    let sessionid = jsonobj.sessionID.split('@')
+    console.log("sessionid: ",sessionid)
+    sessionid = sessionid[0].replace('\"','')
+    console.log("replace sessionid: ",sessionid)
+    const file = './' + sessiondatapath + '/' + sessionid
+    console.log(sessiondata)
+    console.log(file)
+    fs.appendFile(file, sessiondata + os.EOL, function (err) {
+      if (err) throw err;
+      console.log('Saved!');
+    });
+   }
+    
    var imgurl = req.body.imgurl
    console.log("--------->",imgurl)
    var imagePath 
@@ -163,19 +162,9 @@ app.post('/lireq', multer({ storage: storage }).single('urld'), (req, res, next)
       lvpath = __dirname + '\\images\\' + 'imgdwnload' +  "-" + Date.now() +'.jpg'  ;
       (async () => {
           let example_image_1 = await download_image(imgurl, lvpath)
-          //console.log("Status: ",example_image_1.status)
-          //if(example_image_1.status){
             console.log("calling get request.")
             sendgetrequest(lvpath,req,res)
-
-          //}
       })();
-      // downloadimage(imgurl,lvpath).then(
-      //   imagePath = lvpath
-      //   sendgetrequest(imagePath)
-      // )
-      
-      //imgparam = 1
      } 
     else { 
       res.status(404).json({message:'Not valid URL to download the query image'}); 
@@ -184,14 +173,7 @@ app.post('/lireq', multer({ storage: storage }).single('urld'), (req, res, next)
 
   else{
     res.status(404).json({message:'image or image URL is mandatory for this query'});
-  } 
-  // if (imgparam == 1)
-  // {
-  //   //console.log("image or image path is present.")
-  //   console.log("imaagepath: ",imagePath)
-  //   console.log("Sending GET request.")
-  // }
-     
+  }      
 
 });
 
