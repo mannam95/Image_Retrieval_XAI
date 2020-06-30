@@ -304,7 +304,7 @@ body.loading .modal {
 
 /* classes for default cookies modal */
 
-#cookieModal h4 {
+#cookieModal h2:first-child {
     color: rgba(238, 75, 90, 1);
     font-family: 'Quicksand', sans-serif;
     font-size: 18px;
@@ -312,7 +312,7 @@ body.loading .modal {
     margin-bottom: 10px;
 }
 
-#cookieModal p:last-child {
+.cookieBtn {
     margin-bottom: 0;
     text-align: right;
 }
@@ -331,9 +331,28 @@ body.loading .modal {
 }
 
 #cookieModal p {
-    color: white;
+    color: black;
     font-size: 15px;
     line-height: 1.5em;
 }
+
+.block-cookies__title {
+    text-align: center;
+    font: 700 23px Axiforma,Arial,serif;
+    margin: 35px auto;
+    color: #7b68ee;
+}
+
+.block-cookies__subtitle {
+    font: 700 18px Axiforma,Arial,serif;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.content_col{
+    max-height: 30em;
+    overflow: auto;
+}
+
 
 /* End of classes for default cookies modal */
