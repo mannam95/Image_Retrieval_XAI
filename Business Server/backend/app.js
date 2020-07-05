@@ -16,6 +16,7 @@ const https = require('https')
 //app.use('/resultimages', express.static(path.join(conf.baseimgdir)));
 //app.use('/resultimages',express.static('E:\\SummerSem\\Project_XAI\\temporary data\\less image'));
 app.use('/resultimages',express.static(conf.staticimgpath));
+app.use('/explainimages',express.static(conf.explainabilityofimg))
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
@@ -43,14 +44,31 @@ function readjsonobject(obj){
   var dirPath;
   var imgpath;
   var imagename;
-  for (var i = 0;i<obj.topScores.length;i++){
-        imgpath = obj.topScores[i].name;
-        newimgpath = imgpath.replace(conf.baseimgdir+'\\','');
-        newimgpath = newimgpath.split('\\').join('\/');
+  for (var i = 0;i<obj.Data.topScores.length;i++){
+        imgpath = obj.Data.topScores[i].name;
+        //newimgpath = imgpath.replace(conf.baseimgdir+'\\','');
+        //newimgpath = newimgpath.split('\\').join('\/');
+        //console.log("Newimgpath: ",newimgpath)
         imagename = path.basename(imgpath);
-        var newurl = httpurl + "/resultimages/" + newimgpath;
-        obj.topScores[i].name = newurl;
+        //console.log("imagename: ",imagename)
+        var newurl = httpurl + "/resultimages/" + imagename; //newimgpath;
+        //console.log("Newurl: ",newurl)
+        obj.Data.topScores[i].name = newurl;
         }
+
+   for(var i = 0;i<obj.SemanticData.similarity_arr.length;i++){
+        base_img = obj.SemanticData.similarity_arr[i].base_img
+        query_img = obj.SemanticData.similarity_arr[i].query_img
+
+        baseimgpath = path.basename(base_img)
+        queryimgpath = path.basename(query_img)
+
+        baseurl = httpurl + "/explainimages/" + baseimgpath;
+        queryurl = httpurl + "/explainimages/" + queryimgpath;
+
+        obj.SemanticData.similarity_arr[i].base_img = baseurl
+        obj.SemanticData.similarity_arr[i].query_img = queryurl
+   }
 }
 
 
@@ -128,30 +146,34 @@ function sendgetrequest(imagePath,req,res){
 app.post('/lireq', multer({ storage: storage }).single('urld'), (req, res, next)=>{
 
    // Kush: save the session id and session data from the incoming request if it is present. 
+   console.log("session data: ",req.body.sessiondata)
    if(req.body.sessiondata !== undefined && req.body.sessiondata !== null && req.body.sessiondata !== "")
    {
     let sessiondata = req.body.sessiondata
+    //console.log("session data: ",sessiondata)
     const jsonobj = JSON.parse(req.body.sessiondata);
     let sessionid = jsonobj.sessionID.split('@')
-    console.log("sessionid: ",sessionid)
+    //console.log("sessionid: ",sessionid)
     sessionid = sessionid[0].replace('\"','')
-    console.log("replace sessionid: ",sessionid)
+    //console.log("replace sessionid: ",sessionid)
     const file = './' + sessiondatapath + '/' + sessionid
-    console.log(sessiondata)
-    console.log(file)
+    //console.log(sessiondata)
+    //console.log(file)
     fs.appendFile(file, sessiondata + os.EOL, function (err) {
       if (err) throw err;
       console.log('Saved!');
     });
    }
-    
+
    var imgurl = req.body.imgurl
-   console.log("--------->",imgurl)
+   //console.log("--------->",imgurl)
    var imagePath 
 
   if(req.file){
+    console.log("file exists")
     filename =req.file.filename;
     imagePath = __dirname + '\\images\\' +req.file.filename;
+    console.log("Sending get request..")
     sendgetrequest(imagePath,req,res)
   }
   else if (imgurl.trim()) //isEmpty(imgurl)

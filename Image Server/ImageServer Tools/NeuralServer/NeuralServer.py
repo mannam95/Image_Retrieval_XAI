@@ -105,9 +105,12 @@ def doProcessing():
         tempName = ntpath.join(workingDir, fname)
         print(filename)
 
+        #tempname = 'test'
+
         model_segment = torch.hub.load('pytorch/vision:v0.6.0', 'fcn_resnet101', pretrained=True)
         model_segment.eval()
         input_image = Image.open(filename)
+        #input_image = Image.open('a1.jpg')
         input_tensor = preprocess(input_image)
         input_batch = input_tensor.unsqueeze(0)
 
@@ -136,6 +139,8 @@ def doProcessing():
 
         for x in range(len(predict)):
           for y in range(len(predict[x])):
+            #print("x: ",x)
+            #print("y: ",y)
             if(predict[x][y]==0):
                 continue;
             dat = images.get(predict[x][y], None)
@@ -149,11 +154,13 @@ def doProcessing():
         #print(images.shape)
         i=0
         for key in images:
+            print("Key: ",key)
             dat = images.get(key, None)
             mask = get_color_pallete(dat, 'pascal_voc')
             #mask = mask.convert('RGB')
             #mask.putpalette(colors)
             name = tempName+str(i)+'.png'
+            #print(name)
             print(name)
             i=i+1;
             mask.save(name)
