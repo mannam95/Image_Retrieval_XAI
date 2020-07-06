@@ -6,7 +6,7 @@
 
 .BtnClass, .BtnClass:hover {
     /* background-color: RGB(79, 129, 189) !important; */
-    background-color: white !important; 
+    background-color: white !important;
     color: rgba(58, 177, 213, 1) !important;
     border: 1px solid rgba(58, 177, 213, 1) !important;
     /* border: none !important;
@@ -45,7 +45,7 @@ table.datatable {
     border-collapse: collapse !important;
 }
 
-.trsingleDiv{
+.trsingleDiv {
     /* border: 1px solid black !important; */
     border-radius: 5px 5px 5px 5px;
     box-shadow: 2px 1px 6px;
@@ -81,10 +81,15 @@ table.datatable {
     display: flex;
 }
 
+.dataTables_paginate {
+    padding-right: 12em;
+}
+
 /* explain button styles in table */
-.ExplainBtnClass, .ExplainBtnClass:hover{
+
+.ExplainBtnClass, .ExplainBtnClass:hover {
     /* background-color: rgba(58, 177, 213, 1) !important; */
-    background-color: white !important; 
+    background-color: white !important;
     color: rgba(44, 113, 161, 1) !important;
     border: 1px solid rgba(44, 113, 161, 1) !important;
     /* border: none !important;
@@ -98,14 +103,30 @@ table.datatable {
     cursor: pointer !important;
     font-weight: bolder;
 }
+
+.ExpDisBtnClass, .ExpDisBtnClass:hover {
+    /* background-color: rgba(58, 177, 213, 1) !important; */
+    border: 1px solid #999999;
+    background-color: #cccccc;
+    color: #666666;
+    padding: 15px 32px !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    font-size: 16px !important;
+    margin: 4px 2px !important;
+    font-weight: bolder;
+}
+
 /* End of explain button styles in table */
 
 /* visual explanation compare button styles in table */
+
 .VisualBtnClass, .VisualBtnClass:hover {
     /* background-color: rgb(238, 130, 238) !important;
     border: none !important;
     color: white !important; */
-    background-color: white !important; 
+    background-color: white !important;
     color: rgba(44, 113, 161, 1) !important;
     border: 1px solid rgba(44, 113, 161, 1) !important;
     padding: 15px 32px !important;
@@ -117,9 +138,11 @@ table.datatable {
     cursor: pointer !important;
     font-weight: bolder;
 }
+
 /* ENd of visual explanation compare button styles in table */
 
 /* visual explanation close button in popup styles in table */
+
 .visualCloseBtn, .visualCloseBtn:hover {
     background-color: RGB(46, 101, 38) !important;
     color: white !important;
@@ -132,6 +155,7 @@ table.datatable {
     opacity: 1 !important;
     text-shadow: none !important;
 }
+
 /* End of visual explanation close button in popup styles in table */
 
 .match-row {
@@ -153,7 +177,7 @@ table.datatable {
     line-height: 0;
 }
 
-/* End Of Start of Table Classes */
+/* End of Table Classes */
 
 /* to hide the watermakr by zingchart */
 
@@ -185,9 +209,9 @@ body.loading .modal {
 
 /********************************************** End Of Loader Classes *********************************************************/
 
-
 /* New Classes for better view*/
-.search-container{
+
+.search-container {
     background-color: rgba(44, 113, 161, 1);
     padding-top: 20px;
     padding-bottom: 20px;
@@ -276,13 +300,13 @@ body.loading .modal {
     color: #fff;
 }
 
-.imgVerCenter{
+.imgVerCenter {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
 }
 
-.modalVertical{
+.modalVertical {
     height: 85%;
     width: 100%;
     display: flex;
@@ -292,7 +316,8 @@ body.loading .modal {
 /* End Of New Classes for better view*/
 
 /* slideshow classes */
-.carImgHeight{
+
+.carImgHeight {
     max-height: 100% !important;
     max-width: 100% !important;
     margin: auto !important;
@@ -300,7 +325,6 @@ body.loading .modal {
     cursor: pointer;
     /* width: 16em !important; */
 }
-
 
 /* classes for default cookies modal */
 
@@ -338,21 +362,254 @@ body.loading .modal {
 
 .block-cookies__title {
     text-align: center;
-    font: 700 23px Axiforma,Arial,serif;
+    font: 700 23px Axiforma, Arial, serif;
     margin: 35px auto;
     color: #7b68ee;
 }
 
 .block-cookies__subtitle {
-    font: 700 18px Axiforma,Arial,serif;
+    font: 700 18px Axiforma, Arial, serif;
     margin-bottom: 20px;
     text-align: left;
 }
 
-.content_col{
+.content_col {
     max-height: 30em;
     overflow: auto;
 }
 
-
 /* End of classes for default cookies modal */
+
+/* classes for the select filter */
+
+/* .sorting-row {
+    padding-top: 20px;
+} */
+
+.sorting-row .sort {
+    display: inline-block;
+    width: 220px;
+    padding-bottom: 10px;
+    vertical-align: top;
+}
+
+.sorting-row button {
+    display: inline-block;
+    background-color: #fff;
+    border: 1px solid #c2ced9;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: left;
+    font-size: 13px;
+    color: #5d6876;
+    width: 190px;
+    height: 40px;
+    font-weight: 400;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.sorting-row .dropdown-menu {
+    width: 190px;
+    box-shadow: none;
+    border: 2px solid #c2ced9;
+    top: 45px;
+}
+
+.sorting-row button span {
+    float: right;
+    margin-top: 10px;
+}
+
+.sorting-row .dropdown-menu li {
+    list-style-type: none;
+}
+
+.sorting-row .dropdown-menu a {
+    font-size: 13px;
+    line-height: 30px;
+    cursor: pointer;
+}
+
+/* End of classes for the select filter */
+
+/* captcha classes */
+
+.captcha_appCls {
+    border: 2px dashed #ddd;
+    border-radius: 3px;
+    background-color: #f4f7fa;
+    padding: 10px 40px;
+    margin: 0;
+    font-size: 0;
+    white-space: nowrap;
+    font-size: 0;
+    list-style: none;
+    display: inline-block;
+}
+
+.captcha_appCls li.cursor-pointer {
+    cursor: pointer;
+}
+
+.captcha_appClsli {
+    display: inline-block;
+    vertical-align: top;
+    height: 33px;
+    box-sizing: content-box;
+    line-height: 32px;
+    border: 1px solid transparent;
+    background-color: transparent;
+    font-size: 18px;
+    font-family: Verdana, Geneva, sans-serif;
+    line-height: 30px;
+    margin: 0 5px;
+    padding: 0;
+}
+
+.captchabordered {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    vertical-align: inherit;
+    height: inherit;
+    line-height: 1.5;
+    border: none;
+}
+
+.captchaptag {
+    font-size: 16px;
+    line-height: 1.5;
+    padding: 0.5em 1em;
+    border: 1px solid rgb(151, 151, 151);
+    border-radius: 3px;
+    margin-bottom: 0px !important;
+}
+
+.captchainputbox {
+    line-height: 1.5;
+    font-size: 16px;
+    padding: 0.5em 1em;
+    height: inherit;
+    border: 1px solid rgb(151, 151, 151);
+    border-radius: 3px;
+}
+
+.captchaBtnPrim, .captchaBtnPrim:hover {
+    border: none !important;
+    background: rgba(0, 172, 138, 1) !important;
+    color: white !important;
+    font-family: 'Quicksand', sans-serif !important;
+    font-size: 15px !important;
+    padding: 7px !important;
+    border-radius: 3px !important;
+    margin-left: 15px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease-in !important;
+}
+
+.captchaBtn {
+    margin: 10px;
+    text-align: right;
+}
+
+/* End of captcha classes */
+
+/* Start of visual explanation classes */
+
+.cmpCls {
+    max-width: 95%;
+    /* do not stretch the bootstrap column */
+}
+
+.cmpCaption {
+    justify-content: center;
+}
+
+.otherlbl {
+    background-color: #e7e7e7;
+    color: black;
+    font-size: x-large;
+}
+
+.labelCls {
+    padding: 8px;
+    font-family: Arial;
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
+    border: 1px solid rgba(44, 113, 161, 1) !important;
+    background: rgba(44, 113, 161, 1) !important;
+    font-weight: normal !important;
+    color: #ffffff !important;
+}
+
+.tabTableCls {
+    text-align: center;
+}
+
+.col-container {
+    display: table;
+    width: 100%;
+}
+
+.colNew {
+    display: table-cell;
+    padding: 16px;
+}
+
+.CmpBtnClass {
+    text-align: center;
+    display: inline-block;
+    background-color: #fff;
+    border: 1px solid #c2ced9;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: left;
+    font-size: 13px;
+    color: #5d6876;
+    width: 190px;
+    height: 40px;
+    font-weight: 400;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.CmpTExplainBtnClass, .CmpTExplainBtnClass:hover {
+    /* background-color: rgba(58, 177, 213, 1) !important; */
+    background-color: white !important;
+    color: rgba(44, 113, 161, 1) !important;
+    border: 1px solid rgba(44, 113, 161, 1) !important;
+    /* padding: 15px 32px !important; */
+    text-align: center !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    font-size: 16px !important;
+    margin: 4px 2px !important;
+    cursor: pointer !important;
+    /* font-weight: bolder;*/
+}
+
+.table-fixed thead {
+    width: 97%;
+}
+
+.table-fixed tbody {
+    height: 230px;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.table-fixed thead, .table-fixed tbody, .table-fixed tr, .table-fixed td, .table-fixed th {
+    display: block;
+}
+
+/* .table-fixed tbody td, .table-fixed thead > tr> th {
+    /* float: left; */
+
+/* border-bottom-width: 0; */
+
+/* } */
+
+/* End of visual explanation classes */

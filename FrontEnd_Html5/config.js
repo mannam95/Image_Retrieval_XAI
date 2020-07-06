@@ -16,7 +16,7 @@ requirejs.config({
         'datatables.net-buttons-html5': ['//cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min'],
         'datatables.net-buttons-flash': ['//cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min'],
 
-        'jszip': ['//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min']
+        'jszip': ['//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min'],
     },
     shim: {
         jqueryui: {
