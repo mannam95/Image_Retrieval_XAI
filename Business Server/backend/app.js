@@ -11,6 +11,8 @@ var validUrl = require('valid-url');
 // load configuration file.
 const conf = require('./config.json');
 const https = require('https')
+//added by srinath
+const xlsxFile = require('xlsx');
 
 //map the base image absolute path to proxy resultimages directory.
 //app.use('/resultimages', express.static(path.join(conf.baseimgdir)));
@@ -209,6 +211,31 @@ app.get('/sessionid', function (req, res) {
   res.send(sessionid)
   
 })
+
+
+//code added by Srinath
+//reads the deafult class images and sends it to the client
+app.get('/defaultImages', function (req, res) {
+
+  var workbook = xlsxFile.readFile(conf.slideConfigDatapath);
+  var xlData = xlsxFile.utils.sheet_to_json(workbook.Sheets.Sheet1, { header: 1 });
+
+  //transpose the excel data
+  xlData = xlData[0].map((_, colIndex) => xlData.map(row => row[colIndex]));
+
+  var imagesJsonData = [];
+
+  //loop and generate the Json Data
+  for (var i = 0; i < xlData.length; i++) {
+    imagesJsonData[i] = {
+      className: xlData[i][0],
+      imageUrls: (xlData[i].slice(1)).filter(function (e) { return (e != undefined && e != '' && e != null) })
+    }
+  }
+
+  res.send(JSON.stringify(imagesJsonData));
+
+});
 
 module.exports = app;
 
