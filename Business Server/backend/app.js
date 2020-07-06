@@ -19,6 +19,7 @@ const xlsxFile = require('xlsx');
 //app.use('/resultimages',express.static('E:\\SummerSem\\Project_XAI\\temporary data\\less image'));
 app.use('/resultimages',express.static(conf.staticimgpath));
 app.use('/explainimages',express.static(conf.explainabilityofimg))
+app.use('/slideimages',express.static(conf.SlideImages))
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
@@ -227,9 +228,21 @@ app.get('/defaultImages', function (req, res) {
 
   //loop and generate the Json Data
   for (var i = 0; i < xlData.length; i++) {
+
+    imageUrls = (xlData[i].slice(1)).filter(function (e) { return (e != undefined && e != '' && e != null) })
+    newUrls = []
+    classname = xlData[i][0]
+
+    for (var idx = 0 ; idx< imageUrls.length; idx++ ){
+      baseurl = imageUrls[idx]
+      imagename =  path.basename(String(baseurl));
+      baseurl = httpurl + "/slideimages/" + classname + '/' +imagename
+      newUrls[idx] = baseurl
+    }
+    
     imagesJsonData[i] = {
-      className: xlData[i][0],
-      imageUrls: (xlData[i].slice(1)).filter(function (e) { return (e != undefined && e != '' && e != null) })
+      className: classname,
+      imageUrls: newUrls
     }
   }
 
