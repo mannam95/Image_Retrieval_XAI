@@ -634,7 +634,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
 
                 changePaginationStyle('irtexdbID');
 
-                $("[id^='accordion']").accordion({ header: "h3", collapsible: true, active: false, heightStyle: "content" });
+                // $("[id^='accordion']").accordion({ header: "h3", collapsible: true, active: false, heightStyle: "content" });
                 $('#resTableContID').show();
                 // $("#irtexdbID").css("width", "100%");
 
