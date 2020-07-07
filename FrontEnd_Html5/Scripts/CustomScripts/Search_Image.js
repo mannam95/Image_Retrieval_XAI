@@ -661,7 +661,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                     "deferRender": true,
                     columns: [
                         {
-                            "data": "name",
+                            "data": "base_name_original",
                             "className": 'thirdColumnClass',
                             render: function (data, type, row) {
                                 return '<div class="row match-row trsingleDiv">' +
@@ -669,7 +669,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                                     '<input type="checkbox" id="selectIndex' + row.ID + '">' +
                                     '</div>' +
                                     '<div class="col-xs-3 col-sm-3 match-thumb imgVerCenter">' +
-                                    '<img class="tableImgClass" id="resImgID' + (row.ID + 1) + '" src="' + data + '"/>' +
+                                    '<img class="tableImgClass" id="resImgID' + (row.ID + 1) + '" src="' + getImgURL(data) + '"/>' +
                                     '</div>' +
                                     '<div class="col-xs-6 col-sm-6 match-details">' +
                                     '<div class="match">' +
@@ -719,6 +719,28 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                 deferred.reject();
             }
             return deferred.promise();
+        }
+
+        //Gets the original image url from topscores
+        function getImgURL(base_name_original){
+            try {
+                var tempResImgName1 = base_name_original.split('\\').pop().split('#')[0].split('?')[0];
+                    
+                    for (var g1 = 0; g1 < pageDetails.endpointresult.Data.topScores.length; g1++) {
+                        var currImgName1 = pageDetails.endpointresult.Data.topScores[g1].name.split('\\').pop().split('#')[0].split('?')[0];
+
+                        if (tempResImgName1 == currImgName1) {
+                            return pageDetails.endpointresult.Data.topScores[g1].name;
+                        }
+                    }
+            } catch (error) {
+                swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!',
+                    footer: JSON.stringify(error)
+                });
+            }
         }
 
         // cnhanges the style of the paf´gination filter
@@ -1971,11 +1993,12 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                 for (var n4 = 0; n4 < zeroOverAll.length; n4++) {
                     //change to single forward slash
                     var tempResImgName = zeroOverAll[n3].base_name_original.split('\\').pop().split('#')[0].split('?')[0];
+                    
 
                     for (var n5 = 0; n5 < newData.Data.topScores.length; n5++) {
                         var currImgName = newData.Data.topScores[n5].name.split('\\').pop().split('#')[0].split('?')[0];
 
-                        if (tempResImgName = currImgName) {
+                        if (tempResImgName == currImgName) {
                             zeroOverAll[n4]['zeroOverAll'] = newData.Data.topScores[n5].overallDistScore;
                             break;
                         }
