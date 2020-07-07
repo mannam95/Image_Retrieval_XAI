@@ -428,34 +428,58 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                 var filename = pageDetails.imageUrl.split('/').pop().split('#')[0].split('?')[0];
 
                 if (filename != '' && filename != null && filename != undefined) {
-                    var getvalSucc = validateURL();
-                    getvalSucc.done(function () {
-                        $('#carsContainerID').hide();
-                        pageDetails.imageName = pageDetails.duplicateImageName = filename;
-                        if ((pageDetails.imageName.match(/\.([0-9a-z]+)(?=[?#])|(\.)(?:[\w]+)$/gmi) != null) && ((pageDetails.supportedImageFormats.indexOf((pageDetails.imageName.match(/\.([0-9a-z]+)(?=[?#])|(\.)(?:[\w]+)$/gmi)[0]).toUpperCase())) >= 0)) {
+                    $('#carsContainerID').hide();
+                    pageDetails.imageName = pageDetails.duplicateImageName = filename;
+                    if ((pageDetails.imageName.match(/\.([0-9a-z]+)(?=[?#])|(\.)(?:[\w]+)$/gmi) != null) && ((pageDetails.supportedImageFormats.indexOf((pageDetails.imageName.match(/\.([0-9a-z]+)(?=[?#])|(\.)(?:[\w]+)$/gmi)[0]).toUpperCase())) >= 0)) {
 
-                            var getretSucc = returnDataFromServer(false);
-                            getretSucc.done(function () {
-                                // $('#url_box').val('');
-                                var htmlPreview = '<img style="max-height:100%;max-width:100%;margin:auto;" id="previewImgID" src="' + pageDetails.imageUrl + '" />';
-                                $('#viewPartdiv').empty();
-                                $('#viewPartdiv').append(htmlPreview);
-                                $('#queryImageID').show();
-                                $('body').removeClass("loading");
-                            }).fail(function () {
-                                //Do nothing
-                            });
+                        var getretSucc = returnDataFromServer(false);
+                        getretSucc.done(function () {
+                            // $('#url_box').val('');
+                            var htmlPreview = '<img style="max-height:100%;max-width:100%;margin:auto;" id="previewImgID" src="' + pageDetails.imageUrl + '" />';
+                            $('#viewPartdiv').empty();
+                            $('#viewPartdiv').append(htmlPreview);
+                            $('#queryImageID').show();
+                            $('body').removeClass("loading");
+                        }).fail(function () {
+                            //Do nothing
+                        });
 
-                        } else {
-                            $('#url_box').val('');
-                            swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'Please enter a valid image URL!'
-                            });
-                        }
+                    } else {
+                        $('#url_box').val('');
+                        swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Please enter a valid image URL!'
+                        });
+                    }
+                    // var getvalSucc = validateURL();
+                    // getvalSucc.done(function () {
+                    //     $('#carsContainerID').hide();
+                    //     pageDetails.imageName = pageDetails.duplicateImageName = filename;
+                    //     if ((pageDetails.imageName.match(/\.([0-9a-z]+)(?=[?#])|(\.)(?:[\w]+)$/gmi) != null) && ((pageDetails.supportedImageFormats.indexOf((pageDetails.imageName.match(/\.([0-9a-z]+)(?=[?#])|(\.)(?:[\w]+)$/gmi)[0]).toUpperCase())) >= 0)) {
 
-                    });
+                    //         var getretSucc = returnDataFromServer(false);
+                    //         getretSucc.done(function () {
+                    //             // $('#url_box').val('');
+                    //             var htmlPreview = '<img style="max-height:100%;max-width:100%;margin:auto;" id="previewImgID" src="' + pageDetails.imageUrl + '" />';
+                    //             $('#viewPartdiv').empty();
+                    //             $('#viewPartdiv').append(htmlPreview);
+                    //             $('#queryImageID').show();
+                    //             $('body').removeClass("loading");
+                    //         }).fail(function () {
+                    //             //Do nothing
+                    //         });
+
+                    //     } else {
+                    //         $('#url_box').val('');
+                    //         swal.fire({
+                    //             icon: 'error',
+                    //             title: 'Oops...',
+                    //             text: 'Please enter a valid image URL!'
+                    //         });
+                    //     }
+
+                    // });
                 } else {
                     $('#url_box').val('');
                     swal.fire({
@@ -722,17 +746,17 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
         }
 
         //Gets the original image url from topscores
-        function getImgURL(base_name_original){
+        function getImgURL(base_name_original) {
             try {
                 var tempResImgName1 = base_name_original.split('\\').pop().split('#')[0].split('?')[0];
-                    
-                    for (var g1 = 0; g1 < pageDetails.endpointresult.Data.topScores.length; g1++) {
-                        var currImgName1 = pageDetails.endpointresult.Data.topScores[g1].name.split('/').pop().split('#')[0].split('?')[0];
 
-                        if (tempResImgName1 == currImgName1) {
-                            return pageDetails.endpointresult.Data.topScores[g1].name;
-                        }
+                for (var g1 = 0; g1 < pageDetails.endpointresult.Data.topScores.length; g1++) {
+                    var currImgName1 = pageDetails.endpointresult.Data.topScores[g1].name.split('/').pop().split('#')[0].split('?')[0];
+
+                    if (tempResImgName1 == currImgName1) {
+                        return pageDetails.endpointresult.Data.topScores[g1].name;
                     }
+                }
             } catch (error) {
                 swal.fire({
                     icon: 'error',
@@ -1993,7 +2017,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                 for (var n4 = 0; n4 < zeroOverAll.length; n4++) {
                     //change to single forward slash
                     var tempResImgName = zeroOverAll[n3].base_name_original.split('\\').pop().split('#')[0].split('?')[0];
-                    
+
 
                     for (var n5 = 0; n5 < newData.Data.topScores.length; n5++) {
                         var currImgName = newData.Data.topScores[n5].name.split('/').pop().split('#')[0].split('?')[0];
