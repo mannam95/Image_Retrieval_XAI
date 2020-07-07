@@ -727,7 +727,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                 var tempResImgName1 = base_name_original.split('\\').pop().split('#')[0].split('?')[0];
                     
                     for (var g1 = 0; g1 < pageDetails.endpointresult.Data.topScores.length; g1++) {
-                        var currImgName1 = pageDetails.endpointresult.Data.topScores[g1].name.split('\\').pop().split('#')[0].split('?')[0];
+                        var currImgName1 = pageDetails.endpointresult.Data.topScores[g1].name.split('/').pop().split('#')[0].split('?')[0];
 
                         if (tempResImgName1 == currImgName1) {
                             return pageDetails.endpointresult.Data.topScores[g1].name;
@@ -1996,7 +1996,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                     
 
                     for (var n5 = 0; n5 < newData.Data.topScores.length; n5++) {
-                        var currImgName = newData.Data.topScores[n5].name.split('\\').pop().split('#')[0].split('?')[0];
+                        var currImgName = newData.Data.topScores[n5].name.split('/').pop().split('#')[0].split('?')[0];
 
                         if (tempResImgName == currImgName) {
                             zeroOverAll[n4]['zeroOverAll'] = newData.Data.topScores[n5].overallDistScore;
