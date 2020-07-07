@@ -1524,6 +1524,8 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                 pageDetails.endpointresult = reOrderData(serverRes);
                 pageDetails.mainTableData = pageDetails.endpointresult.Data.topScores;
                 pageDetails.baseImagedata = pageDetails.endpointresult.Data.QueryImgDetails;
+                pageDetails.checkedCount = 0;
+                pageDetails.checkedIDDetails = [];
                 $('#globalDivID').empty();
                 $('#globalDivID').append('<h4><b>Global Explanation Loading...</b></h4>');
                 normalizeServerData();
