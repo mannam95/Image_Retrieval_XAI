@@ -1526,6 +1526,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                 pageDetails.baseImagedata = pageDetails.endpointresult.Data.QueryImgDetails;
                 pageDetails.checkedCount = 0;
                 pageDetails.checkedIDDetails = [];
+                $('#gblCmpBtn').hide();
                 $('#globalDivID').empty();
                 $('#globalDivID').append('<h4><b>Global Explanation Loading...</b></h4>');
                 normalizeServerData();
