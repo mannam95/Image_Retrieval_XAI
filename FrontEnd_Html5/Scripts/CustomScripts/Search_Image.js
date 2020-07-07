@@ -2016,7 +2016,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                 //get the overall distance score for the images where overAll is 0
                 for (var n4 = 0; n4 < zeroOverAll.length; n4++) {
                     //change to single forward slash
-                    var tempResImgName = zeroOverAll[n3].base_name_original.split('\\').pop().split('#')[0].split('?')[0];
+                    var tempResImgName = zeroOverAll[n4].base_name_original.split('\\').pop().split('#')[0].split('?')[0];
 
 
                     for (var n5 = 0; n5 < newData.Data.topScores.length; n5++) {
