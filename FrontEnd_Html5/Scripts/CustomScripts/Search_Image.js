@@ -2175,8 +2175,8 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                     var queURL = pageDetails.endpointresult.SemanticData.similarity_arr[pageDetails.checkedIDDetails[m1]].query_img;
 
                     mTabHeadData = mTabHeadData + '<div class="col-xs-3 col-sm-3 col-xl-3 col-md-3 col-lg-3 col-3">' +
-                        '<div class="row"><img class="col-xs-12 col-sm-12 col-xl-12 col-md-12 col-lg-12 col-12" src="' + resURL + '"></div>' +
-                        '<div class="row" style="margin-top: 1em;"><img class="col-xs-12 col-sm-12 col-xl-12 col-md-12 col-lg-12 col-12" src="' + queURL + '"></div>' +
+                        '<div class="row"><img class="col-xs-12 col-sm-12 col-xl-12 col-md-12 col-lg-12 col-12" src="' + queURL + '"></div>' +
+                        '<div class="row" style="margin-top: 1em;"><img class="col-xs-12 col-sm-12 col-xl-12 col-md-12 col-lg-12 col-12" src="' + resURL + '"></div>' +
                         // '<img class="col-xs-12 col-sm-12 col-xl-12 col-md-12 col-lg-12 col-12" src="' + resURL + '">' +
                         '</div>';
                 }
