@@ -218,11 +218,12 @@ class similarity_per_facet:
         #return json.dumps(self, cls = NumpyArrayEncoder, sort_keys=True, indent=4)
         
 class similarity_per_image:
-    def __init__(self, similarity_for_obj, sim_per_facet, query_img, base_img):
+    def __init__(self, similarity_for_obj, sim_per_facet, query_img, base_img, actual_name):
         self.similarity_for_obj = similarity_for_obj
         self.sim_per_facet = sim_per_facet
         self.query_img = query_img
         self.base_img = base_img
+        self.base_name_original = actual_name
         
     def toJSON(self):
         return json.dumps(self, default=lambda o: default_call(o), sort_keys=True, indent=4)
@@ -249,8 +250,15 @@ def compare(query, images, store_path, resp_img_save_path):
 
     #information of query... to be generated at runtime
     query_info, query_vector = semantic_info(query, 0.70)
-    query_img = cv2.imread(query)
-    query_vector_norm = query_vector / numpy.linalg.norm(query_vector)
+    query_im = cv2.imread(query)
+    
+    uniq= numpy.unique(query_vector)
+    query_vector_norm = None
+    if len(uniq) == 1 and uniq[0] == 0 :
+        query_vector_norm = query_vector
+    else:
+        query_vector_norm = query_vector / numpy.linalg.norm(query_vector)
+            
     
     similarity_per_image_list = []
     
@@ -263,6 +271,8 @@ def compare(query, images, store_path, resp_img_save_path):
     sim_for_obj = 0
     
     for img in images:
+        query_img = query_im.copy()
+        color_encode_count = 0
         #similarity on per object type broken down
         overall_similarity = []
         
@@ -276,7 +286,12 @@ def compare(query, images, store_path, resp_img_save_path):
         image_info = bse.info
         img_vector = bse.vector
         bse_img = bse.img
-        img_vector_norm = img_vector / numpy.linalg.norm(img_vector)
+        uniq= numpy.unique(img_vector)
+        img_vector_norm = None
+        if len(uniq) == 1 and uniq[0] == 0 :
+            img_vector_norm = img_vector
+        else:
+            img_vector_norm = img_vector / numpy.linalg.norm(img_vector)
         
         #distance between 2 object vectors
         x_val = 0
@@ -288,7 +303,10 @@ def compare(query, images, store_path, resp_img_save_path):
             y_val += (img_vector_norm[i] * img_vector_norm[i])
         x_val = math.sqrt(x_val)
         y_val = math.sqrt(y_val)
-        sim_for_obj = sim_for_obj /(x_val*y_val)
+        if x_val == 0 or y_val == 0:
+            sim_for_obj = 0
+        else:
+            sim_for_obj = sim_for_obj /(x_val*y_val)
         
         #sim_for_obj = cdist(query_vector_norm.reshape(1, -1), img_vector_norm.reshape(1, -1), metric='cosine')
         
@@ -313,9 +331,11 @@ def compare(query, images, store_path, resp_img_save_path):
             for q_info in query_info:
                 if q_info.labels != cat:
                     continue
+                cv2.normalize(q_info.hist, q_info.hist, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX)
                 for b_info in image_info:
                     if b_info.labels != cat:
                         continue
+                    cv2.normalize(b_info.hist, b_info.hist, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX)
                     color_distance = cv2.compareHist(q_info.hist, b_info.hist, cv2.HISTCMP_BHATTACHARYYA)
                     size_distance = abs(q_info.ratio - b_info.ratio)
                     #distance_obj.append(entity(q_info, b_info, color_distance, size_distance, cat))
@@ -363,13 +383,13 @@ def compare(query, images, store_path, resp_img_save_path):
         
         milliseconds = uuid.uuid4().hex.upper()
         q_img_path = os.path.join(resp_img_save_path, str(milliseconds)+".png")
-        milliseconds = uuid.uuid4().hex.upper()
+        milliseconds = uuid.uuid4().hex[:6].upper()
         b_img_path = os.path.join(resp_img_save_path, str(milliseconds)+".png")
 
         cv2.imwrite(q_img_path,query_img)
         cv2.imwrite(b_img_path,bse_img)
 
-        similarity__ = similarity_per_image(sim_for_obj, overall_similarity, q_img_path, b_img_path)
+        similarity__ = similarity_per_image(sim_for_obj, overall_similarity, q_img_path, b_img_path, img)
         similarity_per_image_list.append(similarity__)
 
     return (similarity_per_image_list)
@@ -393,5 +413,6 @@ def extract_n_store(mypath, store_path):
 
 
 
-#extract_n_store("D:\\dke\\2ND SEM\\IRTEX\\resource\\pascal data\\VOCtrainval_11-May-2012\\VOCdevkit\\VOC2012\\less image", "D:\\dke\\2ND SEM\\IRTEX\\R&D\\explainibility\\extraction")
+extract_n_store("D:\\dke\\2ND SEM\\IRTEX\\resource\\pascal data\\VOCtrainval_11-May-2012\\VOCdevkit\\VOC2012\\less image", "D:\\dke\\2ND SEM\\IRTEX\\R&D\\explainibility\\extraction")
+#extract_n_store("D:\\dke\\2ND SEM\\IRTEX\\resource\\pascal data\\VOCtrainval_11-May-2012\\VOCdevkit\\VOC2012\\less image", "D:\dke\2ND SEM\IRTEX\R&D\explainibility\extraction")
 

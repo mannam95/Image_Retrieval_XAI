@@ -332,9 +332,11 @@ def compare(query, images, store_path, resp_img_save_path):
             for q_info in query_info:
                 if q_info.labels != cat:
                     continue
+                cv2.normalize(q_info.hist, q_info.hist, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX)
                 for b_info in image_info:
                     if b_info.labels != cat:
                         continue
+                    cv2.normalize(b_info.hist, b_info.hist, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX)
                     color_distance = cv2.compareHist(q_info.hist, b_info.hist, cv2.HISTCMP_BHATTACHARYYA)
                     size_distance = abs(q_info.ratio - b_info.ratio)
                     #distance_obj.append(entity(q_info, b_info, color_distance, size_distance, cat))
