@@ -28,7 +28,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                 imgUrlKey: 'imgurl',
                 cookiesKey: 'sessiondata'
             },
-            colorConstants: ['Black', 'Maroon', 'Green', 'Olive', 'Navy', 'Purple', 'Teal', 'Silver', 'Grey', 'Red', 'Lime', 'Yellow', 'Blue', 'Fuchsia', 'Aqua', 'White'],
+            colorConstants: ["Black", "White", "Red", "Lime", "Blue", "Yellow", "Cyan", "Magenta", "Silver", "Gray", "Maroon", "Olive", "Green", "Purple", "Teal", "Navy"],
             semanticsConstants: ['aeroplane', 'bicycle', 'bird', 'boat', 'bottle', 'bus', 'car', 'cat', 'chair', 'cow', 'diningtable', 'dog', 'horse', 'motorbike', 'person', 'pottedplant', 'sheep', 'sofa', 'train', 'tvmonitor'],
             constantDetails: ['colorConstants', 'semanticsConstants'],
             excludedFeatures: ['shapesemantic', 'colorSemanticData'],
@@ -47,7 +47,9 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
             checkedCount: 0,
             checkedIDDetails: [],
             colorexpflag: false,
-            shapeexpflag: false
+            shapeexpflag: false,
+            numToWords1: ['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten'],
+            numToWords2: ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Nineth', 'Tenth']
         };
 
         //When everything is loaded what to do first
@@ -2064,36 +2066,119 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
 
                 var cmpDiv = '<div class="container">';
 
-                cmpDiv = cmpDiv + '<div class="row">';
-
-                //makes the header data in visualization
-                var tabHead = '<h3>';
-                for (var c1 = 0; c1 < diffObjs.length; c1++) {
-                    var curObj = firstCaps(diffObjs[c1].similarity_of_obj_type[0].cat);
-                    if (diffObjs.length == 1) {
-                        tabHead = tabHead + curObj + ' has been detected in the image.';
-                    } else if ((c1 + 1) == diffObjs.length) {
-                        tabHead = tabHead + ' and ' + curObj + ' are detected in the image.';
-                    } else {
-                        tabHead = tabHead + curObj + ', ';
-                    }
-                }
-                tabHead = tabHead + '</h3></div>';
-                cmpDiv = cmpDiv + tabHead;
 
                 //generate tabs data
-                var tabsBody = '<div id="tabs" class="row" style="margin-left: -15px; margin-right: 13px; display: inline-block;">';
+               // var tabsBody = '<div>';
+
+                var tempObjCount = 0;
+                var tempIndCount = [];
+                var tempColorCount = [];
+                var tempShapeCount = [];
+                for (var c2 = 0; c2 < diffObjs.length; c2++) {
+                    tempIndCount.push(diffObjs[c2].similarity_of_obj_type.length);
+                    tempColorCount[c2] = 0;
+                    tempShapeCount[c2] = 0;
+                    for (var c4 = 0; c4 < diffObjs[c2].similarity_of_obj_type.length; c4++) {
+                        tempObjCount++;
+                        var curr2Obj = diffObjs[c2].similarity_of_obj_type[c4];
+                        tempColorCount[c2] = Number(tempColorCount[c2]) + Number((((curr2Obj.color_distance) * 100).toFixed(2)));
+                        tempShapeCount[c2] = Number(tempShapeCount[c2]) + Number((((curr2Obj.size_distance) * 100).toFixed(2)));
+                    }
+                }
+
+                var nlpData = '';
+                if (tempObjCount > 1) {
+                    nlpData = '<div><h3>In total there are ' + tempObjCount + ' similar objects between the images.</h3>';
+                } else {
+                    nlpData = '<div><h3>In total there is ' + tempObjCount + ' similar object between the images.</h3>';
+                }
+
+                //nlpData = nlpData + '<div class="row" style="margin-left: -15px; margin-right: 13px; display: inline-block;">';
+
+                //makes the header data in visualization
+                var tabHead = '<h4>';
+
+                if (tempIndCount.length == 1) {
+                    var curObj = firstCaps(diffObjs[0].similarity_of_obj_type[0].cat);
+
+                    if (tempIndCount[0] == 1) {
+                        tabHead = tabHead + 'There is ' + pageDetails.numToWords1[tempIndCount[0]-1] + ' ' + curObj + ' detected in both the images.';
+                    } else {
+                        tabHead = tabHead + 'There are ' + pageDetails.numToWords1[tempIndCount[0]-1] + ' ' + curObj + 's detected in both the images.';
+                    }
+                } else {
+                    tabHead = tabHead + 'There are ';
+
+                    for (var c7 = 0; c7 < tempIndCount.length; c7++) {
+
+                        var curObj = firstCaps(diffObjs[c7].similarity_of_obj_type[0].cat);
+
+                        if ((c7 + 1) == tempIndCount.length) {
+                            if(tempIndCount[c7] == 1){
+                                tabHead = tabHead + ' and ' + pageDetails.numToWords1[tempIndCount[c7]-1] + ' ' + curObj + ' detected in both the images.';
+                            } else {
+                                tabHead = tabHead + ' and ' + pageDetails.numToWords1[tempIndCount[c7]-1] + ' ' + curObj + 's detected in both the images.';
+                            }
+                        } else {
+                            if(tempIndCount[c7] == 1){
+                                tabHead = tabHead + pageDetails.numToWords1[tempIndCount[c7]-1] + ' ' + curObj + ', ';
+                            } else {
+                                tabHead = tabHead + pageDetails.numToWords1[tempIndCount[c7]-1] + ' ' + curObj + 's, ';
+                            }
+                        }
+
+                    }
+                }
+
+                tabHead = tabHead + '</h4></div>';
+
+                nlpData += tabHead;
+
+                nlpData += '<div><ul>';
+
+                for (var c5 = 0; c5 < diffObjs.length; c5++) {
+
+                    var tempcurr2Obj = diffObjs[c5].similarity_of_obj_type[0].cat;
+
+                    nlpData += '<li>Among the '+ firstCaps(tempcurr2Obj) +'s there is '+ (tempColorCount[c5]/diffObjs[c5].similarity_of_obj_type.length).toFixed(2) +'% similarity in color, '+ (tempShapeCount[c5]/diffObjs[c5].similarity_of_obj_type.length).toFixed(2)  +'% similarity in shape. <ul>';
+
+                    for (var c6 = 0; c6 < diffObjs[c5].similarity_of_obj_type.length; c6++) {
+                        var curr2Obj = diffObjs[c5].similarity_of_obj_type[c6];
+
+                        
+
+                        if (diffObjs[c5].similarity_of_obj_type.length > 1) {
+                            // nlpData += '<li>' + firstCaps(curr2Obj.cat) + (c6 + 1) + ' is represented in ' + curr2Obj.color_name + ' box with ' + (((curr2Obj.color_distance) * 100).toFixed(2)) + '% of color and ' + (((curr2Obj.size_distance) * 100).toFixed(2)) + '% of shape match.</li>';
+                            nlpData += '<li>The '+ pageDetails.numToWords2[c6] + ' ' + firstCaps(curr2Obj.cat) + ' is been highlighted by ' + curr2Obj.color_name + ' box in both the images and has ' + (((curr2Obj.color_distance) * 100).toFixed(2)) + '% of color, ' + (((curr2Obj.size_distance) * 100).toFixed(2)) + '% of shape similarity.</li>';
+                        } else {
+                            // nlpData += '<li>' + firstCaps(curr2Obj.cat) + ' is represented in ' + curr2Obj.color_name + ' box with ' + (((curr2Obj.color_distance) * 100).toFixed(2)) + '% of color and ' + (((curr2Obj.size_distance) * 100).toFixed(2)) + '% of shape match.</li>';
+                            nlpData += '<li>The ' + firstCaps(curr2Obj.cat) + ' is been highlighted by ' + curr2Obj.color_name + ' box in both the images and has ' + (((curr2Obj.color_distance) * 100).toFixed(2)) + '% of color, ' + (((curr2Obj.size_distance) * 100).toFixed(2)) + '% of shape similarity.</li>';
+                        }
+
+                    }
+
+                    nlpData += '</ul></li>';
+
+                }
+
+                nlpData += '</div></ul>';
+
+
+
+
+
+                //commented for generating NLP text instead of table text 
 
                 //generate UL list data
-                var tabsUl = '<ul>';
+                /*var tabsUl = '<ul>';
                 for (var c2 = 0; c2 < diffObjs.length; c2++) {
                     tabsUl = tabsUl + '<li><a href="#tabs-' + c2 + '">' + firstCaps(diffObjs[c2].similarity_of_obj_type[0].cat) + '</a></li>'
                 }
-                tabsUl = tabsUl + '</ul>';
+                tabsUl = tabsUl + '</ul>';*/
 
                 //generate ul specific tabs data
-                var tabsUlData = '';
-                for (var c3 = 0; c3 < diffObjs.length; c3++) {
+                // var tabsUlData = '';
+                /*for (var c3 = 0; c3 < diffObjs.length; c3++) {
                     tabsUlData = tabsUlData + '<div id="tabs-' + c3 + '">';
                     tabsUlData = tabsUlData + '<p>';
 
@@ -2122,10 +2207,11 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
 
                     tabsUlData = tabsUlData + tabsUlTableData + '</p>';
                     tabsUlData = tabsUlData + '</div>';
-                }
+                }*/
 
-                tabsBody = tabsBody + tabsUl + tabsUlData + '</div>';
-                cmpDiv = cmpDiv + tabsBody;
+                // tabsBody = tabsBody + tabsUl + tabsUlData + '</div>';
+
+                cmpDiv = cmpDiv + nlpData + '</div>';
 
                 cmpDiv = cmpDiv + '<div class="row"><div class="col-container"><div class="colNew"><div class="row" style="justify-content: center;"><img class="cmpCls col-xs-8 col-sm-8 col-xl-8 col-md-8 col-lg-8 col-8" id="cmpQueImg" src="' + queURL + '"></div><div class="row cmpCaption"><span class="labelCls otherlbl">Query Image</span></div></div>';
                 cmpDiv = cmpDiv + '<div class="colNew"><div class="row" style="justify-content: center;"><img class="cmpCls col-xs-8 col-sm-8 col-xl-8 col-md-8 col-lg-8 col-8" id="cmpResImg" src="' + resURL + '"></div><div class="row cmpCaption"><span class="labelCls otherlbl">Result Image</span></div></div></div></div>';
@@ -2135,7 +2221,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                 $('#visualdialog').empty();
                 $('#visualdialog').append(cmpDiv);
 
-                $("#tabs").tabs();
+                // $("#tabs").tabs();
             } catch (error) {
                 swal.fire({
                     icon: 'error',
