@@ -28,6 +28,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                 imgUrlKey: 'imgurl',
                 cookiesKey: 'sessiondata'
             },
+            //colorConstants: ['Black', 'Maroon', 'Green', 'Olive', 'Navy', 'Purple', 'Teal', 'Silver', 'Grey', 'Red', 'Lime', 'Yellow', 'Blue', 'Fuchsia', 'Aqua', 'White'],
             colorConstants: ["Black", "White", "Red", "Lime", "Blue", "Yellow", "Cyan", "Magenta", "Silver", "Gray", "Maroon", "Olive", "Green", "Purple", "Teal", "Navy"],
             semanticsConstants: ['aeroplane', 'bicycle', 'bird', 'boat', 'bottle', 'bus', 'car', 'cat', 'chair', 'cow', 'diningtable', 'dog', 'horse', 'motorbike', 'person', 'pottedplant', 'sheep', 'sofa', 'train', 'tvmonitor'],
             constantDetails: ['colorConstants', 'semanticsConstants'],
@@ -49,7 +50,9 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
             colorexpflag: false,
             shapeexpflag: false,
             numToWords1: ['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten'],
-            numToWords2: ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Nineth', 'Tenth']
+            numToWords2: ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Nineth', 'Tenth'],
+            singularClasses: ['person', 'bird', 'cat', 'cow', 'dog', 'horse', 'sheep', 'aeroplane', 'bicycle', 'boat', 'bus', 'car', 'motorbike', 'train', 'bottle', 'chair', 'dining table', 'potted plant', 'sofa', 'tv/monitor'],
+            pluralClasses: ['persons', 'birds', 'cats', 'cows', 'dogs', 'horses', 'sheeps', 'aeroplanes', 'bicycles', 'boats', 'buses', 'cars', 'motorbikes', 'trains', 'bottles', 'chairs', 'dining tables', 'potted plants', 'sofas', 'tv"s/monitors']
         };
 
         //When everything is loaded what to do first
@@ -333,8 +336,8 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                         '<span class="sr-only">Previous</span>' +
                         '</a>';
 
-                    slideDivData = slideDivData + '<a class="right carousel-control" data-target="#' + slideData[s1].className + 'Carousel" data-slide="prev" href="javascript:;">' +
-                        '<span class="glyphicon glyphicon-chevron-left"></span>' +
+                    slideDivData = slideDivData + '<a class="right carousel-control" data-target="#' + slideData[s1].className + 'Carousel" data-slide="next" href="javascript:;">' +
+                        '<span class="glyphicon glyphicon-chevron-right"></span>' +
                         '<span class="sr-only">Next</span>' +
                         '</a>';
                     // Left and right controls End
@@ -704,12 +707,15 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                                     '<div class="row" style="padding-top: 1.5em;">' +
                                     '<div class="col-xs-8 col-sm-6 col-md-4 col-lg-4">' +
 
-                                    //disabling the explain button conditional operator check
+                                    //disabling the explain button with conditional operator check
                                     (((Number(row.similarity_for_obj) != Number(0.0)) && row.sim_per_facet.length > 0) ? ('<input class="ExplainBtnClass" data-toggle="collapse" type="button" id="ExpBtnID' + (row.ID + 1) + '" data-target="#ExpID' + (row.ID + 1) + '" value="Explain">') : ('<input class="ExpDisBtnClass" data-toggle="collapse" type="button" id="ExpBtnID' + (row.ID + 1) + '" data-target="#ExpID' + (row.ID + 1) + '" value="Explain" disabled>')) +
 
                                     '</div>' +
                                     '<div class="col-xs-2 col-sm-3 col-md-3 col-lg-3">' +
-                                    '<input class="VisualBtnClass" data-target="#exampleModalCenter" data-toggle="modal" type="button" value="Visual Explanation" id="VisualBtn' + (row.ID + 1) + '">' +
+
+                                    //disabling the visual explain button conditional operator check
+                                    (((Number(row.similarity_for_obj) != Number(0.0)) && row.sim_per_facet.length > 0) ? ('<input class="VisualBtnClass" data-target="#exampleModalCenter" data-toggle="modal" type="button" value="Visual Explanation" id="VisualBtn' + (row.ID + 1) + '">') : ('<input class="ExpDisBtnClass" data-target="#exampleModalCenter" data-toggle="modal" type="button" value="Visual Explanation" id="VisualBtn' + (row.ID + 1) + '" disabled>')) +
+
                                     '</div>' +
                                     '</div>' +
                                     '</div>' +
@@ -797,6 +803,20 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                 $('#selectListBtn').empty();
                 $('#selectListBtn').append(this.text + '<span class="caret"></span>');
                 pageDetails.tabledetails.page.len($('#' + this.id).attr('selectVal')).draw();
+            } catch (error) {
+                swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!',
+                    footer: JSON.stringify(error)
+                });
+            }
+        });
+
+        // when the user clicks on next page or previous page scroll to top
+        $(document).on('click', '.paginate_button', function () {
+            try {
+                window.scrollTo(0, 0);
             } catch (error) {
                 swal.fire({
                     icon: 'error',
@@ -1992,11 +2012,11 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                             tempOSize = tempOSize + newData.SemanticData.similarity_arr[n1].sim_per_facet[n2].sim_for_shape;
                         }
 
-                        avgOCol = (tempOCol / n2);
-                        avgOSize = (tempOSize / n2);
+                        avgOCol = (tempOCol / newData.SemanticData.similarity_arr[n1].sim_per_facet.length);
+                        avgOSize = (tempOSize / newData.SemanticData.similarity_arr[n1].sim_per_facet.length);
 
-                        newData.SemanticData.similarity_arr[n1]['overAllColor'] = (avgOCol / n2);
-                        newData.SemanticData.similarity_arr[n1]['overAllSize'] = (avgOSize / n2);
+                        newData.SemanticData.similarity_arr[n1]['overAllColor'] = (avgOCol);
+                        newData.SemanticData.similarity_arr[n1]['overAllSize'] = (avgOSize);
 
                         newData.SemanticData.similarity_arr[n1]['overAll'] = (((avgOCol * 0.15) + (avgOSize * 0.15) + (newData.SemanticData.similarity_arr[n1]['similarity_for_obj'] * 0.70)));
 
@@ -2104,7 +2124,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                     if (tempIndCount[0] == 1) {
                         tabHead = tabHead + 'There is ' + pageDetails.numToWords1[tempIndCount[0]-1] + ' ' + curObj + ' detected in both the images.';
                     } else {
-                        tabHead = tabHead + 'There are ' + pageDetails.numToWords1[tempIndCount[0]-1] + ' ' + curObj + 's detected in both the images.';
+                        tabHead = tabHead + 'There are ' + pageDetails.numToWords1[tempIndCount[0]-1] + ' ' + pageDetails.pluralClasses[pageDetails.singularClasses.indexOf(curObj)] + ' detected in both the images.';
                     }
                 } else {
                     tabHead = tabHead + 'There are ';
@@ -2117,13 +2137,13 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                             if(tempIndCount[c7] == 1){
                                 tabHead = tabHead + ' and ' + pageDetails.numToWords1[tempIndCount[c7]-1] + ' ' + curObj + ' detected in both the images.';
                             } else {
-                                tabHead = tabHead + ' and ' + pageDetails.numToWords1[tempIndCount[c7]-1] + ' ' + curObj + 's detected in both the images.';
+                                tabHead = tabHead + ' and ' + pageDetails.numToWords1[tempIndCount[c7]-1] + ' ' + pageDetails.pluralClasses[pageDetails.singularClasses.indexOf(curObj)] + ' detected in both the images.';
                             }
                         } else {
                             if(tempIndCount[c7] == 1){
                                 tabHead = tabHead + pageDetails.numToWords1[tempIndCount[c7]-1] + ' ' + curObj + ', ';
                             } else {
-                                tabHead = tabHead + pageDetails.numToWords1[tempIndCount[c7]-1] + ' ' + curObj + 's, ';
+                                tabHead = tabHead + pageDetails.numToWords1[tempIndCount[c7]-1] + ' ' + pageDetails.pluralClasses[pageDetails.singularClasses.indexOf(curObj)] + ', ';
                             }
                         }
 
@@ -2140,7 +2160,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
 
                     var tempcurr2Obj = diffObjs[c5].similarity_of_obj_type[0].cat;
 
-                    nlpData += '<li>Among the '+ firstCaps(tempcurr2Obj) +'s there is '+ (tempColorCount[c5]/diffObjs[c5].similarity_of_obj_type.length).toFixed(2) +'% similarity in color, '+ (tempShapeCount[c5]/diffObjs[c5].similarity_of_obj_type.length).toFixed(2)  +'% similarity in shape. <ul>';
+                    nlpData += '<li>Among the '+ firstCaps(pageDetails.pluralClasses[pageDetails.singularClasses.indexOf(tempcurr2Obj)]) +' there is '+ (tempColorCount[c5]/diffObjs[c5].similarity_of_obj_type.length).toFixed(2) +'% similarity in color, '+ (tempShapeCount[c5]/diffObjs[c5].similarity_of_obj_type.length).toFixed(2)  +'% similarity in shape. <ul>';
 
                     for (var c6 = 0; c6 < diffObjs[c5].similarity_of_obj_type.length; c6++) {
                         var curr2Obj = diffObjs[c5].similarity_of_obj_type[c6];
@@ -2395,6 +2415,8 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
         //creates the accordion for comparision
         function mImagesAcc(currObjInd, flagobj) {
             try {
+                pageDetails.shapeexpflag = false;
+                pageDetails.colorexpflag = false;
                 var oCol = ((pageDetails.endpointresult.SemanticData.similarity_arr[currObjInd].overAllColor) * 100).toFixed(2);
                 var oSiz = ((pageDetails.endpointresult.SemanticData.similarity_arr[currObjInd].overAllSize) * 100).toFixed(2);
                 var accDiv = '';
@@ -2402,7 +2424,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
 
                 //Accordion button
                 accDiv = accDiv + '<div class="row">' +
-                    '<input class="CmpTExplainBtnClass" data-toggle="collapse" type="button" id="cmpNBtn' + flagobj + currObjInd + '" data-target="#cmpBody' + flagobj + currObjInd + '" value="Overall ' + (flagobj == 'color_distance' ? 'Color' : 'Shape') + ' % is ' + (flagobj == 'color_distance' ? oCol : oSiz) + '"></input>';
+                    '<input class="CmpTExplainBtnClass" data-toggle="collapse" type="button" id="cmpNBtn' + flagobj + currObjInd + '" data-target="#cmpBody' + flagobj + currObjInd + '" value="Overall ' + (flagobj == 'color_distance' ? 'Color' : 'Shape') + ' % is ' + (flagobj == 'color_distance' ? ((oCol=="NaN" || oCol==undefined)?0:oCol) : ((oSiz=="NaN" || oSiz==undefined)?0:oSiz)) + '"></input>';
                 accDiv = accDiv + '</div>';
 
                 //Accordion Body
@@ -2414,7 +2436,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                 for (var mi1 = 0; mi1 < pageDetails.endpointresult.SemanticData.similarity_arr[currObjInd].sim_per_facet.length; mi1++) {
                     var curTObj = pageDetails.endpointresult.SemanticData.similarity_arr[currObjInd].sim_per_facet;
                     for (var mi2 = 0; mi2 < curTObj[mi1].similarity_of_obj_type.length; mi2++) {
-                        accDiv = accDiv + '<li class="list-group-item">Color % of ' + curTObj[mi1].similarity_of_obj_type[mi2].cat + ' in ' + curTObj[mi1].similarity_of_obj_type[mi2].color_name + ' box is ' + ((curTObj[mi1].similarity_of_obj_type[mi2][flagobj]) * 100).toFixed(2) + '</li>';
+                        accDiv = accDiv + '<li class="list-group-item">'+ (flagobj == 'color_distance' ? 'Color' : 'Shape') +' % of ' + curTObj[mi1].similarity_of_obj_type[mi2].cat + ' in ' + curTObj[mi1].similarity_of_obj_type[mi2].color_name + ' box is ' + ((curTObj[mi1].similarity_of_obj_type[mi2][flagobj]) * 100).toFixed(2) + '</li>';
                     }
                 }
 
