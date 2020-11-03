@@ -51,8 +51,8 @@ def doSegmentProcessing(filename, confidence):
     f = cv2.imread(filename)
     mn=min(f.shape[0], f.shape[1])
     mx=max(f.shape[0], f.shape[1])
-    x, img = gluoncv.data.transforms.presets.yolo.load_test(filename, short=mn, max_size=mx)
-    class_IDs, scores, bounding_boxes = net(x)
+    x_, img = gluoncv.data.transforms.presets.yolo.load_test(filename, short=mn, max_size=mx)
+    class_IDs, scores, bounding_boxes = net(x_)
     class_IDs = class_IDs.asnumpy()
     scores = scores.asnumpy()
     bounding_boxes = bounding_boxes.asnumpy()
@@ -68,8 +68,18 @@ def doSegmentProcessing(filename, confidence):
             continue
         
         x,y,w,h = bounding_boxes[0][i]
+
+        if x<0:
+            w = w+x
+            x = numpy.float32(0)
+            bounding_boxes[0][i] = x,y,w,h
+        if y < 0:
+            h = h+y
+            y = 0
+            bounding_boxes[0][i] = x,y,w,h
         mmask = numpy.zeros(shape=f.shape, dtype="uint8")
-        c=cv2.rectangle(mmask, (x, y), (x+w, y+h), (255, 255, 255), -1)
+        #c=cv2.rectangle(mmask, (x, y), (x+w, y+h), (255, 255, 255), -1)
+        c=cv2.rectangle(mmask, (x, y), (w, h), (255, 255, 255), -1)
         
         masked_img = cv2.bitwise_and(f, c)
         name = fname+str(i)+".png"
@@ -367,9 +377,9 @@ def compare(query, images, store_path, resp_img_save_path):
                 obj.color_name = colors[color_encode_count]
                 obj.color_code = c_codes[color_encode_count]
                 x,y,w,h = obj.q_box
-                query_img =cv2.rectangle(query_img, (x, y), (x+w, y+h), c_codes[color_encode_count], 2)
+                query_img =cv2.rectangle(query_img, (x, y), (w, h), c_codes[color_encode_count], 5)
                 x,y,w,h = obj.b_box
-                bse_img =cv2.rectangle(bse_img, (x, y), (x+w, y+h), c_codes[color_encode_count], 2)
+                bse_img =cv2.rectangle(bse_img, (x, y), (w, h), c_codes[color_encode_count], 5)
                 color_encode_count += 1
 
             
@@ -411,8 +421,8 @@ def extract_n_store(mypath, store_path):
         print("finished writing "+str(cmp+1)+"/"+str(len(onlyfiles)))
         cmp += 1
 
+#semantic_info("problem 2.jpg", 0.70)
 
-
-extract_n_store("D:\\dke\\2ND SEM\\IRTEX\\resource\\pascal data\\VOCtrainval_11-May-2012\\VOCdevkit\\VOC2012\\less image", "D:\\dke\\2ND SEM\\IRTEX\\R&D\\explainibility\\extraction")
+#extract_n_store("D:\\dke\\2ND SEM\\IRTEX\\resource\\pascal data\\VOCtrainval_11-May-2012\\VOCdevkit\\VOC2012\\less image", "D:\\dke\\2ND SEM\\IRTEX\\R&D\\explainibility\\extraction")
 #extract_n_store("D:\\dke\\2ND SEM\\IRTEX\\resource\\pascal data\\VOCtrainval_11-May-2012\\VOCdevkit\\VOC2012\\less image", "D:\dke\2ND SEM\IRTEX\R&D\explainibility\extraction")
 

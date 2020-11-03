@@ -69,8 +69,18 @@ def doSegmentProcessing(filename, confidence):
             continue
         
         x,y,w,h = bounding_boxes[0][i]
+
+        if x<0:
+            w = w+x
+            x = numpy.float32(0)
+            bounding_boxes[0][i] = x,y,w,h
+        if y < 0:
+            h = h+y
+            y = 0
+            bounding_boxes[0][i] = x,y,w,h
         mmask = numpy.zeros(shape=f.shape, dtype="uint8")
-        c=cv2.rectangle(mmask, (x, y), (x+w, y+h), (255, 255, 255), -1)
+        #c=cv2.rectangle(mmask, (x, y), (x+w, y+h), (255, 255, 255), -1)
+        c=cv2.rectangle(mmask, (x, y), (w, h), (255, 255, 255), -1)
         
         masked_img = cv2.bitwise_and(f, c)
         name = fname+str(i)+".png"
@@ -368,9 +378,9 @@ def compare(query, images, store_path, resp_img_save_path):
                 obj.color_name = colors[color_encode_count]
                 obj.color_code = c_codes[color_encode_count]
                 x,y,w,h = obj.q_box
-                query_img =cv2.rectangle(query_img, (x, y), (x+w, y+h), c_codes[color_encode_count], 2)
+                query_img =cv2.rectangle(query_img, (x, y), (w, h), c_codes[color_encode_count], 5)
                 x,y,w,h = obj.b_box
-                bse_img =cv2.rectangle(bse_img, (x, y), (x+w, y+h), c_codes[color_encode_count], 2)
+                bse_img =cv2.rectangle(bse_img, (x, y), (w, h), c_codes[color_encode_count], 5)
                 color_encode_count += 1
 
             
