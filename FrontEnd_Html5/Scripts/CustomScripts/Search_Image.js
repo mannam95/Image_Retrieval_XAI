@@ -1,4 +1,4 @@
-define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6promise', 'zingchart', 'bootstrap', 'tensorflowjs'], function ($, jqueryui, swal, datatables, datatables_net, es6promise, z_chart, b_strap, tfjs) {
+define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6promise', 'zingchart', 'bootstrap', 'tensorflowjs', 'responseJson'], function ($, jqueryui, swal, datatables, datatables_net, es6promise, z_chart, b_strap, tfjs, respJs) {
     $(function () {
 
         // store all the variables as an object properties
@@ -52,7 +52,10 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
             numToWords1: ['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten'],
             numToWords2: ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Nineth', 'Tenth'],
             singularClasses: ['person', 'bird', 'cat', 'cow', 'dog', 'horse', 'sheep', 'aeroplane', 'bicycle', 'boat', 'bus', 'car', 'motorbike', 'train', 'bottle', 'chair', 'dining table', 'potted plant', 'sofa', 'tv/monitor'],
-            pluralClasses: ['persons', 'birds', 'cats', 'cows', 'dogs', 'horses', 'sheeps', 'aeroplanes', 'bicycles', 'boats', 'buses', 'cars', 'motorbikes', 'trains', 'bottles', 'chairs', 'dining tables', 'potted plants', 'sofas', 'tv"s/monitors']
+            pluralClasses: ['persons', 'birds', 'cats', 'cows', 'dogs', 'horses', 'sheeps', 'aeroplanes', 'bicycles', 'boats', 'buses', 'cars', 'motorbikes', 'trains', 'bottles', 'chairs', 'dining tables', 'potted plants', 'sofas', 'tv"s/monitors'],
+            pageFlag: 'dynastat',
+            pageFlagVal: '',
+            imageInd: ''
         };
 
         //When everything is loaded what to do first
@@ -61,6 +64,14 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
 
                 //check cookies
                 checkCookies();
+
+                pageDetails.pageFlagVal = getQueryString(pageDetails.pageFlag);
+
+                if (pageDetails.pageFlagVal == 'yes') {
+
+                } else {
+                    //do nothing
+                }
 
                 // pageDetails.endpointresult = newJsonData.Data;
                 // reOrderData(newJsonData);
@@ -295,6 +306,8 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
 
                 var slideDivData = '';
 
+                var indexImgCount = 0;
+
                 for (var s1 = 0; s1 < slideData.length; s1++) {
                     slideDivData = slideDivData + '<div class="col-sm-3"><div class="card"><div class="card-body">' +
                         '<h3 class="card-title">' + slideData[s1].className + '</h3>' +
@@ -318,11 +331,11 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                     for (s3 = 0; s3 < slideData[s1].imageUrls.length; s3++) {
                         if (s3 == 0) {
                             slideDivData = slideDivData + '<div class="item active">' +
-                                '<img class="carImgHeight" src="' + slideData[s1].imageUrls[s3] + '"></img>' +
+                                '<img class="carImgHeight" src="' + slideData[s1].imageUrls[s3] + '" data-indexImg="' + (indexImgCount++) + '"></img>' +
                                 '</div>';
                         } else {
                             slideDivData = slideDivData + '<div class="item">' +
-                                '<img class="carImgHeight" src="' + slideData[s1].imageUrls[s3] + '"></img>' +
+                                '<img class="carImgHeight" src="' + slideData[s1].imageUrls[s3] + '" data-indexImg="' + (indexImgCount++) + '"></img>' +
                                 '</div>';
                         }
                     }
@@ -347,6 +360,9 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
 
                 $('#slideShowDiv').empty();
                 $('#slideShowDiv').append(slideDivData);
+
+                //generates the response json
+               // genRespJson();
             } catch (error) {
                 swal.fire({
                     icon: 'error',
@@ -359,7 +375,15 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
 
         //triggers file upload on click of label
         $("#formupload-button").click(function () {
-            $("#formupload_box").click();
+            if (pageDetails.pageFlagVal == 'no') {
+                swal.fire({
+                    icon: 'info',
+                    title: 'Oops...',
+                    text: 'Image-Search is possible only with the following images!',
+                });
+            } else {
+                $("#formupload_box").click();
+            }
         });
 
         //detects when file is selected
@@ -426,6 +450,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
         //triggers when the url is pasted and searched
         function searchImage(defaultImageURL) {
             try {
+
                 pageDetails.imageUrl = $('#url_box').val();
                 if (defaultImageURL != undefined && defaultImageURL != null && defaultImageURL != '') {
                     pageDetails.imageUrl = defaultImageURL
@@ -541,7 +566,17 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
         $(pageDetails.idDetails[5]).click(function () {
             try {
                 $('body').addClass("loading");
-                searchImage(null);
+                if (pageDetails.pageFlagVal == 'no') {
+                    $('#url_box').val('');
+                    $('body').removeClass("loading");
+                    swal.fire({
+                        icon: 'info',
+                        title: 'Oops...',
+                        text: 'Image-Search is possible only with the following images!',
+                    });
+                } else {
+                    searchImage(null);
+                }
             } catch (error) {
                 swal.fire({
                     icon: 'error',
@@ -556,6 +591,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
         // $('.carImgHeight').click(function () {
         $(document).on('click', '[class^="carImgHeight"]', function () {
             $('body').addClass("loading");
+            pageDetails.imgInd = $(this).data( "indeximg");
             searchImage(this.src);
         });
 
@@ -762,7 +798,15 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                     var currImgName1 = pageDetails.endpointresult.Data.topScores[g1].name.split('/').pop().split('#')[0].split('?')[0];
 
                     if (tempResImgName1 == currImgName1) {
-                        return pageDetails.endpointresult.Data.topScores[g1].name;
+
+                        //default path for the slideshow images
+                        if (pageDetails.pageFlagVal == 'no') {
+                            return ('/Images/resultImages/' + currImgName1);
+                        } 
+                        //dynamic path
+                        else {
+                            return pageDetails.endpointresult.Data.topScores[g1].name;
+                        }
                     }
                 }
             } catch (error) {
@@ -1500,33 +1544,40 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                     formdata.append(pageDetails.serverHostedDetails.cookiesKey, JSON.stringify({ 'sessionID': getCookies('sessionID')[1], 'data': JSON.parse(getCookies('userData')[1]) }));
                 }
 
-                $.ajax({
-                    url: pageDetails.serverHostedDetails.url,
-                    type: 'POST',
-                    data: formdata,
-                    processData: false,
-                    contentType: false,
-                    // "mimeType": "multipart/form-data",
-                    success: function (response) {
-                        document.cookie = "sessionID=";
-                        document.cookie = "userData=";
-                        var succget = getSessionID();
-                        succget.done(function () {
-                            // JSON.parse(response)
-                            handleResultData(response);
-                            deferred.resolve();
-                        });
-                    },
-                    error: function (errres) {
-                        swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Problem with server!!!',
-                            footer: JSON.stringify(errres)
-                        });
-                        deferred.reject();
-                    }
-                });
+                if (pageDetails.pageFlagVal == 'no') {
+                    $('#url_box').val('');
+                    handleResultData(returnRespJson(pageDetails.imgInd));
+                    deferred.resolve();
+                } else {
+                    $.ajax({
+                        url: pageDetails.serverHostedDetails.url,
+                        type: 'POST',
+                        data: formdata,
+                        processData: false,
+                        contentType: false,
+                        // "mimeType": "multipart/form-data",
+                        success: function (response) {
+                            document.cookie = "sessionID=";
+                            document.cookie = "userData=";
+                            var succget = getSessionID();
+                            succget.done(function () {
+                                // JSON.parse(response)
+                               // getAllRespJson.push(response);
+                                handleResultData(response);
+                                deferred.resolve();
+                            });
+                        },
+                        error: function (errres) {
+                            swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Problem with server!!!',
+                                footer: JSON.stringify(errres)
+                            });
+                            deferred.reject();
+                        }
+                    });
+                }
             } catch (error) {
                 swal.fire({
                     icon: 'error',
@@ -2079,8 +2130,16 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
         //makes the visual explanation
         function compSImages(imgInd) {
             try {
-                var resURL = pageDetails.endpointresult.SemanticData.similarity_arr[imgInd].base_img;
-                var queURL = pageDetails.endpointresult.SemanticData.similarity_arr[imgInd].query_img;
+                var resURL = '';
+                var queURL = '';
+
+                if (pageDetails.pageFlagVal == 'no') {
+                    resURL = '/Images/explainimages/' + ((pageDetails.endpointresult.SemanticData.similarity_arr[imgInd].base_img).split('/').pop().split('#')[0].split('?')[0]);
+                    queURL = '/Images/explainimages/' + ((pageDetails.endpointresult.SemanticData.similarity_arr[imgInd].query_img).split('/').pop().split('#')[0].split('?')[0]);
+                } else {
+                    resURL = pageDetails.endpointresult.SemanticData.similarity_arr[imgInd].base_img;
+                    queURL = pageDetails.endpointresult.SemanticData.similarity_arr[imgInd].query_img;
+                }
 
                 var diffObjs = pageDetails.endpointresult.SemanticData.similarity_arr[imgInd].sim_per_facet;
 
@@ -2088,7 +2147,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
 
 
                 //generate tabs data
-               // var tabsBody = '<div>';
+                // var tabsBody = '<div>';
 
                 var tempObjCount = 0;
                 var tempIndCount = [];
@@ -2122,9 +2181,9 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                     var curObj = firstCaps(diffObjs[0].similarity_of_obj_type[0].cat);
 
                     if (tempIndCount[0] == 1) {
-                        tabHead = tabHead + 'There is ' + pageDetails.numToWords1[tempIndCount[0]-1] + ' ' + curObj + ' detected in both the images.';
+                        tabHead = tabHead + 'There is ' + pageDetails.numToWords1[tempIndCount[0] - 1] + ' ' + curObj + ' detected in both the images.';
                     } else {
-                        tabHead = tabHead + 'There are ' + pageDetails.numToWords1[tempIndCount[0]-1] + ' ' + pageDetails.pluralClasses[pageDetails.singularClasses.indexOf(curObj)] + ' detected in both the images.';
+                        tabHead = tabHead + 'There are ' + pageDetails.numToWords1[tempIndCount[0] - 1] + ' ' + pageDetails.pluralClasses[pageDetails.singularClasses.indexOf(curObj.toLowerCase())] + ' detected in both the images.';
                     }
                 } else {
                     tabHead = tabHead + 'There are ';
@@ -2134,16 +2193,16 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                         var curObj = firstCaps(diffObjs[c7].similarity_of_obj_type[0].cat);
 
                         if ((c7 + 1) == tempIndCount.length) {
-                            if(tempIndCount[c7] == 1){
-                                tabHead = tabHead + ' and ' + pageDetails.numToWords1[tempIndCount[c7]-1] + ' ' + curObj + ' detected in both the images.';
+                            if (tempIndCount[c7] == 1) {
+                                tabHead = tabHead + ' and ' + pageDetails.numToWords1[tempIndCount[c7] - 1] + ' ' + curObj + ' detected in both the images.';
                             } else {
-                                tabHead = tabHead + ' and ' + pageDetails.numToWords1[tempIndCount[c7]-1] + ' ' + pageDetails.pluralClasses[pageDetails.singularClasses.indexOf(curObj)] + ' detected in both the images.';
+                                tabHead = tabHead + ' and ' + pageDetails.numToWords1[tempIndCount[c7] - 1] + ' ' + pageDetails.pluralClasses[pageDetails.singularClasses.indexOf(curObj.toLowerCase())] + ' detected in both the images.';
                             }
                         } else {
-                            if(tempIndCount[c7] == 1){
-                                tabHead = tabHead + pageDetails.numToWords1[tempIndCount[c7]-1] + ' ' + curObj + ', ';
+                            if (tempIndCount[c7] == 1) {
+                                tabHead = tabHead + pageDetails.numToWords1[tempIndCount[c7] - 1] + ' ' + curObj + ', ';
                             } else {
-                                tabHead = tabHead + pageDetails.numToWords1[tempIndCount[c7]-1] + ' ' + pageDetails.pluralClasses[pageDetails.singularClasses.indexOf(curObj)] + ', ';
+                                tabHead = tabHead + pageDetails.numToWords1[tempIndCount[c7] - 1] + ' ' + pageDetails.pluralClasses[pageDetails.singularClasses.indexOf(curObj.toLowerCase())] + ', ';
                             }
                         }
 
@@ -2160,16 +2219,16 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
 
                     var tempcurr2Obj = diffObjs[c5].similarity_of_obj_type[0].cat;
 
-                    nlpData += '<li>Among the '+ firstCaps(pageDetails.pluralClasses[pageDetails.singularClasses.indexOf(tempcurr2Obj)]) +' there is '+ (tempColorCount[c5]/diffObjs[c5].similarity_of_obj_type.length).toFixed(2) +'% similarity in color, '+ (tempShapeCount[c5]/diffObjs[c5].similarity_of_obj_type.length).toFixed(2)  +'% similarity in shape. <ul>';
+                    nlpData += '<li>Among the ' + firstCaps(pageDetails.pluralClasses[pageDetails.singularClasses.indexOf(tempcurr2Obj)]) + ' there is ' + (tempColorCount[c5] / diffObjs[c5].similarity_of_obj_type.length).toFixed(2) + '% similarity in color, ' + (tempShapeCount[c5] / diffObjs[c5].similarity_of_obj_type.length).toFixed(2) + '% similarity in shape. <ul>';
 
                     for (var c6 = 0; c6 < diffObjs[c5].similarity_of_obj_type.length; c6++) {
                         var curr2Obj = diffObjs[c5].similarity_of_obj_type[c6];
 
-                        
+
 
                         if (diffObjs[c5].similarity_of_obj_type.length > 1) {
                             // nlpData += '<li>' + firstCaps(curr2Obj.cat) + (c6 + 1) + ' is represented in ' + curr2Obj.color_name + ' box with ' + (((curr2Obj.color_distance) * 100).toFixed(2)) + '% of color and ' + (((curr2Obj.size_distance) * 100).toFixed(2)) + '% of shape match.</li>';
-                            nlpData += '<li>The '+ pageDetails.numToWords2[c6] + ' ' + firstCaps(curr2Obj.cat) + ' is been highlighted by ' + curr2Obj.color_name + ' box in both the images and has ' + (((curr2Obj.color_distance) * 100).toFixed(2)) + '% of color, ' + (((curr2Obj.size_distance) * 100).toFixed(2)) + '% of shape similarity.</li>';
+                            nlpData += '<li>The ' + pageDetails.numToWords2[c6] + ' ' + firstCaps(curr2Obj.cat) + ' is been highlighted by ' + curr2Obj.color_name + ' box in both the images and has ' + (((curr2Obj.color_distance) * 100).toFixed(2)) + '% of color, ' + (((curr2Obj.size_distance) * 100).toFixed(2)) + '% of shape similarity.</li>';
                         } else {
                             // nlpData += '<li>' + firstCaps(curr2Obj.cat) + ' is represented in ' + curr2Obj.color_name + ' box with ' + (((curr2Obj.color_distance) * 100).toFixed(2)) + '% of color and ' + (((curr2Obj.size_distance) * 100).toFixed(2)) + '% of shape match.</li>';
                             nlpData += '<li>The ' + firstCaps(curr2Obj.cat) + ' is been highlighted by ' + curr2Obj.color_name + ' box in both the images and has ' + (((curr2Obj.color_distance) * 100).toFixed(2)) + '% of color, ' + (((curr2Obj.size_distance) * 100).toFixed(2)) + '% of shape similarity.</li>';
@@ -2304,8 +2363,15 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                     '<div class="row" style="justify-content: center;vertical-align: middle;">';
 
                 for (var m1 = 0; m1 < pageDetails.checkedIDDetails.length; m1++) {
-                    var resURL = pageDetails.endpointresult.SemanticData.similarity_arr[pageDetails.checkedIDDetails[m1]].base_img;
-                    var queURL = pageDetails.endpointresult.SemanticData.similarity_arr[pageDetails.checkedIDDetails[m1]].query_img;
+                    var resURL = '';
+                    var queURL = '';
+                    if (pageDetails.pageFlagVal == 'no') {
+                        resURL = '/Images/explainimages/' + ((pageDetails.endpointresult.SemanticData.similarity_arr[pageDetails.checkedIDDetails[m1]].base_img).split('/').pop().split('#')[0].split('?')[0]);
+                        queURL = '/Images/explainimages/' + ((pageDetails.endpointresult.SemanticData.similarity_arr[pageDetails.checkedIDDetails[m1]].query_img).split('/').pop().split('#')[0].split('?')[0]);
+                    } else{
+                        resURL = pageDetails.endpointresult.SemanticData.similarity_arr[pageDetails.checkedIDDetails[m1]].base_img;
+                        queURL = pageDetails.endpointresult.SemanticData.similarity_arr[pageDetails.checkedIDDetails[m1]].query_img;
+                    }
 
                     mTabHeadData = mTabHeadData + '<div class="col-xs-3 col-sm-3 col-xl-3 col-md-3 col-lg-3 col-3">' +
                         '<div class="row"><img class="col-xs-12 col-sm-12 col-xl-12 col-md-12 col-lg-12 col-12" src="' + queURL + '"></div>' +
@@ -2424,7 +2490,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
 
                 //Accordion button
                 accDiv = accDiv + '<div class="row">' +
-                    '<input class="CmpTExplainBtnClass" data-toggle="collapse" type="button" id="cmpNBtn' + flagobj + currObjInd + '" data-target="#cmpBody' + flagobj + currObjInd + '" value="Overall ' + (flagobj == 'color_distance' ? 'Color' : 'Shape') + ' % is ' + (flagobj == 'color_distance' ? ((oCol=="NaN" || oCol==undefined)?0:oCol) : ((oSiz=="NaN" || oSiz==undefined)?0:oSiz)) + '"></input>';
+                    '<input class="CmpTExplainBtnClass" data-toggle="collapse" type="button" id="cmpNBtn' + flagobj + currObjInd + '" data-target="#cmpBody' + flagobj + currObjInd + '" value="Overall ' + (flagobj == 'color_distance' ? 'Color' : 'Shape') + ' % is ' + (flagobj == 'color_distance' ? ((oCol == "NaN" || oCol == undefined) ? 0 : oCol) : ((oSiz == "NaN" || oSiz == undefined) ? 0 : oSiz)) + '"></input>';
                 accDiv = accDiv + '</div>';
 
                 //Accordion Body
@@ -2436,7 +2502,7 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
                 for (var mi1 = 0; mi1 < pageDetails.endpointresult.SemanticData.similarity_arr[currObjInd].sim_per_facet.length; mi1++) {
                     var curTObj = pageDetails.endpointresult.SemanticData.similarity_arr[currObjInd].sim_per_facet;
                     for (var mi2 = 0; mi2 < curTObj[mi1].similarity_of_obj_type.length; mi2++) {
-                        accDiv = accDiv + '<li class="list-group-item">'+ (flagobj == 'color_distance' ? 'Color' : 'Shape') +' % of ' + curTObj[mi1].similarity_of_obj_type[mi2].cat + ' in ' + curTObj[mi1].similarity_of_obj_type[mi2].color_name + ' box is ' + ((curTObj[mi1].similarity_of_obj_type[mi2][flagobj]) * 100).toFixed(2) + '</li>';
+                        accDiv = accDiv + '<li class="list-group-item">' + (flagobj == 'color_distance' ? 'Color' : 'Shape') + ' % of ' + curTObj[mi1].similarity_of_obj_type[mi2].cat + ' in ' + curTObj[mi1].similarity_of_obj_type[mi2].color_name + ' box is ' + ((curTObj[mi1].similarity_of_obj_type[mi2][flagobj]) * 100).toFixed(2) + '</li>';
                     }
                 }
 
@@ -2656,6 +2722,56 @@ define(['jquery', 'jqueryui', 'sweetalert', 'datatables', 'datatables.net', 'es6
             return arr.reduce(function (prev, cur) {
                 return prev + cur[prop];
             }, 0);
+        }
+
+        /*********************************************************Get the query string from Url***********************************************/
+        getQueryString = function (field) {
+            url = window.location.href;
+            var href = url ? url : window.location.href;
+            var reg = new RegExp('[?&]' + field + '=([^&#]*)', 'i');
+            var string = reg.exec(href);
+            return string ? string[1] : null;
+        }
+
+
+        /*********************************************************End Of Get the query string  from Url***********************************************/
+
+        var getAllRespJson = [];
+        //function to get all the response data for the slide text
+        function genRespJson() {
+            try {
+                var imgList = [];
+
+                $(".carImgHeight").each(function () {
+                    imgList.push(this.src);
+                });
+
+                (function Task(i, callback) {
+                    if (i < imgList.length) {
+    
+                        var temp = searchImage(imgList[i]);  //You Ajax function
+                        temp.done(function () {
+                            Task(i + 1, callback)
+                        })
+                    }
+                    else {
+                        //this call will terminate the function
+                        callback();
+                    }
+                })
+                    (0, function () {
+                        console.log(getAllRespJson);
+    
+                    }); //Task CallBack Function Ends here
+
+
+
+
+
+
+            } catch (error) {
+                console.log(error);
+            }
         }
 
         function firstCaps(capsStr) {
