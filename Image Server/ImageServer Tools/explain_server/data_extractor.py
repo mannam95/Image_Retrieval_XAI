@@ -253,7 +253,9 @@ class store:
         self.img = img
 
 colors = ["Black", "White", "Red", "Lime", "Blue", "Yellow", "Cyan", "Magenta", "Silver", "Gray", "Maroon", "Olive", "Green", "Purple", "Teal", "Navy"]
-c_codes = [(0,0,0), (255,255,255), (255,0,0), (0,255,0), (0,0,255), (255,255,0), (0,255,255), (255,0,255),  (192,192,192), (128,128,128), (128,0,0), (128,128,0), (0,128,0), (128,0,128), (0,128,128), (0,0,128)]
+#c_codes = [(0,0,0), (255,255,255), (255,0,0), (0,255,0), (0,0,255), (255,255,0), (0,255,255), (255,0,255),  (192,192,192), (128,128,128), (128,0,0), (128,128,0), (0,128,0), (128,0,128), (0,128,128), (0,0,128)]
+#color codes needs to be in bgr, since this is the default space of opencv
+c_codes = [(0,0,0), (255,255,255), (0,0,255), (0,255,0), (255,0,0), (0,255,255), (255,255,0), (255,0,255),  (192,192,192), (128,128,128), (0,0,128), (0,128,128), (0,128,0), (128,0,128), (128,128,0), (128,0,0)]
 
 def compare(query, images, store_path, resp_img_save_path):
     color_encode_count = 0
@@ -421,7 +423,9 @@ def extract_n_store(mypath, store_path):
         print("finished writing "+str(cmp+1)+"/"+str(len(onlyfiles)))
         cmp += 1
 
-#semantic_info("problem 2.jpg", 0.70)
+#semantic_info("img_hard.jpeg", 0.70)
+
+compare("D:\\dke\\pytest\\2007_000033.jpg", ["D:\\dke\\pytest\\2007_000033.jpg"], "D:\\dke\\2ND SEM\\IRTEX\\R&D\\explainibility\\extraction", "D:\\dke\\pytest\\resp")
 
 #extract_n_store("D:\\dke\\2ND SEM\\IRTEX\\resource\\pascal data\\VOCtrainval_11-May-2012\\VOCdevkit\\VOC2012\\less image", "D:\\dke\\2ND SEM\\IRTEX\\R&D\\explainibility\\extraction")
 #extract_n_store("D:\\dke\\2ND SEM\\IRTEX\\resource\\pascal data\\VOCtrainval_11-May-2012\\VOCdevkit\\VOC2012\\less image", "D:\dke\2ND SEM\IRTEX\R&D\explainibility\extraction")

@@ -52,8 +52,8 @@ def doSegmentProcessing(filename, confidence):
     f = cv2.imread(filename)
     mn=min(f.shape[0], f.shape[1])
     mx=max(f.shape[0], f.shape[1])
-    x, img = gluoncv.data.transforms.presets.yolo.load_test(filename, short=mn, max_size=mx)
-    class_IDs, scores, bounding_boxes = net(x)
+    x_, img = gluoncv.data.transforms.presets.yolo.load_test(filename, short=mn, max_size=mx)
+    class_IDs, scores, bounding_boxes = net(x_)
     class_IDs = class_IDs.asnumpy()
     scores = scores.asnumpy()
     bounding_boxes = bounding_boxes.asnumpy()
@@ -254,7 +254,9 @@ class store:
         self.img = img
 
 colors = ["Black", "White", "Red", "Lime", "Blue", "Yellow", "Cyan", "Magenta", "Silver", "Gray", "Maroon", "Olive", "Green", "Purple", "Teal", "Navy"]
-c_codes = [(0,0,0), (255,255,255), (255,0,0), (0,255,0), (0,0,255), (255,255,0), (0,255,255), (255,0,255),  (192,192,192), (128,128,128), (128,0,0), (128,128,0), (0,128,0), (128,0,128), (0,128,128), (0,0,128)]
+#c_codes = [(0,0,0), (255,255,255), (255,0,0), (0,255,0), (0,0,255), (255,255,0), (0,255,255), (255,0,255),  (192,192,192), (128,128,128), (128,0,0), (128,128,0), (0,128,0), (128,0,128), (0,128,128), (0,0,128)]
+#color codes needs to be in bgr, since this is the default space of opencv
+c_codes = [(0,0,0), (255,255,255), (0,0,255), (0,255,0), (255,0,0), (0,255,255), (255,255,0), (255,0,255),  (192,192,192), (128,128,128), (0,0,128), (0,128,128), (0,128,0), (128,0,128), (128,128,0), (128,0,0)]
 
 def compare(query, images, store_path, resp_img_save_path):
     color_encode_count = 0
